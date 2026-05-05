@@ -449,8 +449,8 @@ let revHistory = []; // for filtering
 // INIT
 // ═══════════════════════════════════════════════════
 function init() {
-  engine = new QuestionEngine(QUESTIONS_BANK);
-  const total = QUESTIONS_BANK.length;
+  engine = new (window.QuestionEngine)(window.QUESTIONS_BANK);
+  const total = window.QUESTIONS_BANK.length;
   document.getElementById('qs-total-count').textContent = `${total} questions dans la banque · Rotation intelligente activée`;
 
   // Programme tabs
@@ -546,7 +546,7 @@ function startTheme(themeObj) {
   if (!pool.length) { alert('Aucune question disponible pour ce filtre.'); return; }
 
   S.qs = engine.getSmartSelection(themeObj.id, Math.min(15, pool.length))
-    .map(q => QuestionEngine.shuffleAnswers(q));
+    .map(q => window.QuestionEngine.shuffleAnswers(q));
 
   show('quiz');
   renderQ();
@@ -783,7 +783,7 @@ function restart() {
   S.corr=0; S.wrong=0; S.skipped=0; S.hist=[]; S.flagged=[]; S.idx=0; S.done=false;
   // Nouvelles questions via l'algo
   S.qs = engine.getSmartSelection(S.themeObj.id, Math.min(15, engine.getByTheme(S.themeObj.id).length))
-    .map(q => QuestionEngine.shuffleAnswers(q));
+    .map(q => window.QuestionEngine.shuffleAnswers(q));
   show('quiz');
   renderQ();
   updateSidebar();

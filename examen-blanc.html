@@ -703,7 +703,7 @@ function setTimer(btn, val) {
 // ════════════════════════════════════════
 function startExam() {
   // Récupère les questions selon le programme
-  const bank = typeof QUESTIONS_BANK !== 'undefined' ? QUESTIONS_BANK : [];
+  const bank = typeof window.QUESTIONS_BANK !== 'undefined' ? window.QUESTIONS_BANK : [];
   let pool = bank.filter(q => q.prog === CFG.prog);
   if (pool.length < 20) {
     // Fallback : prendre toutes les questions disponibles
@@ -1228,7 +1228,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById('launch-info');
     if (!el) return;
     try {
-      const bank = typeof QUESTIONS_BANK !== 'undefined' ? QUESTIONS_BANK : [];
+      const bank = typeof window.QUESTIONS_BANK !== 'undefined' ? window.QUESTIONS_BANK : [];
       const leger = bank.filter(q=>q.prog==='LEGER').length;
       const lourd = bank.filter(q=>q.prog==='LOURD').length;
       const adr = bank.filter(q=>q.prog==='ADR').length;

@@ -11,7 +11,7 @@
 // Thèmes ADR        : adr-gen, adr-cls, adr-doc, adr-emb, adr-sig, adr-sec
 // ═══════════════════════════════════════════════════════════════════
 
-const QUESTIONS_BANK = [
+var QUESTIONS_BANK = [
 
 // ╔══════════════════════════════════════════════════════╗
 // ║         CPC LÉGER — DROIT CIVIL & COMMERCIAL        ║
@@ -764,5 +764,9 @@ class QuestionEngine {
 }
 
 // Export global
-if (typeof module !== 'undefined') module.exports = { QUESTIONS_BANK, QuestionEngine };
-else window.QUESTIONS_BANK = QUESTIONS_BANK, window.QuestionEngine = QuestionEngine;
+if (typeof module !== 'undefined') {
+  module.exports = { QUESTIONS_BANK, QuestionEngine };
+} else {
+  window.QUESTIONS_BANK = QUESTIONS_BANK;
+  window.QuestionEngine = QuestionEngine;
+}
