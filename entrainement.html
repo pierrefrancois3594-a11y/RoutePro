@@ -392,9 +392,7 @@
 </div>
 
 <!-- Charge la banque de questions -->
-<script src="questions-db.js?v=2"></script>
-<script src="qcm-leger.js?v=2"></script>
-<script src="qcm-lourd-adr.js?v=2"></script>
+<script src="banque.js"></script>
 <script>
 // ═══════════════════════════════════════════════════
 // CONFIG THÈMES
@@ -449,7 +447,7 @@ let revHistory = []; // for filtering
 // INIT
 // ═══════════════════════════════════════════════════
 function init() {
-  engine = new (window.QuestionEngine)(window.QUESTIONS_BANK);
+  engine = new window.QuestionEngine(window.QUESTIONS_BANK);
   const total = window.QUESTIONS_BANK.length;
   document.getElementById('qs-total-count').textContent = `${total} questions dans la banque · Rotation intelligente activée`;
 
