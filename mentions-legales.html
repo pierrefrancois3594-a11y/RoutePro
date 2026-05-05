@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mentions Légales – RoutePro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:     #0B1829;
+      --navy-mid: #132338;
+      --navy-lt:  #1C3252;
+      --orange:   #F26522;
+      --orange-lt:#FF8A4C;
+      --steel:    #8FA3B8;
+      --steel-lt: #C4D4E2;
+      --white:    #F0F4F8;
+      --mono:     'JetBrains Mono', monospace;
+      --display:  'Barlow Condensed', sans-serif;
+      --body:     'Barlow', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    a { color: var(--orange); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(11,24,41,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(143,163,184,.15);
+      padding: 0 40px;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 26px; font-weight: 800;
+      letter-spacing: .04em; text-transform: uppercase;
+      display: flex; align-items: center; gap: 10px;
+      color: var(--white);
+    }
+    .nav-logo span { color: var(--orange); }
+    .nav-logo .logo-icon {
+      width: 32px; height: 32px; background: var(--orange);
+      border-radius: 3px; display: grid; place-items: center;
+    }
+    .nav-back {
+      font-size: 13px; font-weight: 500;
+      letter-spacing: .05em; text-transform: uppercase;
+      color: var(--steel);
+      display: flex; align-items: center; gap: 8px;
+      transition: color .2s;
+    }
+    .nav-back:hover { color: var(--white); text-decoration: none; }
+
+    /* LAYOUT */
+    .page-wrapper {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 40px;
+      gap: 60px;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: sticky;
+      top: 84px;
+      align-self: start;
+    }
+    .sidebar-title {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 20px;
+    }
+    .sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+    .sidebar-link {
+      font-size: 13px;
+      color: var(--steel);
+      padding: 8px 14px;
+      border-left: 2px solid transparent;
+      transition: color .2s, border-color .2s, background .2s;
+      display: block;
+      border-radius: 0 3px 3px 0;
+    }
+    .sidebar-link:hover {
+      color: var(--white);
+      border-left-color: var(--orange);
+      background: rgba(242,101,34,.05);
+      text-decoration: none;
+    }
+    .sidebar-link.active {
+      color: var(--white);
+      border-left-color: var(--orange);
+      background: rgba(242,101,34,.08);
+    }
+    .sidebar-sep {
+      height: 1px;
+      background: rgba(143,163,184,.1);
+      margin: 12px 0;
+    }
+    .sidebar-disclaimer {
+      margin-bottom: 24px;
+      background: rgba(242,101,34,.07);
+      border: 1px solid rgba(242,101,34,.25);
+      border-left: 3px solid var(--orange);
+      border-radius: 0 4px 4px 0;
+      padding: 12px 14px;
+      font-size: 11.5px;
+      color: var(--steel);
+      line-height: 1.65;
+    }
+    .sidebar-disclaimer strong { color: var(--orange-lt); display: flex; align-items: center; gap: 6px; margin-bottom: 5px; font-size: 12px; }
+
+    /* CONTENT */
+    .content { min-width: 0; }
+    .page-header {
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(143,163,184,.12);
+    }
+    .page-header .tag {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 12px; display: block;
+    }
+    .page-header h1 {
+      font-family: var(--display);
+      font-size: 48px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .02em; line-height: 1;
+      margin-bottom: 12px;
+    }
+    .page-header .meta {
+      font-family: var(--mono);
+      font-size: 11px; color: var(--steel);
+      display: flex; gap: 20px; flex-wrap: wrap;
+    }
+
+    /* SECTIONS */
+    .legal-section {
+      margin-bottom: 60px;
+      scroll-margin-top: 84px;
+    }
+    .legal-section h2 {
+      font-family: var(--display);
+      font-size: 28px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .04em;
+      color: var(--white);
+      margin-bottom: 8px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--orange);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .legal-section h2 .sec-num {
+      font-family: var(--mono);
+      font-size: 11px; color: var(--orange);
+      background: rgba(242,101,34,.12);
+      padding: 3px 8px; border-radius: 2px;
+    }
+    .legal-section h3 {
+      font-family: var(--display);
+      font-size: 18px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .04em;
+      color: var(--steel-lt);
+      margin: 28px 0 12px;
+    }
+    .legal-section p {
+      font-size: 14px; color: var(--steel-lt);
+      line-height: 1.75; margin-bottom: 14px;
+    }
+    .legal-section p strong { color: var(--white); }
+    .legal-section ul {
+      list-style: none;
+      margin: 0 0 16px 0;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .legal-section ul li {
+      font-size: 14px; color: var(--steel-lt);
+      padding-left: 20px; position: relative;
+      line-height: 1.65;
+    }
+    .legal-section ul li::before {
+      content: '→';
+      position: absolute; left: 0;
+      color: var(--orange); font-size: 12px;
+    }
+    .legal-section ol {
+      margin: 0 0 16px 20px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .legal-section ol li {
+      font-size: 14px; color: var(--steel-lt);
+      line-height: 1.65; padding-left: 8px;
+    }
+
+    /* INFO BOX */
+    .info-box {
+      background: var(--navy-mid);
+      border: 1px solid rgba(143,163,184,.15);
+      border-radius: 4px;
+      padding: 20px 24px;
+      margin: 16px 0;
+    }
+    .info-box.orange {
+      background: rgba(242,101,34,.06);
+      border-color: rgba(242,101,34,.25);
+    }
+    .info-box.alert {
+      background: rgba(255,95,86,.05);
+      border-color: rgba(255,95,86,.2);
+      border-left: 3px solid #FF5F56;
+    }
+    .info-box .ib-label {
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 10px; display: block;
+    }
+    .info-box.alert .ib-label { color: #FF7B73; }
+    .info-box p, .info-box ul li { font-size: 13px !important; color: var(--steel) !important; }
+    .info-box p strong { color: var(--steel-lt) !important; }
+    .info-box table { width: 100%; border-collapse: collapse; }
+    .info-box table td {
+      font-size: 13px; color: var(--steel-lt);
+      padding: 8px 12px; border-bottom: 1px solid rgba(143,163,184,.08);
+      vertical-align: top;
+    }
+    .info-box table td:first-child { color: var(--steel); width: 40%; font-weight: 500; }
+    .info-box table tr:last-child td { border-bottom: none; }
+
+    /* PLACEHOLDER */
+    .placeholder {
+      background: rgba(242,101,34,.08);
+      border: 1px dashed rgba(242,101,34,.4);
+      border-radius: 3px;
+      padding: 4px 10px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--orange-lt);
+      display: inline;
+    }
+
+    /* TABLE OF CGV */
+    .tarif-table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+    .tarif-table th {
+      background: var(--navy-lt);
+      color: var(--steel);
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+      padding: 10px 14px; text-align: left;
+      border-bottom: 1px solid rgba(143,163,184,.15);
+    }
+    .tarif-table td {
+      padding: 10px 14px;
+      color: var(--steel-lt);
+      border-bottom: 1px solid rgba(143,163,184,.07);
+      vertical-align: top;
+    }
+    .tarif-table tr:hover td { background: rgba(143,163,184,.03); }
+
+    /* DROITS RGPD */
+    .rights-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .right-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(143,163,184,.1);
+      border-radius: 4px;
+      padding: 16px 18px;
+    }
+    .right-card .rc-title {
+      font-family: var(--display);
+      font-size: 15px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .04em;
+      color: var(--white); margin-bottom: 6px;
+    }
+    .right-card p { font-size: 12px !important; color: var(--steel) !important; margin: 0 !important; }
+
+    /* SEPARATOR */
+    .section-sep {
+      height: 1px;
+      background: rgba(143,163,184,.1);
+      margin: 48px 0;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #060F1A;
+      border-top: 1px solid rgba(143,163,184,.1);
+      padding: 32px 40px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px;
+    }
+    footer p {
+      font-size: 12px; color: rgba(143,163,184,.4);
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      font-size: 12px; color: rgba(143,163,184,.5);
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--steel-lt); text-decoration: none; }
+
+    @media (max-width: 900px) {
+      .page-wrapper { grid-template-columns: 1fr; padding: 40px 20px; }
+      .sidebar { position: static; }
+      .rights-grid { grid-template-columns: 1fr; }
+      nav { padding: 0 20px; }
+      footer { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <rect x="1" y="8" width="16" height="3" rx="1.5" fill="white"/>
+        <rect x="3" y="4" width="12" height="3" rx="1.5" fill="white" opacity=".6"/>
+        <rect x="3" y="11" width="12" height="3" rx="1.5" fill="white" opacity=".6"/>
+        <circle cx="5" cy="15" r="2" fill="white"/>
+        <circle cx="13" cy="15" r="2" fill="white"/>
+      </svg>
+    </div>
+    Route<span>Pro</span>
+  </a>
+  <a href="index.html" class="nav-back">← Retour à l'accueil</a>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-disclaimer">
+      <strong>⚠ Rappel important</strong>
+      RoutePro est un outil d'entraînement indépendant. Il ne constitue pas une formation officielle ni un organisme de formation agréé.
+    </div>
+    <div class="sidebar-title">Sommaire</div>
+    <nav class="sidebar-nav">
+      <a href="#editeur" class="sidebar-link">1. Éditeur du site</a>
+      <a href="#hebergeur" class="sidebar-link">2. Hébergeur</a>
+      <a href="#propriete" class="sidebar-link">3. Propriété intellectuelle</a>
+      <a href="#responsabilite" class="sidebar-link">4. Responsabilité</a>
+      <div class="sidebar-sep"></div>
+      <a href="#rgpd" class="sidebar-link">5. Politique de confidentialité</a>
+      <a href="#cookies" class="sidebar-link">6. Cookies</a>
+      <div class="sidebar-sep"></div>
+      <a href="#cgu" class="sidebar-link">7. CGU</a>
+      <div class="sidebar-sep"></div>
+      <a href="#cgv" class="sidebar-link">8. CGV</a>
+      <a href="#abonnement" class="sidebar-link">9. Abonnements</a>
+      <a href="#resiliation" class="sidebar-link">10. Résiliation</a>
+      <a href="#paiement" class="sidebar-link">11. Paiement</a>
+      <a href="#remboursement" class="sidebar-link">12. Remboursement</a>
+      <div class="sidebar-sep"></div>
+      <a href="#contact-legal" class="sidebar-link">13. Contact</a>
+    </nav>
+  </aside>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="content">
+    <div class="page-header">
+      <span class="tag">Informations légales</span>
+      <h1>Mentions Légales<br/>CGV · CGU · RGPD</h1>
+      <div class="meta">
+        <span>Dernière mise à jour : <strong style="color:var(--steel-lt)">À compléter</strong></span>
+        <span>Version : 1.0</span>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════
+         1. ÉDITEUR
+    ══════════════════════════ -->
+    <section class="legal-section" id="editeur">
+      <h2><span class="sec-num">01</span> Éditeur du site</h2>
+      <p>Conformément aux dispositions de la loi n°2004-575 du 21 juin 2004 pour la Confiance dans l'Économie Numérique (LCEN), les informations relatives à l'éditeur du site <strong>routepro.fr</strong> sont les suivantes :</p>
+
+      <div class="info-box">
+        <span class="ib-label">Identification de l'éditeur</span>
+        <table>
+          <tr><td>Nom / Raison sociale</td><td><span class="placeholder">[Votre nom ou raison sociale]</span></td></tr>
+          <tr><td>Forme juridique</td><td><span class="placeholder">[Ex : Auto-entrepreneur / SASU / EURL]</span></td></tr>
+          <tr><td>Adresse du siège social</td><td><span class="placeholder">[Votre adresse complète]</span></td></tr>
+          <tr><td>SIREN / SIRET</td><td><span class="placeholder">[Votre numéro SIREN / SIRET]</span></td></tr>
+          <tr><td>Numéro de TVA intracommunautaire</td><td><span class="placeholder">[FR + numéro si applicable]</span></td></tr>
+          <tr><td>Adresse e-mail de contact</td><td><span class="placeholder">[contact@routepro.fr]</span></td></tr>
+          <tr><td>Téléphone</td><td><span class="placeholder">[Optionnel]</span></td></tr>
+          <tr><td>Directeur de la publication</td><td><span class="placeholder">[Votre nom complet]</span></td></tr>
+        </table>
+      </div>
+
+      <div class="info-box orange">
+        <span class="ib-label">Statut de la plateforme</span>
+        <p>RoutePro est une plateforme d'entraînement et de simulation d'examen indépendante. <strong>Elle n'est pas un organisme de formation agréé</strong> au sens du Code du travail et n'est pas habilitée à délivrer des attestations, certificats ou diplômes officiels. Elle ne dispense pas de formations au sens réglementaire du terme.</p>
+      </div>
+    </section>
+
+    <div class="section-sep"></div>
+
+    <!-- ══════════════════════════
+         2. HÉBERGEUR
+    ══════════════════════════ -->
+    <section class="legal-section" id="hebergeur">
+      <h2><span class="sec-num">02</span> Hébergeur</h2>
+      <div class="info-box">
+        <span class="ib-label">Hébergeur du site</span>
+        <table>
+          <tr><td>Raison sociale</td><td>Vercel Inc.</td></tr>
+          <tr><td>Adresse</td><td>440 N Barranca Ave #4133, Covina, CA 91723, États-Unis</td></tr>
+          <tr><td>Site web</td><td><a href="https://vercel.com" target="_blank">vercel.com</a></td></tr>
+        </table>
+      </div>
+      <p>Les données de la base de données sont hébergées par :</p>
+      <div class="info-box">
+        <span class="ib-label">Hébergeur de la base de données</span>
+        <table>
+          <tr><td>Raison sociale</td><td>Supabase Inc.</td></tr>
+          <tr><td>Adresse</td><td>970 Toa Payoh North, #07-04, Singapour 318992</td></tr>
+          <tr><td>Région des données</td><td><span class="placeholder">[Ex : EU West — Frankfurt]</span> (Union européenne)</td></tr>
+          <tr><td>Site web</td><td><a href="https://supabase.com" target="_blank">supabase.com</a></td></tr>
+        </table>
+      </div>
+    </section>
+
+    <div class="section-sep"></div>
+
+    <!-- ══════════════════════════
+         3. PROPRIÉTÉ INTELLECTUELLE
+    ══════════════════════════ -->
+    <section class="legal-section" id="propriete">
+      <h2><span class="sec-num">03</span> Propriété intellectuelle</h2>
+      <p>L'ensemble du contenu de ce site — textes, questions, explications, design, logos, icônes, charte graphique, code source — est la propriété exclusive de <span class="placeholder">[Nom de l'éditeur]</span> et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.</p>
+      <p>Toute reproduction, représentation, modification, publication, transmission ou dénaturation, totale ou partielle, du contenu du site par quelque procédé que ce soit et sur quelque support que ce soit est <strong>strictement interdite</strong>, sauf autorisation écrite préalable de l'éditeur.</p>
+      <p>Les questions, réponses et explications présentes sur la plateforme ont été rédigées par l'éditeur à des fins pédagogiques. Elles constituent une œuvre originale protégée par le droit d'auteur. Leur reproduction, redistribution ou revente, même partielle, est interdite.</p>
+      <div class="info-box alert">
+        <span class="ib-label">⚠ Interdiction de revente</span>
+        <p>Il est expressément interdit de revendre, redistribuer, partager, louer ou sous-licencier l'accès à la plateforme ou à son contenu à des tiers, sous quelque forme que ce soit. Toute violation de cette interdiction entraîne la résiliation immédiate du compte et peut faire l'objet de poursuites judiciaires.</p>
+      </div>
+    </section>
+
+    <div class="section-sep"></div>
+
+    <!-- ══════════════════════════
+         4. RESPONSABILITÉ
+    ══════════════════════════ -->
+    <section class="legal-section" id="responsabilite">
+      <h2><span class="sec-num">04</span> Limitation de responsabilité</h2>
+      <p>RoutePro est un <strong>outil d'entraînement et de révision indépendant</strong>. Il ne constitue en aucun cas une formation officielle et ne remplace pas les formations dispensées par des organismes agréés.</p>
+      <p>L'éditeur ne saurait être tenu responsable :</p>
+      <ul>
+        <li>Des résultats obtenus par l'utilisateur à l'examen officiel ;</li>
+        <li>De l'exactitude absolue des questions au regard du contenu des examens officiels ;</li>
+        <li>De toute interruption ou indisponibilité du service ;</li>
+        <li>De tout dommage direct ou indirect résultant de l'utilisation ou de l'impossibilité d'utiliser le site.</li>
+      </ul>
+      <div class="info-box orange">
+        <span class="ib-label">Avertissement ADR</span>
+        <p>Les contenus relatifs à l'ADR (transport de marchandises dangereuses) présents sur cette plateforme couvrent <strong>uniquement la théorie générale</strong> à des fins d'entraînement. La formation ADR initiale et les spécialisations (citerne, explosifs, radioactifs…) ainsi que le certificat ADR doivent obligatoirement être obtenus auprès d'un organisme de formation agréé par le Ministère chargé des Transports. La partie pratique ne peut pas être réalisée en ligne.</p>
+      </div>
+      <p>Les questions présentes sur ce site ont été créées par nos soins à des fins pédagogiques. <strong>Elles ne sont pas issues des examens officiels et ne constituent pas une garantie de contenu réel d'examen.</strong></p>
+    </section>
+
+    <div class="section-sep"></div>
+
+    <!-- ══════════════════════════
+         5. POLITIQUE DE CONFIDENTIALITÉ / RGPD
+    ══════════════════════════ -->
+    <section class="legal-section" id="rgpd">
+      <h2><span class="sec-num">05</span> Politique de confidentialité — RGPD</h2>
+      <p>Conformément au Règlement Général sur la Protection des Données (RGPD — UE 2016/679) et à la loi Informatique et Libertés du 6 janvier 1978 modifiée, l'éditeur s'engage à protéger la vie privée des utilisateurs de la plateforme.</p>
+
+      <h3>5.1 Responsable du traitement</h3>
+      <div class="info-box">
+        <table>
+          <tr><td>Responsable</td><td><span class="placeholder">[Votre nom]</span></td></tr>
+          <tr><td>Adresse</td><td><span class="placeholder">[Votre adresse]</span></td></tr>
+          <tr><td>E-mail DPO / Contact RGPD</td><td><span class="placeholder">[rgpd@routepro.fr]</span></td></tr>
+        </table>
+      </div>
+
+      <h3>5.2 Données collectées</h3>
+      <p>Dans le cadre de l'utilisation de la plateforme, les données suivantes peuvent être collectées et traitées :</p>
+      <ul>
+        <li><strong>Données d'identification :</strong> adresse e-mail, prénom, nom (lors de l'inscription) ;</li>
+        <li><strong>Données de connexion :</strong> adresse IP, dates et heures de connexion, navigateur et système d'exploitation ;</li>
+        <li><strong>Données d'utilisation :</strong> résultats des sessions d'entraînement, réponses données, scores, progression par matière ;</li>
+        <li><strong>Données de paiement :</strong> traitées exclusivement par notre prestataire de paiement Stripe (aucune donnée bancaire n'est stockée sur nos serveurs) ;</li>
+        <li><strong>Cookies :</strong> voir section 6.</li>
+      </ul>
+
+      <h3>5.3 Finalités et bases légales du traitement</h3>
+      <div class="info-box">
+        <table>
+          <tr>
+            <td><strong>Finalité</strong></td>
+            <td><strong>Base légale</strong></td>
+          </tr>
+          <tr>
+            <td>Gestion des comptes utilisateurs</td>
+            <td>Exécution du contrat (Art. 6.1.b RGPD)</td>
+          </tr>
+          <tr>
+            <td>Fourniture du service d'entraînement</td>
+            <td>Exécution du contrat (Art. 6.1.b RGPD)</td>
+          </tr>
+          <tr>
+            <td>Traitement des paiements et abonnements</td>
+            <td>Exécution du contrat (Art. 6.1.b RGPD)</td>
+          </tr>
+          <tr>
+            <td>Statistiques de progression personnelles</td>
+            <td>Exécution du contrat (Art. 6.1.b RGPD)</td>
+          </tr>
+          <tr>
+            <td>Amélioration du service (données anonymisées)</td>
+            <td>Intérêt légitime (Art. 6.1.f RGPD)</td>
+          </tr>
+          <tr>
+            <td>Communications transactionnelles (confirmations)</td>
+            <td>Exécution du contrat (Art. 6.1.b RGPD)</td>
+          </tr>
+          <tr>
+            <td>Communications commerciales (newsletter)</td>
+            <td>Consentement (Art. 6.1.a RGPD)</td>
+          </tr>
+          <tr>
+            <td>Obligations légales (comptabilité, TVA)</td>
+            <td>Obligation légale (Art. 6.1.c RGPD)</td>
+          </tr>
+        </table>
+      </div>
+
+      <h3>5.4 Durée de conservation</h3>
+      <ul>
+        <li><strong>Données de compte actif :</strong> pendant toute la durée de la relation contractuelle ;</li>
+        <li><strong>Données de compte inactif :</strong> suppression ou anonymisation au bout de 3 ans après la dernière connexion ;</li>
+        <li><strong>Données de paiement (factures) :</strong> 10 ans (obligation comptable) ;</li>
+        <li><strong>Logs de connexion :</strong> 12 mois maximum ;</li>
+        <li><strong>Données de progression :</strong> supprimées sur demande ou à la fermeture du compte.</li>
+      </ul>
+
+      <h3>5.5 Destinataires des données</h3>
+      <p>Les données personnelles sont destinées exclusivement à l'éditeur et aux prestataires techniques suivants, dans la stricte mesure nécessaire à leurs missions :</p>
+      <ul>
+        <li><strong>Supabase</strong> — hébergement de la base de données et authentification ;</li>
+        <li><strong>Stripe</strong> — traitement sécurisé des paiements ;</li>
+        <li><strong>Vercel</strong> — hébergement de l'application web.</li>
+      </ul>
+      <p><strong>Aucune donnée personnelle n'est vendue, louée ou cédée à des tiers</strong>, que ce soit à des fins commerciales, publicitaires ou autres.</p>
+
+      <h3>5.6 Transferts hors UE</h3>
+      <p>Certains de nos prestataires (Vercel, Stripe) sont établis aux États-Unis. Ces transferts sont encadrés par les garanties appropriées prévues par le RGPD (clauses contractuelles types de la Commission européenne ou adhésion au Data Privacy Framework EU-US). Les données de la base de données Supabase sont hébergées dans la région <span class="placeholder">[EU West — Frankfurt]</span>, au sein de l'Union européenne.</p>
+
+      <h3>5.7 Vos droits</h3>
+      <p>Conformément au RGPD, vous disposez des droits suivants concernant vos données personnelles :</p>
+      <div class="rights-grid">
+        <div class="right-card">
+          <div class="rc-title">📋 Droit d'accès</div>
+          <p>Obtenir la confirmation que vos données sont traitées et en recevoir une copie.</p>
+        </div>
+        <div class="right-card">
+          <div class="rc-title">✏️ Droit de rectification</div>
+          <p>Corriger des données inexactes ou incomplètes vous concernant.</p>
+        </div>
+        <div class="right-card">
+          <div class="rc-title">🗑 Droit à l'effacement</div>
+          <p>Demander la suppression de vos données (« droit à l'oubli »), sous réserve des obligations légales.</p>
+        </div>
+        <div class="right-card">
+          <div class="rc-title">⏸ Droit à la limitation</div>
+          <p>Demander la suspension du traitement de vos données dans certains cas.</p>
+        </div>
+        <div class="right-card">
+          <div class="rc-title">📦 Droit à la portabilité</div>
+          <p>Recevoir vos données dans un format structuré et lisible par machine.</p>
+        </div>
+        <div class="right-card">
+          <div class="rc-title">🚫 Droit d'opposition</div>
+          <p>Vous opposer au traitement de vos données pour des raisons tenant à votre situation particulière.</p>
+        </div>
+      </div>
+      <p style="margin-top:16px">Pour exercer ces droits, contactez-nous à : <a href="mailto:rgpd@routepro.fr"><span class="placeholder">[rgpd@routepro.fr]</span></a>. Nous vous répondrons dans un délai maximum d'un mois.</p>
+      <p>En cas de litige, vous pouvez introduire une réclamation auprès de la <strong>CNIL</strong> (Commission Nationale de l'Informatique et des Libertés) : <a href="https://www.cnil.fr" target="_blank">www.cnil.fr</a></p>
+    </section>
+
+    <div class="section-sep"></div>
+
+    <!-- ══════════════════════════
+         6. COOKIES
+    ══════════════════════════ -->
+    <section class="legal-section" id="cookies">
+      <h2><span class="sec-num">06</span> Politique de gestion des cookies</h2>
+      <p>Un cookie est un petit fichier texte déposé sur votre terminal lors de la visite du site. Conformément à la directive ePrivacy et aux recommandations de la CNIL, nous vous informons de l'utilisation suivante :</p>
+
+      <h3>Cookies strictement nécessaires (pas de consentement requis)</h3>
+      <div class="info-box">
+        <table>
+          <tr><td><strong>Cookie</strong></td><td><strong>Finalité</strong></td><td><strong>Durée</strong></td></tr>
+          <tr><td>session</td><td>Maintien de la session d'authentification</td><td>Session</td></tr>
+          <tr><td>disclaimer-seen</td><td>Mémorisation de l'affichage du disclaimer</td><td>Session</td></tr>
+          <tr><td>csrf-token</td><td>Protection contre les attaques CSRF</td><td>Session</td></tr>
+        </table>
+      </div>
+
+      <h3>Cookies analytiques (avec consentement)</h3>
+      <div class="info-box">
+        <table>
+          <tr><td><strong>Cookie</strong></td><td><strong>Finalité</strong></td><td><strong>Durée</strong></td></tr>
+          <tr><td><span class="placeholder">[Outil analytics si utilisé]</span></td><td>Mesure d'audience anonymisée</td><td><span class="placeholder">[Durée]</span></td></tr>
+        </table>
+      </div>
+      <p>Vous pouvez à tout moment modifier vos préférences de cookies depuis le lien « Gestion des cookies » en bas de page, ou en configurant votre navigateur.</p>
+    </section>
+
+    <div class="section-sep"></div>
+
+    <!-- ══════════════════════════
+         7. CGU
+    ══════════════════════════ -->
+    <section class="legal-section" id="cgu">
+      <h2><span class="sec-num">07</span> Conditions Générales d'Utilisation (CGU)</h2>
+      <p>Les présentes Conditions Générales d'Utilisation (CGU) régissent l'accès et l'utilisation de la plateforme RoutePro accessible à l'adresse <span class="placeholder">[routepro.fr]</span>.</p>
+
+      <h3>7.1 Acceptation des CGU</h3>
+      <p>L'accès et l'utilisation de la plateforme impliquent l'acceptation pleine et entière des présentes CGU. L'utilisateur s'engage à les lire attentivement avant toute inscription.</p>
+
+      <h3>7.2 Nature du service</h3>
+      <p>RoutePro est une <strong>plateforme d'entraînement et de simulation d'examen</strong>. Elle propose :</p>
+      <ul>
+        <li>Des exercices QCM de révision pour la capacité professionnelle en transport routier de marchandises (CPC >3,5t) ;</li>
+        <li>Des exercices QCM de révision pour l'ADR (transport de marchandises dangereuses — partie théorique uniquement) ;</li>
+        <li>Des simulations d'examens blancs ;</li>
+        <li>Des statistiques de progression personnelles.</li>
+      </ul>
+      <div class="info-box alert">
+        <span class="ib-label">⚠ Ce que RoutePro n'est PAS</span>
+        <p>RoutePro n'est <strong>pas un organisme de formation agréé</strong>. Il ne délivre aucune attestation, aucun certificat ni aucun diplôme officiel. Il ne remplace en aucun cas les formations obligatoires pour se présenter aux examens officiels CPC ou ADR.</p>
+      </div>
+
+      <h3>7.3 Inscription et compte utilisateur</h3>
+      <p>L'inscription est ouverte à toute personne physique majeure. L'utilisateur s'engage à :</p>
+      <ul>
+        <li>Fournir des informations exactes et à jour lors de l'inscription ;</li>
+        <li>Maintenir la confidentialité de ses identifiants de connexion ;</li>
+        <li>Ne pas créer plusieurs comptes avec la même identité ;</li>
+        <li>Informer immédiatement l'éditeur de toute utilisation non autorisée de son compte.</li>
+      </ul>
+
+      <h3>7.4 Usage personnel et non commercial</h3>
+      <p>L'accès à la plateforme est strictement <strong>personnel et non cessible</strong>. Il est formellement interdit :</p>
+      <ul>
+        <li>De partager ses identifiants avec des tiers ;</li>
+        <li>De revendre ou de céder son accès ;</li>
+        <li>De redistribuer, copier ou reproduire les questions, réponses et explications ;</li>
+        <li>D'utiliser des outils automatisés (bots, scrapers) pour extraire le contenu ;</li>
+        <li>D'utiliser la plateforme à des fins commerciales sans accord écrit préalable de l'éditeur.</li>
+      </ul>
+
+      <h3>7.5 Disponibilité du service</h3>
+      <p>L'éditeur s'efforce d'assurer la disponibilité du service 24h/24 et 7j/7. Toutefois, des interruptions peuvent survenir pour maintenance, mises à jour ou raisons techniques indépendantes de sa volonté. L'éditeur ne garantit pas une disponibilité ininterrompue du service.</p>
+
+      <h3>7.6 Modification des CGU</h3>
+      <p>L'éditeur se réserve le droit de modifier les présentes CGU à tout moment. Les utilisateurs seront notifiés par e-mail en cas de modification substantielle. L'utilisation continue de la plateforme après notification vaut acceptation des nouvelles CGU.</p>
+
+      <h3>7.7 Résiliation du compte</h3>
+      <p>L'utilisateur peut fermer son compte à tout moment depuis son espace personnel. L'éditeur se réserve le droit de suspendre ou résilier tout compte en cas de violation des présentes CGU, sans préavis ni remboursement.</p>
+
+      <h3>7.8 Droit applicable et juridiction</h3>
+      <p>Les présentes CGU sont soumises au droit français. En cas de litige, et après tentative de résolution amiable, les tribunaux compétents seront ceux du ressort de <span class="placeholder">[votre ville]</span>, sauf disposition légale contraire applicable aux consommateurs.</p>
+    </section>
+
+    <div class="section-sep"></div>
+
+    <!-- ══════════════════════════
+         8. CGV
+    ══════════════════════════ -->
+    <section class="legal-section" id="cgv">
+      <h2><span class="sec-num">08</span> Conditions Générales de Vente (CGV)</h2>
+      <p>Les présentes Conditions Générales de Vente (CGV) s'appliquent à toutes les transactions d'abonnements payants effectuées sur la plateforme RoutePro.</p>
+
+      <h3>8.1 Vendeur</h3>
+      <div class="info-box">
+        <table>
+          <tr><td>Nom / Raison sociale</td><td><span class="placeholder">[Votre nom ou raison sociale]</span></td></tr>
+          <tr><td>Adresse</td><td><span class="placeholder">[Votre adresse complète]</span></td></tr>
+          <tr><td>SIREN</td><td><span class="placeholder">[Votre SIREN]</span></td></tr>
+          <tr><td>E-mail</td><td><span class="placeholder">[contact@routepro.fr]</span></td></tr>
+        </table>
+      </div>
+
+      <h3>8.2 Produits et services</h3>
+      <p>RoutePro propose les abonnements payants suivants, donnant accès à la plateforme d'entraînement en version illimitée :</p>
+      <table class="tarif-table">
+        <thead>
+          <tr>
+            <th>Plan</th>
+            <th>Durée</th>
+            <th>Prix TTC</th>
+            <th>Engagement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Gratuit</strong></td>
+            <td>Permanent</td>
+            <td>0,00 €</td>
+            <td>Aucun</td>
+          </tr>
+          <tr>
+            <td><strong>Mensuel</strong></td>
+            <td>1 mois renouvelable</td>
+            <td>14,90 € / mois</td>
+            <td>Sans engagement</td>
+          </tr>
+          <tr>
+            <td><strong>Annuel</strong></td>
+            <td>12 mois renouvelables</td>
+            <td>99,00 € / an</td>
+            <td>Sans engagement</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Tous les prix sont indiqués en euros TTC (TVA applicable selon la législation en vigueur). <span class="placeholder">[Préciser le taux de TVA applicable : ex. 20%]</span></p>
+
+      <h3>8.3 Commande et formation du contrat</h3>
+      <p>La souscription à un abonnement payant s'effectue en ligne selon le processus suivant :</p>
+      <ol>
+        <li>Sélection du plan d'abonnement sur la page Tarifs ;</li>
+        <li>Création ou connexion au compte utilisateur ;</li>
+        <li>Saisie des informations de paiement sur la page sécurisée Stripe ;</li>
+        <li>Validation de la commande par clic sur le bouton de confirmation ;</li>
+        <li>Envoi d'un e-mail de confirmation de commande avec récapitulatif.</li>
+      </ol>
+      <p>Le contrat d'abonnement est conclu au moment de la validation du paiement et de l'envoi de la confirmation par e-mail.</p>
+    </section>
+
+    <div class="section-sep"></div>
+
+    <!-- ══════════════════════════
+         9. ABONNEMENTS
+    ══════════════════════════ -->
+    <section class="legal-section" id="abonnement">
+      <h2><span class="sec-num">09</span> Abonnements et renouvellement</h2>
+
+      <h3>9.1 Renouvellement automatique</h3>
+      <p>Les abonnements sont à <strong>renouvellement automatique</strong>. À l'issue de chaque période d'abonnement, le renouvellement est effectué automatiquement pour une durée identique et au même tarif, sauf résiliation préalable de l'utilisateur.</p>
+      <p>L'utilisateur sera informé par e-mail du prochain prélèvement automatique au moins <strong>7 jours avant</strong> l'échéance de renouvellement.</p>
+
+      <h3>9.2 Accès au service</h3>
+      <p>L'accès aux fonctionnalités illimitées est activé immédiatement après confirmation du paiement et reste actif jusqu'à la fin de la période d'abonnement en cours.</p>
+    </section>
+
+    <div class="section-sep"></div>
+
+    <!-- ══════════════════════════
+         10. RÉSILIATION
+    ══════════════════════════ -->
+    <section class="legal-section" id="resiliation">
+      <h2><span class="sec-num">10</span> Résiliation — Loi du 9 mars 2023</h2>
+      <div class="info-box orange">
+        <span class="ib-label">🔓 Résiliation facile en ligne</span>
+        <p>Conformément à la loi n°2023-91 du 9 mars 2023 relative aux résiliations de contrats de consommation (loi dite « résiliation en trois clics »), <strong>vous pouvez résilier votre abonnement RoutePro directement en ligne</strong>, depuis votre espace personnel, sans avoir à contacter le service client, à justifier votre décision ni à subir de délai d'attente excessif. La résiliation est <strong>gratuite</strong>.</p>
+      </div>
+
+      <h3>Procédure de résiliation</h3>
+      <ol>
+        <li>Connectez-vous à votre compte sur routepro.fr ;</li>
+        <li>Accédez à la section <strong>« Mon abonnement »</strong> dans votre espace personnel ;</li>
+        <li>Cliquez sur <strong>« Résilier mon abonnement »</strong> ;</li>
+        <li>Confirmez votre résiliation.</li>
+      </ol>
+      <p>La résiliation prend effet à la <strong>fin de la période d'abonnement en cours</strong>. Vous conservez l'accès aux fonctionnalités premium jusqu'à cette date. Aucun remboursement au prorata n'est effectué pour la période restante, sauf exercice du droit de rétractation (voir section 12).</p>
+    </section>
+
+    <div class="section-sep"></div>
+
+    <!-- ══════════════════════════
+         11. PAIEMENT
+    ══════════════════════════ -->
+    <section class="legal-section" id="paiement">
+      <h2><span class="sec-num">11</span> Paiement</h2>
+      <p>Les paiements sont traités de manière sécurisée par <strong>Stripe</strong>, prestataire certifié PCI-DSS niveau 1. Aucune donnée bancaire n'est stockée sur les serveurs de RoutePro.</p>
+      <p>Moyens de paiement acceptés :</p>
+      <ul>
+        <li>Carte bancaire (Visa, Mastercard, American Express) ;</li>
+        <li><span class="placeholder">[Autres moyens acceptés si applicable : PayPal, Apple Pay, etc.]</span></li>
+      </ul>
+      <p>En cas d'échec de paiement lors d'un renouvellement automatique, l'accès premium sera suspendu jusqu'à régularisation. L'utilisateur sera notifié par e-mail.</p>
+    </section>
+
+    <div class="section-sep"></div>
+
+    <!-- ══════════════════════════
+         12. RÉTRACTATION / REMBOURSEMENT
+    ══════════════════════════ -->
+    <section class="legal-section" id="remboursement">
+      <h2><span class="sec-num">12</span> Droit de rétractation et remboursement</h2>
+
+      <h3>12.1 Droit de rétractation (14 jours)</h3>
+      <p>Conformément aux articles L.221-18 et suivants du Code de la consommation, vous disposez d'un délai de <strong>14 jours calendaires</strong> à compter de la souscription de votre abonnement pour exercer votre droit de rétractation, sans avoir à justifier de motifs ni à payer de pénalités.</p>
+      <div class="info-box alert">
+        <span class="ib-label">Exception au droit de rétractation</span>
+        <p>Conformément à l'article L.221-28 du Code de la consommation, <strong>le droit de rétractation ne peut être exercé</strong> pour les contrats de fourniture de contenu numérique non fourni sur un support matériel dont l'exécution a commencé avant la fin du délai de rétractation, avec l'accord préalable exprès du consommateur et sa renonciation expresse à son droit de rétractation.<br/><br/>
+        <strong>En pratique :</strong> si vous avez commencé à utiliser la plateforme (accès aux questions, sessions d'entraînement) après avoir expressément renoncé à votre droit de rétractation lors de la commande, le droit de rétractation ne s'applique plus. Cette renonciation vous sera demandée explicitement lors du processus de commande.</p>
+      </div>
+
+      <h3>12.2 Exercice du droit de rétractation</h3>
+      <p>Pour exercer le droit de rétractation (dans le délai applicable), adressez une déclaration non équivoque par e-mail à : <a href="mailto:contact@routepro.fr"><span class="placeholder">[contact@routepro.fr]</span></a>. Le remboursement sera effectué dans les <strong>14 jours</strong> suivant la réception de votre demande.</p>
+    </section>
+
+    <div class="section-sep"></div>
+
+    <!-- ══════════════════════════
+         13. CONTACT
+    ══════════════════════════ -->
+    <section class="legal-section" id="contact-legal">
+      <h2><span class="sec-num">13</span> Contact</h2>
+      <p>Pour toute question relative aux présentes mentions légales, CGV, CGU ou à la politique de confidentialité, vous pouvez nous contacter :</p>
+      <div class="info-box">
+        <table>
+          <tr><td>E-mail général</td><td><span class="placeholder">[contact@routepro.fr]</span></td></tr>
+          <tr><td>E-mail RGPD</td><td><span class="placeholder">[rgpd@routepro.fr]</span></td></tr>
+          <tr><td>Adresse postale</td><td><span class="placeholder">[Votre adresse complète]</span></td></tr>
+        </table>
+      </div>
+      <p>En cas de litige non résolu amiablement, vous pouvez recourir à la médiation de la consommation. L'éditeur adhère au service de médiation : <span class="placeholder">[Nom du médiateur et lien vers sa plateforme]</span>. Vous pouvez également utiliser la plateforme européenne de règlement en ligne des litiges : <a href="https://ec.europa.eu/consumers/odr" target="_blank">ec.europa.eu/consumers/odr</a></p>
+    </section>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 RoutePro — <span class="placeholder">[Votre nom / raison sociale]</span> — Tous droits réservés</p>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="mentions-legales.html">Mentions légales</a>
+    <a href="#">Politique de confidentialité</a>
+    <a href="#">CGV</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+  // Highlight active sidebar link on scroll
+  const sections = document.querySelectorAll('.legal-section');
+  const links = document.querySelectorAll('.sidebar-link');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.sidebar-link[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
