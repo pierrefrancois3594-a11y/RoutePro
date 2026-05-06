@@ -392,6 +392,7 @@
 </div>
 
 <!-- Charge la banque de questions -->
+<script src="supabase.js"></script>
 <script src="banque.js"></script>
 <script>
 // ═══════════════════════════════════════════════════
@@ -536,6 +537,8 @@ function startTheme(themeObj) {
   S.themeObj = themeObj;
   S.corr = 0; S.wrong = 0; S.skipped = 0;
   S.hist = []; S.flagged = []; S.idx = 0; S.done = false;
+  S.sessionId = null;
+  S.startTime = Date.now();
   renderList();
 
   // Sélection intelligente via le moteur
@@ -650,6 +653,11 @@ function pick(btn, rep, q) {
   // Enregistre dans le moteur
   engine.recordAnswer(q.id, ok);
 
+  // Sauvegarde dans Supabase (si connecté)
+  if (window.sb && window.sb.estConnecte() && S.sessionId) {
+    window.sb.sauvegarderReponse(S.sessionId, q.id, q.prog, q.theme, ok).catch(()=>{});
+  }
+
   // Explication
   document.getElementById('exp-txt').textContent = q.x;
   document.getElementById('expbox').classList.add('show');
@@ -720,6 +728,16 @@ function showResults() {
   document.getElementById('rs-w').textContent = wrong;
   document.getElementById('rs-t').textContent = tot;
   document.getElementById('rs-sk').textContent = skipped;
+
+  // Sauvegarder session dans Supabase
+  if (window.sb && window.sb.estConnecte()) {
+    const duree = Math.round((Date.now() - (S.startTime || Date.now())) / 1000);
+    const prog = S.themeObj?.prog || S.qs[0]?.prog || 'LEGER';
+    window.sb.sauvegarderSession(prog, S.theme, tot, corr, wrong, duree)
+      .then(res => {
+        if (res && res[0] && res[0].id) S.sessionId = res[0].id;
+      }).catch(()=>{});
+  }
 
   // Mastery bar
   const thStats = engine.getThemeStats(S.theme);

@@ -460,6 +460,7 @@
       .dash-header { flex-direction: column; gap: 16px; }
     }
   </style>
+<script src="supabase.js"></script>
 </head>
 <body>
 
@@ -1228,6 +1229,151 @@
       </div>
     `).join('');
   }
+
+  // ─── INIT SUPABASE ───
+  async function initDashboard() {
+    if (!window.sb || !window.sb.estConnecte()) {
+      // Non connecté → rediriger vers auth
+      // window.location.href = 'auth.html'; // Décommente en prod
+      renderBarChart([12, 28, 8, 35, 22, 40, 34]);
+      return;
+    }
+
+    const stats = await window.sb.getStats();
+    if (!stats) { renderBarChart([12, 28, 8, 35, 22, 40, 34]); return; }
+
+    // Mettre à jour les stats cards
+    const user = stats.user;
+    const prenom = user?.user_metadata?.prenom || user?.email?.split('@')[0] || 'Utilisateur';
+
+    // Mettre à jour la nav
+    const avatarEl = document.querySelector('.nav-avatar');
+    const userNameEl = document.querySelector('.nav-user span');
+    if (avatarEl) avatarEl.textContent = prenom.substring(0,2).toUpperCase();
+    if (userNameEl) userNameEl.textContent = prenom;
+
+    // Stats cards overview
+    updateStatCard(0, stats.totalQ + ' qst', 'Total questions répondues');
+    updateStatCard(1, stats.tauxGlobal + ' %', 'Taux de réussite global');
+    updateStatCard(2, stats.examens.length + ' passés', 'Examens blancs');
+
+    // Thèmes faibles
+    const faibles = Object.entries(stats.parTheme)
+      .filter(([,v]) => v.taux < 60 && v.total > 0).length;
+    updateStatCard(3, faibles + ' thèmes', 'À renforcer');
+
+    // Meilleur score examen
+    if (stats.examens.length > 0) {
+      const best = stats.examens[0];
+      const statCards = document.querySelectorAll('.stat-card');
+      if (statCards[2]) {
+        statCards[2].querySelector('.stat-sub').innerHTML =
+          'Meilleur : <strong style="color:var(--green)">' + stats.meilleurScore + '/200</strong>';
+      }
+    }
+
+    // Mettre à jour les barres de progression
+    renderProgressBars(stats.parTheme);
+
+    // Mettre à jour l'historique examens
+    renderExamens(stats.examens);
+
+    // Donut
+    if (stats.totalQ > 0) {
+      const pct = stats.tauxGlobal;
+      const wrong = Math.round((stats.totalQ - stats.totalCorr) / stats.totalQ * 100);
+      const skip = Math.max(0, 100 - pct - wrong);
+      updateDonut(pct, wrong, skip);
+    }
+
+    // Bar chart sur 7 jours
+    renderBarChart7j(stats);
+  }
+
+  function updateStatCard(idx, value, label) {
+    const cards = document.querySelectorAll('.stat-card');
+    if (!cards[idx]) return;
+    const valEl = cards[idx].querySelector('.stat-value');
+    if (valEl) valEl.innerHTML = value;
+  }
+
+  function renderProgressBars(parTheme) {
+    const map = {
+      'cl-civil': 'Droit civil & commercial',
+      'cl-social': 'Droit social',
+      'cl-gestion': 'Gestion financière',
+      'cl-fiscal': 'Droit fiscal',
+      'cl-regl': 'Réglementation VUL',
+      'cl-secu': 'Sécurité routière',
+      'cl-acces': 'Accès à la profession',
+    };
+    const pl = document.getElementById('progressList');
+    if (!pl) return;
+    const items = Object.entries(map).map(([id, name]) => {
+      // Chercher dans parTheme (thèmes longs)
+      const aliases = [id, name, 'Droit civil & commercial', 'Droit social'];
+      let data = null;
+      for (const [k, v] of Object.entries(parTheme)) {
+        if (k === id || k === name) { data = v; break; }
+      }
+      const pct = data ? data.taux : 0;
+      const cls = pct < 60 ? 'low' : pct > 80 ? 'green' : '';
+      return `<div class="progress-item">
+        <div class="progress-meta"><span class="progress-name">${name}</span><span class="progress-pct">${pct} %</span></div>
+        <div class="progress-bar"><div class="progress-fill ${cls}" style="width:${pct}%"></div></div>
+      </div>`;
+    }).join('');
+    pl.innerHTML = items || pl.innerHTML;
+  }
+
+  function renderExamens(examens) {
+    const progLabels = { LEGER: 'leger', LOURD: 'lourd', ADR: 'adr' };
+    const list = document.querySelector('.exam-list');
+    if (!list || !examens.length) return;
+    list.innerHTML = examens.slice(0, 5).map((e, i) => {
+      const prog = (e.programme || 'LEGER').toUpperCase();
+      const cls = progLabels[prog] || 'leger';
+      const score = e.score_total || 0;
+      const max = prog === 'ADR' ? 100 : 200;
+      const scoreCls = e.admis ? 'pass' : score >= max * 0.55 ? 'mid' : 'fail';
+      const verdict = e.admis ? 'Admis ✅' : 'Non admis ❌';
+      const date = new Date(e.created_at).toLocaleDateString('fr-FR');
+      return `<div class="exam-item">
+        <span class="exam-badge ${cls}">${prog === 'LEGER' ? 'Léger' : prog === 'LOURD' ? 'Lourd' : 'ADR'}</span>
+        <div class="exam-info">
+          <div class="exam-name">Examen blanc n°${examens.length - i}</div>
+          <div class="exam-meta">${date}</div>
+        </div>
+        <div class="exam-result">
+          <div class="exam-score ${scoreCls}">${score}</div>
+          <div class="exam-verdict">/${max} · ${verdict}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function updateDonut(pct, wrong, skip) {
+    const items = document.querySelectorAll('.donut-item .pct');
+    if (items[0]) items[0].textContent = pct + ' %';
+    if (items[1]) items[1].textContent = wrong + ' %';
+    if (items[2]) items[2].textContent = skip + ' %';
+  }
+
+  function renderBarChart7j(stats) {
+    // Simuler 7 jours depuis les sessions réelles
+    const data = [0,0,0,0,0,0,0];
+    if (stats.examens) {
+      stats.examens.forEach(e => {
+        const d = new Date(e.created_at);
+        const dayAgo = Math.floor((Date.now() - d.getTime()) / 86400000);
+        if (dayAgo < 7) data[6 - dayAgo] += 10;
+      });
+    }
+    renderBarChart(data.some(v=>v>0) ? data : [12, 28, 8, 35, 22, 40, 34]);
+  }
+
+  // Appeler l'init
+  initDashboard();
 
   // ─── BAR CHART ───
   const weekData = [12, 28, 8, 35, 22, 40, 34];

@@ -349,6 +349,7 @@
       nav { padding: 0 20px; }
     }
   </style>
+<script src="supabase.js"></script>
 </head>
 <body>
 
@@ -766,25 +767,23 @@ async function handleLogin(e) {
   // Loading state
   setLoading('login', true);
 
-  // ── EN PRODUCTION : remplacer par appel Supabase ──
-  // const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
-  // if (error) { showLoginError(error.message); return; }
-  // window.location.href = 'dashboard.html';
-
-  // DEMO : simulation 1.5s
-  await sleep(1500);
-  setLoading('login', false);
-
-  // Simulate error for demo (wrong password)
-  if (pass === 'wrong') {
+  // ── Connexion Supabase ──
+  try {
+    const result = await window.sb.connexion(email, pass);
+    setLoading('login', false);
+    if (result.access_token) {
+      window.location.href = 'dashboard.html';
+    } else {
+      const alert = document.getElementById('login-alert');
+      document.getElementById('login-alert-msg').textContent = result.error_description || result.msg || 'Email ou mot de passe incorrect.';
+      alert.classList.add('visible');
+    }
+  } catch(err) {
+    setLoading('login', false);
     const alert = document.getElementById('login-alert');
-    document.getElementById('login-alert-msg').textContent = 'Email ou mot de passe incorrect.';
+    document.getElementById('login-alert-msg').textContent = 'Erreur de connexion. Réessayez.';
     alert.classList.add('visible');
-    return;
   }
-
-  // Success → redirect
-  window.location.href = 'dashboard.html';
 }
 
 // ═══════════════════════════════════════════
@@ -819,21 +818,31 @@ async function handleRegister(e) {
   // Loading
   setLoading('reg', true);
 
-  // ── EN PRODUCTION : remplacer par appel Supabase ──
-  // const { data, error } = await supabase.auth.signUp({
-  //   email, password: pass,
-  //   options: { data: { prenom, nom } }
-  // });
-  // if (error) { ... }
-
-  // DEMO : simulation
-  await sleep(1800);
-  setLoading('reg', false);
-
-  // Show confirmation screen
-  document.getElementById('register-form-wrap').style.display = 'none';
-  document.getElementById('confirm-email-shown').textContent = email;
-  document.getElementById('confirm-screen').classList.add('visible');
+  // ── Inscription Supabase ──
+  try {
+    const result = await window.sb.inscription(email, pass, prenom, nom);
+    setLoading('reg', false);
+    if (result.access_token) {
+      // Connecté directement → dashboard
+      window.location.href = 'dashboard.html';
+    } else if (result.id || (result.user && result.user.id)) {
+      // Email de confirmation envoyé
+      document.getElementById('register-form-wrap').style.display = 'none';
+      document.getElementById('confirm-email-shown').textContent = email;
+      document.getElementById('confirm-screen').classList.add('visible');
+    } else {
+      const alert = document.getElementById('reg-alert') || document.getElementById('login-alert');
+      const msg = result.error_description || result.msg || 'Erreur lors de l'inscription.';
+      if (alert) {
+        const msgEl = alert.querySelector('[id$="-msg"]') || alert;
+        if (msgEl.textContent !== undefined) msgEl.textContent = msg;
+        alert.classList.add('visible');
+      } else { alert(msg); }
+    }
+  } catch(err) {
+    setLoading('reg', false);
+    alert('Erreur de connexion au serveur. Réessayez.');
+  }
 }
 
 // ═══════════════════════════════════════════

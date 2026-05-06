@@ -527,6 +527,7 @@
 </div>
 
 <!-- ── Scripts ── -->
+<script src="supabase.js"></script>
 <script src="banque.js"></script>
 <script src="sujets-p2.js"></script>
 <script>
@@ -678,7 +679,7 @@ const P2_BANK = {
 // ════════════════════════════════════════
 // ÉTAT GLOBAL
 // ════════════════════════════════════════
-let CFG = { prog: 'LEGER', timer: 60 };
+let CFG = { prog: 'LEGER', timer: 60, startTime: Date.now(), sujetId: '' };
 let P1 = { qs:[], cur:0, answers:{}, flagged:[], timerID:null, timeLeft:0 };
 let P2 = { exercises:[], selfEval:{} };
 
@@ -1097,6 +1098,14 @@ function finishExam() {
   const elimP1 = scoreP1 < 50;
   const elimP2 = scoreP2 < 40;
   const admis = total >= 120 && !elimP1 && !elimP2;
+
+  // Sauvegarder l'examen dans Supabase
+  if (window.sb && window.sb.estConnecte()) {
+    const prog = CFG.prog || 'LEGER';
+    const duree = Math.round((Date.now() - (CFG.startTime || Date.now())) / 1000);
+    const sujetId = CFG.sujetId || '';
+    window.sb.sauvegarderExamen(prog, scoreP1, scoreP2, total, admis, duree, sujetId).catch(()=>{});
+  }
 
   // Titre & verdict
   document.getElementById('res-h1').textContent = admis ? '✓ Admis' : elimP1 || elimP2 ? '✗ Éliminé' : '✗ Ajourné';
