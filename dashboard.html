@@ -484,6 +484,7 @@
       <span id="nav-prenom">...</span>
     </div>
     <a href="entrainement.html"><button class="nav-btn primary">S'entraîner</button></a>
+    <button class="nav-btn" onclick="deconnexion()" title="Se déconnecter">⎋ Déconnexion</button>
   </div>
 </nav>
 
@@ -1228,6 +1229,15 @@
         </div>
       </div>
     `).join('');
+  }
+
+  // ─── DÉCONNEXION ───
+  function deconnexion() {
+    if (window.sb) {
+      window.sb.deconnexion();
+    } else {
+      window.location.href = 'auth.html';
+    }
   }
 
   // ─── INIT SUPABASE ───
