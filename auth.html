@@ -831,13 +831,13 @@ async function handleRegister(e) {
       document.getElementById('confirm-email-shown').textContent = email;
       document.getElementById('confirm-screen').classList.add('visible');
     } else {
-      const alert = document.getElementById('reg-alert') || document.getElementById('login-alert');
+      const alertEl = document.getElementById('reg-alert') || document.getElementById('login-alert');
       const msg = result.error_description || result.msg || "Erreur lors de l'inscription.";
-      if (alert) {
-        const msgEl = alert.querySelector('[id$="-msg"]') || alert;
+      if (alertEl) {
+        const msgEl = alertEl.querySelector('[id$="-msg"]') || alertEl;
         if (msgEl.textContent !== undefined) msgEl.textContent = msg;
-        alert.classList.add('visible');
-      } else { alert(msg); }
+        alertEl.classList.add('visible');
+      } else { window.alert(msg); }
     }
   } catch(err) {
     setLoading('reg', false);
