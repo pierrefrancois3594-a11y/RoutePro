@@ -481,7 +481,7 @@
   <div class="nav-right">
     <div class="nav-user">
       <div class="nav-avatar">PF</div>
-      <span>Pierre-François</span>
+      <span id="nav-prenom">...</span>
     </div>
     <a href="entrainement.html"><button class="nav-btn primary">S'entraîner</button></a>
   </div>
@@ -530,7 +530,7 @@
       <div class="dash-header">
         <div>
           <h1>Mon <span>tableau</span><br/>de bord</h1>
-          <p>Bienvenue, Pierre-François · Dernière connexion : aujourd'hui</p>
+          <p id="dash-bienvenue">Chargement...</p>
         </div>
         <div class="header-actions">
           <a href="examen-blanc.html"><button class="btn-sm btn-primary">Nouvel examen blanc</button></a>
@@ -1233,8 +1233,11 @@
   // ─── INIT SUPABASE ───
   async function initDashboard() {
     if (!window.sb || !window.sb.estConnecte()) {
-      // Non connecté → rediriger vers auth
-      // window.location.href = 'auth.html'; // Décommente en prod
+      // Non connecté → afficher données demo
+      const navPrenom = document.getElementById('nav-prenom');
+      const bienvenue = document.getElementById('dash-bienvenue');
+      if (navPrenom) navPrenom.textContent = 'Invité';
+      if (bienvenue) bienvenue.textContent = 'Mode démonstration · Connectez-vous pour voir vos vraies stats';
       renderBarChart([12, 28, 8, 35, 22, 40, 34]);
       return;
     }
@@ -1246,11 +1249,20 @@
     const user = stats.user;
     const prenom = user?.user_metadata?.prenom || user?.email?.split('@')[0] || 'Utilisateur';
 
-    // Mettre à jour la nav
+    // Mettre à jour la nav et le titre de bienvenue
     const avatarEl = document.querySelector('.nav-avatar');
-    const userNameEl = document.querySelector('.nav-user span');
+    const userNameEl = document.getElementById('nav-prenom');
     if (avatarEl) avatarEl.textContent = prenom.substring(0,2).toUpperCase();
     if (userNameEl) userNameEl.textContent = prenom;
+
+    // Titre de bienvenue dynamique
+    const bienvenueEl = document.getElementById('dash-bienvenue');
+    if (bienvenueEl) {
+      const heure = new Date().getHours();
+      const salut = heure < 12 ? 'Bonjour' : heure < 18 ? 'Bon après-midi' : 'Bonsoir';
+      const dateStr = new Date().toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
+      bienvenueEl.textContent = salut + ', ' + prenom + ' · ' + dateStr;
+    }
 
     // Stats cards overview
     updateStatCard(0, stats.totalQ + ' qst', 'Total questions répondues');
