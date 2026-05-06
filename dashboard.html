@@ -1231,6 +1231,52 @@
     `).join('');
   }
 
+  // ─── GESTION RETOUR OAUTH GOOGLE ───
+  function handleOAuthCallback() {
+    const hash = window.location.hash;
+    if (!hash) return;
+    
+    const params = {};
+    hash.substring(1).split('&').forEach(p => {
+      const [k, v] = p.split('=');
+      params[decodeURIComponent(k)] = decodeURIComponent(v || '');
+    });
+    
+    if (params.access_token) {
+      // Construire la session depuis les paramètres OAuth
+      const session = {
+        access_token: params.access_token,
+        refresh_token: params.refresh_token || '',
+        expires_at: Date.now()/1000 + parseInt(params.expires_in || 3600),
+        user: null
+      };
+      
+      // Récupérer les infos utilisateur
+      fetch('https://eulkccufeddlhbltekxm.supabase.co/auth/v1/user', {
+        headers: {
+          'apikey': 'sb_publishable_hvmFBoqQ3qy3lAi5ZeK8kg_63_Wnws1',
+          'Authorization': 'Bearer ' + params.access_token
+        }
+      })
+      .then(r => r.json())
+      .then(user => {
+        session.user = user;
+        localStorage.setItem('sb_session', JSON.stringify(session));
+        // Nettoyer l'URL
+        window.history.replaceState(null, '', window.location.pathname);
+        // Recharger le dashboard
+        initDashboard();
+      })
+      .catch(() => {
+        localStorage.setItem('sb_session', JSON.stringify(session));
+        window.history.replaceState(null, '', window.location.pathname);
+      });
+    }
+  }
+  
+  // Appeler au chargement
+  handleOAuthCallback();
+
   // ─── DÉCONNEXION ───
   function deconnexion() {
     if (window.sb) {
