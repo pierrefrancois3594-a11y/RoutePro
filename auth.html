@@ -832,7 +832,7 @@ async function handleRegister(e) {
       document.getElementById('confirm-screen').classList.add('visible');
     } else {
       const alert = document.getElementById('reg-alert') || document.getElementById('login-alert');
-      const msg = result.error_description || result.msg || 'Erreur lors de l'inscription.';
+      const msg = result.error_description || result.msg || "Erreur lors de l'inscription.";
       if (alert) {
         const msgEl = alert.querySelector('[id$="-msg"]') || alert;
         if (msgEl.textContent !== undefined) msgEl.textContent = msg;
