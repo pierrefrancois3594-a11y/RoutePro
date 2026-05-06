@@ -801,15 +801,360 @@
     </div>
     <!-- fin tab-overview -->
 
-  </main>
+  
+    <!-- PAGE: STATISTIQUES -->
+    <div id="tab-stats" style="display:none">
+      <div class="dash-header">
+        <div>
+          <h1>Mes <span>statistiques</span></h1>
+          <p>Analyse détaillée de vos performances par programme</p>
+        </div>
+      </div>
+
+      <div class="prog-selector">
+        <button class="prog-tab active" onclick="setProg(this,'leger')">CPC Léger</button>
+        <button class="prog-tab blue" onclick="setProg(this,'lourd')">CPC Lourd</button>
+        <button class="prog-tab green" onclick="setProg(this,'adr')">ADR</button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Questions répondues</div>
+          <div class="stat-value">247<span class="unit"> qst</span></div>
+          <div class="stat-sub"><span class="up">↑ +34</span> cette semaine</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-label">Taux de réussite global</div>
+          <div class="stat-value">71<span class="unit"> %</span></div>
+          <div class="stat-sub"><span class="up">↑ +4 pts</span> vs semaine dernière</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-label">Temps total d'étude</div>
+          <div class="stat-value">8<span class="unit"> h</span></div>
+          <div class="stat-sub">Sur les 7 derniers jours</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-label">Points faibles</div>
+          <div class="stat-value">3<span class="unit"> thèmes</span></div>
+          <div class="stat-sub">< 60 % de réussite</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Progression par matière</span>
+            <span class="card-badge">CPC Léger</span>
+          </div>
+          <div class="progress-list">
+            <div class="progress-item">
+              <div class="progress-meta"><span class="progress-name">Droit civil & commercial</span><span class="progress-pct">82 %</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:82%"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta"><span class="progress-name">Droit social</span><span class="progress-pct">74 %</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:74%"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta"><span class="progress-name">Gestion financière</span><span class="progress-pct">58 %</span></div>
+              <div class="progress-bar"><div class="progress-fill low" style="width:58%"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta"><span class="progress-name">Droit fiscal</span><span class="progress-pct">65 %</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta"><span class="progress-name">Réglementation VUL</span><span class="progress-pct">79 %</span></div>
+              <div class="progress-bar"><div class="progress-fill" style="width:79%"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta"><span class="progress-name">Sécurité routière</span><span class="progress-pct">55 %</span></div>
+              <div class="progress-bar"><div class="progress-fill low" style="width:55%"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta"><span class="progress-name">Accès à la profession</span><span class="progress-pct">88 %</span></div>
+              <div class="progress-bar"><div class="progress-fill green" style="width:88%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">Évolution du taux de réussite</span></div>
+          <div style="padding: 12px 0;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:16px;">
+              <span style="font-size:13px; color:var(--steel)">Il y a 4 semaines</span>
+              <span style="font-size:13px; color:var(--steel)">Aujourd'hui</span>
+            </div>
+            <div style="display:flex; align-items:flex-end; gap:8px; height:100px;">
+              <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div style="width:100%; background:rgba(242,101,34,.3); border-radius:2px 2px 0 0; height:55px;"></div>
+                <span style="font-size:10px; color:var(--steel); font-family:var(--mono)">S-4</span>
+              </div>
+              <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div style="width:100%; background:rgba(242,101,34,.4); border-radius:2px 2px 0 0; height:60px;"></div>
+                <span style="font-size:10px; color:var(--steel); font-family:var(--mono)">S-3</span>
+              </div>
+              <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div style="width:100%; background:rgba(242,101,34,.55); border-radius:2px 2px 0 0; height:67px;"></div>
+                <span style="font-size:10px; color:var(--steel); font-family:var(--mono)">S-2</span>
+              </div>
+              <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div style="width:100%; background:rgba(242,101,34,.7); border-radius:2px 2px 0 0; height:72px;"></div>
+                <span style="font-size:10px; color:var(--steel); font-family:var(--mono)">S-1</span>
+              </div>
+              <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:4px;">
+                <div style="width:100%; background:var(--orange); border-radius:2px 2px 0 0; height:80px;"></div>
+                <span style="font-size:10px; color:var(--orange); font-family:var(--mono); font-weight:700">Cette S.</span>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-top:12px; font-family:var(--mono); font-size:11px; color:var(--steel)">
+              <span>55 %</span><span>58 %</span><span>63 %</span><span>67 %</span><span style="color:var(--orange); font-weight:700">71 %</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: EXAMENS BLANCS -->
+    <div id="tab-examens" style="display:none">
+      <div class="dash-header">
+        <div>
+          <h1>Mes <span>examens</span> blancs</h1>
+          <p>Historique de tous vos passages d'examens</p>
+        </div>
+        <div class="header-actions">
+          <a href="examen-blanc.html"><button class="btn-sm btn-primary">Nouvel examen</button></a>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card blue">
+          <div class="stat-label">Examens passés</div>
+          <div class="stat-value">5<span class="unit"> total</span></div>
+          <div class="stat-sub">3 Léger · 1 Lourd · 1 ADR</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-label">Meilleur score</div>
+          <div class="stat-value">138<span class="unit">/200</span></div>
+          <div class="stat-sub">CPC Léger · Aujourd'hui</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Score moyen</div>
+          <div class="stat-value">121<span class="unit">/200</span></div>
+          <div class="stat-sub">Sur les 5 examens</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-label">Admis / Non admis</div>
+          <div class="stat-value">3<span class="unit">/5</span></div>
+          <div class="stat-sub">Seuil : 120/200</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Historique complet</span>
+          <span class="card-badge">5 examens</span>
+        </div>
+        <div class="exam-list">
+          <div class="exam-item">
+            <span class="exam-badge leger">Léger</span>
+            <div class="exam-info">
+              <div class="exam-name">Examen blanc n°5</div>
+              <div class="exam-meta">Aujourd'hui · 1h 42min · Sujet L-03</div>
+            </div>
+            <div class="exam-result">
+              <div class="exam-score pass">138</div>
+              <div class="exam-verdict">/200 · ✅ Admis</div>
+            </div>
+          </div>
+          <div class="exam-item">
+            <span class="exam-badge adr">ADR</span>
+            <div class="exam-info">
+              <div class="exam-name">Examen blanc n°4</div>
+              <div class="exam-meta">Il y a 3 jours · 58min</div>
+            </div>
+            <div class="exam-result">
+              <div class="exam-score mid">88</div>
+              <div class="exam-verdict">/100 · ⚠️ Limite</div>
+            </div>
+          </div>
+          <div class="exam-item">
+            <span class="exam-badge lourd">Lourd</span>
+            <div class="exam-info">
+              <div class="exam-name">Examen blanc n°3</div>
+              <div class="exam-meta">Il y a 6 jours · 1h 55min · Sujet PL-01</div>
+            </div>
+            <div class="exam-result">
+              <div class="exam-score fail">112</div>
+              <div class="exam-verdict">/200 · ❌ Non admis</div>
+            </div>
+          </div>
+          <div class="exam-item">
+            <span class="exam-badge leger">Léger</span>
+            <div class="exam-info">
+              <div class="exam-name">Examen blanc n°2</div>
+              <div class="exam-meta">Il y a 10 jours · 1h 38min · Sujet L-01</div>
+            </div>
+            <div class="exam-result">
+              <div class="exam-score pass">124</div>
+              <div class="exam-verdict">/200 · ✅ Admis</div>
+            </div>
+          </div>
+          <div class="exam-item">
+            <span class="exam-badge leger">Léger</span>
+            <div class="exam-info">
+              <div class="exam-name">Examen blanc n°1</div>
+              <div class="exam-meta">Il y a 14 jours · 1h 51min · Sujet L-02</div>
+            </div>
+            <div class="exam-result">
+              <div class="exam-score pass">121</div>
+              <div class="exam-verdict">/200 · ✅ Admis</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: OBJECTIFS -->
+    <div id="tab-objectifs" style="display:none">
+      <div class="dash-header">
+        <div>
+          <h1>Mes <span>objectifs</span></h1>
+          <p>Suivez votre progression vers l'examen</p>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card green">
+          <div class="stat-label">Objectifs complétés</div>
+          <div class="stat-value">2<span class="unit">/5</span></div>
+          <div class="stat-sub">Cette semaine</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-label">Progression globale</div>
+          <div class="stat-value">40<span class="unit"> %</span></div>
+          <div class="stat-sub">Vers l'examen</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Jours d'étude</div>
+          <div class="stat-value">12<span class="unit"> j</span></div>
+          <div class="stat-sub">Sur les 30 derniers jours</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-label">À rattraper</div>
+          <div class="stat-value">3<span class="unit"> thèmes</span></div>
+          <div class="stat-sub">Priorité haute</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Objectifs de la semaine</span>
+            <span class="card-badge">2/5 complétés</span>
+          </div>
+          <div class="goals-list">
+            <div class="goal-item">
+              <div class="goal-check done">✓</div>
+              <span class="goal-text">Passer un examen blanc CPC Léger</span>
+              <span class="goal-date">✅ Fait</span>
+            </div>
+            <div class="goal-item">
+              <div class="goal-check done">✓</div>
+              <span class="goal-text">30 questions de Droit civil minimum</span>
+              <span class="goal-date">✅ Fait</span>
+            </div>
+            <div class="goal-item">
+              <div class="goal-check todo"></div>
+              <span class="goal-text">Atteindre 70 % en Gestion financière</span>
+              <span class="goal-date">En cours</span>
+            </div>
+            <div class="goal-item">
+              <div class="goal-check todo"></div>
+              <span class="goal-text">20 questions de Sécurité routière</span>
+              <span class="goal-date">À faire</span>
+            </div>
+            <div class="goal-item">
+              <div class="goal-check todo"></div>
+              <span class="goal-text">Score ≥ 130/200 sur 2 examens consécutifs</span>
+              <span class="goal-date">À faire</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Thèmes prioritaires</span>
+            <span class="card-badge">À renforcer</span>
+          </div>
+          <div class="progress-list">
+            <div class="progress-item">
+              <div class="progress-meta">
+                <span class="progress-name" style="color:var(--red)">⚠ Sécurité routière</span>
+                <span class="progress-pct">55 %</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill low" style="width:55%"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta">
+                <span class="progress-name" style="color:var(--red)">⚠ Gestion financière</span>
+                <span class="progress-pct">58 %</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill low" style="width:58%"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta">
+                <span class="progress-name" style="color:var(--orange)">⚡ Droit fiscal</span>
+                <span class="progress-pct">65 %</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:65%; background:var(--orange)"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta">
+                <span class="progress-name">Droit social</span>
+                <span class="progress-pct">74 %</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:74%"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta">
+                <span class="progress-name">Réglementation VUL</span>
+                <span class="progress-pct">79 %</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:79%"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-meta">
+                <span class="progress-name" style="color:var(--green)">✓ Accès à la profession</span>
+                <span class="progress-pct">88 %</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill green" style="width:88%"></div></div>
+            </div>
+          </div>
+          <div style="margin-top:16px; text-align:center;">
+            <a href="entrainement.html"><button class="btn-sm btn-primary" style="width:100%">S'entraîner sur ces thèmes →</button></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </main>
 </div>
 
 <script>
   // ─── TABS ───
   function showTab(tab) {
+    // Mettre à jour la nav
     document.querySelectorAll('.side-link').forEach(l => l.classList.remove('active'));
     event.currentTarget.classList.add('active');
-    // Pour l'instant une seule tab — extensible
+    // Masquer toutes les tabs
+    ['overview','stats','examens','objectifs'].forEach(t => {
+      const el = document.getElementById('tab-' + t);
+      if (el) el.style.display = 'none';
+    });
+    // Afficher la tab sélectionnée
+    const target = document.getElementById('tab-' + tab);
+    if (target) target.style.display = 'block';
   }
 
   // ─── PROGRAMME SELECTOR ───
