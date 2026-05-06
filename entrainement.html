@@ -602,10 +602,11 @@ function renderQ() {
   // Options
   const og = document.getElementById('opts');
   og.innerHTML = '';
-  q.r.forEach(rep => {
+  const letters = ['A','B','C','D','E'];
+  q.r.forEach((rep, idx) => {
     const btn = document.createElement('button');
     btn.className = 'opt';
-    btn.innerHTML = `<div class="olb">${rep.l.toUpperCase()}</div><div class="otxt">${rep.t}</div><div class="oico">${rep.ok?'✓':'✗'}</div>`;
+    btn.innerHTML = `<div class="olb">${letters[idx]}</div><div class="otxt">${rep.t}</div><div class="oico"></div>`;
     btn.onclick = () => pick(btn, rep, q);
     og.appendChild(btn);
   });
