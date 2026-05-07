@@ -505,6 +505,28 @@ function renderGoals(sessions, examens, rep) {
   }
 }
 
+function getUserPrenom() {
+  try {
+    var raw = localStorage.getItem("sb_session");
+    if (raw) {
+      var s = JSON.parse(raw);
+      var u = s.user;
+      if (u && u.user_metadata) {
+        if (u.user_metadata.prenom) return u.user_metadata.prenom;
+        if (u.user_metadata.full_name) return u.user_metadata.full_name.split(" ")[0];
+        if (u.user_metadata.name) return u.user_metadata.name.split(" ")[0];
+      }
+      if (u && u.email) return u.email.split("@")[0];
+    }
+  } catch(e) {}
+  return "Utilisateur";
+}
+
+function deconnexion() {
+  if (window.sb) window.sb.deconnexion();
+  else { localStorage.removeItem("sb_session"); window.location.href = "auth.html"; }
+}
+
 function init() {
   var prenom = getUserPrenom();
   var nav = document.getElementById("nav-prenom"); if (nav) nav.textContent = prenom;
