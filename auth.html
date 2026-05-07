@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Connexion / Inscription – RoutePro</title>
+  <title>Connexion / Inscription – ForgeTaRoute</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -612,14 +612,14 @@
             <label class="form-check">
               <input type="checkbox" id="check-newsletter" />
               <span class="form-check-label">
-                J'accepte de recevoir les actualités de RoutePro (nouvelles questions, évolutions réglementaires…). Désinscription possible à tout moment.
+                J'accepte de recevoir les actualités de ForgeTaRoute (nouvelles questions, évolutions réglementaires…). Désinscription possible à tout moment.
               </span>
             </label>
           </div>
 
           <!-- Disclaimer rétractation -->
           <div style="background:rgba(242,101,34,.06);border:1px solid rgba(242,101,34,.18);border-radius:3px;padding:10px 14px;margin-bottom:4px;font-size:11px;color:rgba(143,163,184,.7);line-height:1.6;">
-            En cliquant sur « Créer mon compte », vous confirmez avoir pris connaissance que RoutePro est un
+            En cliquant sur « Créer mon compte », vous confirmez avoir pris connaissance que ForgeTaRoute est un
             <strong style="color:rgba(143,163,184,.9)">outil d'entraînement indépendant</strong>, non un organisme de formation agréé.
             Si vous souscrivez ensuite à un abonnement payant et commencez à utiliser le service,
             vous renoncez expressément à votre droit de rétractation de 14 jours conformément à l'art. L.221-28 du Code de la consommation.
@@ -852,7 +852,7 @@ async function handleGoogleAuth() {
   try {
     const SUPA_URL = 'https://eulkccufeddlhbltekxm.supabase.co';
     const SUPA_KEY = 'sb_publishable_hvmFBoqQ3qy3lAi5ZeK8kg_63_Wnws1';
-    const redirectTo = 'https://pierrefrancois3594-a11y.github.io/RoutePro/dashboard.html';
+    const redirectTo = 'https://pierrefrancois3594-a11y.github.io/ForgeTaRoute/dashboard.html';
     
     // Rediriger vers Supabase OAuth Google
     const url = SUPA_URL + '/auth/v1/authorize?provider=google&redirect_to=' + encodeURIComponent(redirectTo);

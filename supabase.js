@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════
-// ROUTEPRO — supabase.js
+// FORGETAROUTE — supabase.js
 // Configuration et fonctions Supabase
 // ═══════════════════════════════════════════════════
 
