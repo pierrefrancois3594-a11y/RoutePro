@@ -259,6 +259,7 @@
 </div>
 
 <script src="supabase.js"></script>
+<script src="stripe.js"></script>
 <script>
 
 var THEMES = {
@@ -597,6 +598,7 @@ function init() {
 }
 
 init();
+  if (window.gererRetourPaiement) window.gererRetourPaiement();
 </script>
 </body>
 </html>

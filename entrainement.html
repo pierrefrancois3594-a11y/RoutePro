@@ -250,6 +250,13 @@
   </style>
 </head>
 <body>
+<div id="freemium-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#0B1829,#132338);border-top:1px solid rgba(242,101,34,.3);padding:16px 40px;z-index:999;align-items:center;justify-content:space-between;gap:20px;">
+  <div>
+    <strong style="font-family:Barlow Condensed,sans-serif;font-size:16px;color:#FF8A4C;text-transform:uppercase;letter-spacing:.05em;">Limite atteinte</strong>
+    <p style="font-size:13px;color:#8FA3B8;margin-top:4px">Vous avez utilise vos 20 questions gratuites aujourd'hui. Passez Premium pour un acces illimite !</p>
+  </div>
+  <button onclick="window.location.href='abonnement.html'" style="font-family:Barlow Condensed,sans-serif;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:10px 24px;border-radius:3px;background:#F26522;color:white;border:none;cursor:pointer;white-space:nowrap;">Passer Premium</button>
+</div>
 
 <nav>
   <a href="index.html" class="nav-logo">
@@ -393,6 +400,7 @@
 
 <!-- Charge la banque de questions -->
 <script src="supabase.js"></script>
+<script src="stripe.js"></script>
 <script src="banque.js"></script>
 <script>
 
@@ -842,6 +850,12 @@ function goSel() {
 }
 
 init();
+  // Vérifier freemium
+  if (window.verifierAbonnement) {
+    window.verifierAbonnement().then(function(abo) {
+      if (window.appliquerFreemium) window.appliquerFreemium(abo.actif);
+    });
+  }
 </script>
 </body>
 </html>
