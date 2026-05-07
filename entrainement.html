@@ -395,6 +395,36 @@
 <script src="supabase.js"></script>
 <script src="banque.js"></script>
 <script>
+
+// ════════════════════════════════════════
+// SAUVEGARDE LOCALSTORAGE → DASHBOARD
+// ════════════════════════════════════════
+function ftrGetStats() {
+  try { return JSON.parse(localStorage.getItem("ftr_stats") || "{}") || {}; } catch(e) { return {}; }
+}
+
+function ftrSaveSession(prog, themeId, total, corr) {
+  var data = ftrGetStats();
+  if (!data.sessions) data.sessions = [];
+  if (!data.reponses) data.reponses = {};
+  // Ajouter la session
+  data.sessions.unshift({ prog: prog, theme: themeId, total: total, corr: corr, ts: Date.now() });
+  if (data.sessions.length > 100) data.sessions = data.sessions.slice(0, 100);
+  // Mettre à jour les stats par thème
+  if (!data.reponses[themeId]) data.reponses[themeId] = { corr: 0, total: 0 };
+  data.reponses[themeId].corr += corr;
+  data.reponses[themeId].total += total;
+  localStorage.setItem("ftr_stats", JSON.stringify(data));
+}
+
+function ftrSaveExamen(prog, score, admis) {
+  var data = ftrGetStats();
+  if (!data.examens) data.examens = [];
+  data.examens.unshift({ prog: prog, score: score, admis: admis, ts: Date.now() });
+  if (data.examens.length > 50) data.examens = data.examens.slice(0, 50);
+  localStorage.setItem("ftr_stats", JSON.stringify(data));
+}
+
 // ═══════════════════════════════════════════════════
 // CONFIG THÈMES
 // ═══════════════════════════════════════════════════
@@ -729,14 +759,14 @@ function showResults() {
   document.getElementById('rs-t').textContent = tot;
   document.getElementById('rs-sk').textContent = skipped;
 
-  // Sauvegarder session dans Supabase
+  // Sauvegarder session dans localStorage (dashboard)
+  var prog4 = S.themeObj && S.themeObj.prog ? S.themeObj.prog : (S.qs[0] ? S.qs[0].prog : 'LEGER');
+  ftrSaveSession(prog4, S.theme, tot, corr);
+
+  // Sauvegarder aussi dans Supabase si connecté
   if (window.sb && window.sb.estConnecte()) {
-    const duree = Math.round((Date.now() - (S.startTime || Date.now())) / 1000);
-    const prog = S.themeObj?.prog || S.qs[0]?.prog || 'LEGER';
-    window.sb.sauvegarderSession(prog, S.theme, tot, corr, wrong, duree)
-      .then(res => {
-        if (res && res[0] && res[0].id) S.sessionId = res[0].id;
-      }).catch(()=>{});
+    var duree4 = Math.round((Date.now() - (S.startTime || Date.now())) / 1000);
+    window.sb.sauvegarderSession(prog4, S.theme, tot, corr, wrong, duree4).catch(function(){});
   }
 
   // Mastery bar

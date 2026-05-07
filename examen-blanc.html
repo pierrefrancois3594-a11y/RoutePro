@@ -1099,7 +1099,16 @@ function finishExam() {
   const elimP2 = scoreP2 < 40;
   const admis = total >= 120 && !elimP1 && !elimP2;
 
-  // Sauvegarder l'examen dans Supabase
+  // Sauvegarder dans localStorage (dashboard)
+  var _prog = CFG.prog || 'LEGER';
+  var _data = {};
+  try { _data = JSON.parse(localStorage.getItem('ftr_stats') || '{}') || {}; } catch(e) {}
+  if (!_data.examens) _data.examens = [];
+  _data.examens.unshift({ prog: _prog, score: total, admis: admis, ts: Date.now() });
+  if (_data.examens.length > 50) _data.examens = _data.examens.slice(0, 50);
+  localStorage.setItem('ftr_stats', JSON.stringify(_data));
+
+  // Sauvegarder aussi dans Supabase si connecté
   if (window.sb && window.sb.estConnecte()) {
     const prog = CFG.prog || 'LEGER';
     const duree = Math.round((Date.now() - (CFG.startTime || Date.now())) / 1000);
