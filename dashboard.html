@@ -102,10 +102,6 @@
     .goal-check.todo{background:rgba(143,163,184,.08);color:var(--steel);border:1px dashed rgba(143,163,184,.2)}
     .goal-txt{flex:1;font-size:13px;color:var(--steel-lt)}
     .goal-status{font-size:11px;color:var(--steel);font-family:var(--mono)}
-    .bar-chart{display:flex;align-items:flex-end;gap:6px;height:80px;margin-top:8px}
-    .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
-    .bar-fill{width:100%;border-radius:2px 2px 0 0;min-height:3px;transition:height .6s ease}
-    .bar-lbl{font-size:10px;color:var(--steel);font-family:var(--mono)}
     .donut-wrap{display:flex;align-items:center;gap:20px}
     .donut-legend{flex:1}
     .donut-row{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--steel-lt);margin-bottom:8px}
@@ -201,10 +197,7 @@
             </div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-title">Questions / 7 derniers jours</div>
-          <div class="bar-chart" id="barChart"></div>
-        </div>
+
       </div>
     </div>
     <div class="card">
@@ -364,22 +357,7 @@ function timeAgo(ts) {
   return "A l'instant";
 }
 
-function renderBarChart(data) {
-  var days = ["L","M","M","J","V","S","D"];
-  var maxV = Math.max.apply(null, data.concat([1]));
-  var bc = document.getElementById("barChart");
-  if (!bc) return;
-  bc.innerHTML = data.map(function(v,i) {
-    var h = Math.round(v/maxV*72);
-    var bg = i===6 ? "var(--orange)" : "rgba(242,101,34,.35)";
-    return [
-      '<div class="bar-col">',
-      '<div class="bar-fill" style="height:' + h + 'px;background:' + bg + '"></div>',
-      '<span class="bar-lbl">' + days[i] + '</span>',
-      '</div>'
-    ].join("");
-  }).join("");
-}
+
 
 function renderDonut(corr, total) {
   var p = pct(corr, total);
@@ -575,7 +553,6 @@ function init() {
     var d = Math.floor((now-s.ts)/86400000);
     if (d<7) barData[6-d] += s.total;
   });
-  renderBarChart(barData);
 
   setProgFilter("LEGER", document.querySelector(".pf-btn"));
   renderActivity(sessions);
