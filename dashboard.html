@@ -1231,6 +1231,23 @@
     `).join('');
   }
 
+  // ─── BAR CHART ───
+  function renderBarChart(data) {
+    const days = ['L','M','M','J','V','S','D'];
+    const maxV = Math.max(...data, 1);
+    const bc = document.getElementById('barChart');
+    if (!bc) return;
+    bc.innerHTML = data.map((v, i) => `
+      <div class="bar-col">
+        <div class="bar-fill" style="height:${Math.round(v/maxV*72)}px; background:${i===6?'var(--orange)':'rgba(242,101,34,.35)'}"></div>
+        <span class="bar-lbl">${days[i]}</span>
+      </div>
+    `).join('');
+  }
+
+  // Appel initial avec données demo
+  renderBarChart([12, 28, 8, 35, 22, 40, 34]);
+
   // ─── GESTION RETOUR OAUTH GOOGLE ───
   function handleOAuthCallback() {
     const hash = window.location.hash;
@@ -1287,7 +1304,20 @@
   }
 
   // ─── INIT SUPABASE ───
-  async function initDashboard() {
+  function renderBarChart7j(stats) {
+    // Simuler 7 jours depuis les sessions réelles
+    const data = [0,0,0,0,0,0,0];
+    if (stats.examens) {
+      stats.examens.forEach(e => {
+        const d = new Date(e.created_at);
+        const dayAgo = Math.floor((Date.now() - d.getTime()) / 86400000);
+        if (dayAgo < 7) data[6 - dayAgo] += 10;
+      });
+    }
+    renderBarChart(data.some(v=>v>0) ? data : [12, 28, 8, 35, 22, 40, 34]);
+  }
+
+  async function initDashboard() { {
     if (!window.sb || !window.sb.estConnecte()) {
       // Non connecté → afficher données demo
       const navPrenom = document.getElementById('nav-prenom');
@@ -1427,35 +1457,10 @@
     if (items[2]) items[2].textContent = skip + ' %';
   }
 
-  function renderBarChart7j(stats) {
-    // Simuler 7 jours depuis les sessions réelles
-    const data = [0,0,0,0,0,0,0];
-    if (stats.examens) {
-      stats.examens.forEach(e => {
-        const d = new Date(e.created_at);
-        const dayAgo = Math.floor((Date.now() - d.getTime()) / 86400000);
-        if (dayAgo < 7) data[6 - dayAgo] += 10;
-      });
-    }
-    renderBarChart(data.some(v=>v>0) ? data : [12, 28, 8, 35, 22, 40, 34]);
-  }
-
-  // Appeler l'init
+// Appeler l'init
   initDashboard();
 
-  // ─── BAR CHART ───
-  const weekData = [12, 28, 8, 35, 22, 40, 34];
-  const weekDays = ['L','M','M','J','V','S','D'];
-  const maxW = Math.max(...weekData);
-  const bc = document.getElementById('barChart');
-  if (bc) {
-    bc.innerHTML = weekData.map((v, i) => `
-      <div class="bar-col">
-        <div class="bar-fill" style="height:${Math.round(v/maxW*72)}px; background:${i===6?'var(--orange)':'rgba(242,101,34,.35)'}"></div>
-        <span class="bar-lbl">${weekDays[i]}</span>
-      </div>
-    `).join('');
-  }
+
 </script>
 
 </body>
