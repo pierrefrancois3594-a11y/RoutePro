@@ -137,6 +137,7 @@
       <div class="nav-avatar" id="nav-avatar">?</div>
       <span id="nav-prenom">...</span>
     </div>
+    <span id="badge-abo" style="font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:20px;background:rgba(255,95,86,.12);color:#FF5F56;border:1px solid rgba(255,95,86,.2)">&#9679; Gratuit</span>
     <a href="abonnement.html"><button class="nav-btn">&#128142; Premium</button></a>
     <a href="entrainement.html"><button class="nav-btn primary">S'entra&icirc;ner</button></a>
     <button class="nav-btn danger" onclick="deconnexion()">&#x2B8B; D&eacute;connexion</button>
@@ -255,6 +256,12 @@
         <div style="margin-top:16px"><a href="entrainement.html"><button class="btn btn-primary" style="width:100%">S'entra&icirc;ner sur ces th&egrave;mes &rarr;</button></a></div>
       </div>
     </div>
+    <!-- Statut abonnement -->
+    <div class="card" style="margin-top:20px" id="abo-card">
+      <div class="card-title">Mon abonnement <span class="badge" id="abo-badge">...</span></div>
+      <div id="abo-content" style="font-size:13px;color:var(--steel)">Chargement...</div>
+    </div>
+
   </div>
 
 </div>
@@ -529,6 +536,77 @@ function handleOAuthCallback() {
   });
 }
 
+
+async function verifierStatutAbo() {
+  try {
+    var token = null, userId = null;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      try {
+        var s = JSON.parse(raw);
+        var sess = s.access_token ? s : (s.currentSession || null);
+        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
+      } catch(e2) {}
+    }
+    if (!token || !userId) return { abonnement: "gratuit" };
+    var resp = await fetch("https://eulkccufeddlhbltekxm.supabase.co/rest/v1/profils?id=eq." + userId + "&select=abonnement,stripe_subscription_id", {
+      headers: { "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g", "Authorization": "Bearer " + token }
+    });
+    var data = await resp.json();
+    return (data && data[0]) ? data[0] : { abonnement: "gratuit" };
+  } catch(e) { return { abonnement: "gratuit" }; }
+}
+
+async function resilierAbonnement() {
+  if (!confirm("Confirmer la resiliation ? Vous garderez acces jusqu a la fin de la periode.")) return;
+  var btn = document.getElementById("btn-resilier");
+  if (btn) { btn.textContent = "Resiliation en cours..."; btn.disabled = true; }
+  try {
+    var token = null;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      try { var s = JSON.parse(raw); if (s.access_token) { token = s.access_token; break; } } catch(e2) {}
+    }
+    var resp = await fetch("https://eulkccufeddlhbltekxm.supabase.co/functions/v1/cancel-subscription", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token, "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g" }
+    });
+    var d2 = await resp.json();
+    if (d2.ok) { alert("Abonnement resilie."); chargerStatutAbo(); }
+    else { throw new Error(d2.error || "Erreur"); }
+  } catch(e) {
+    alert("Erreur. Contactez contact@forgetaroute.fr");
+    if (btn) { btn.textContent = "Resilier mon abonnement"; btn.disabled = false; }
+  }
+}
+
+async function chargerStatutAbo() {
+  var profil = await verifierStatutAbo();
+  var premium = profil && profil.abonnement === "premium";
+  var badge = document.getElementById("badge-abo");
+  if (badge) {
+    badge.textContent = premium ? "● Premium" : "● Gratuit";
+    badge.style.background = premium ? "rgba(39,201,63,.12)" : "rgba(255,95,86,.12)";
+    badge.style.color = premium ? "#27C93F" : "#FF5F56";
+    badge.style.borderColor = premium ? "rgba(39,201,63,.2)" : "rgba(255,95,86,.2)";
+  }
+  var aboBadge = document.getElementById("abo-badge");
+  if (aboBadge) { aboBadge.textContent = premium ? "Premium actif" : "Gratuit"; aboBadge.style.color = premium ? "var(--green)" : "var(--red)"; }
+  var aboContent = document.getElementById("abo-content");
+  if (!aboContent) return;
+  if (premium) {
+    aboContent.innerHTML = '<div style="display:flex;align-items:center;gap:16px;padding:16px;background:rgba(39,201,63,.06);border:1px solid rgba(39,201,63,.15);border-radius:6px;margin-bottom:16px"><span style="font-size:28px">&#9989;</span><div><strong style="color:var(--green);display:block;margin-bottom:4px">Abonnement Premium actif</strong><span style="font-size:12px;color:var(--steel)">Acces illimite a toutes les questions, examens blancs et statistiques.</span></div></div><button id="btn-resilier" onclick="resilierAbonnement()" style="font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:9px 20px;border-radius:3px;background:none;border:1px solid rgba(255,95,86,.3);color:var(--red);cursor:pointer;">Resilier mon abonnement</button>';
+  } else {
+    aboContent.innerHTML = '<div style="display:flex;align-items:center;gap:16px;padding:16px;background:rgba(255,95,86,.06);border:1px solid rgba(255,95,86,.15);border-radius:6px;margin-bottom:16px"><span style="font-size:28px">&#128274;</span><div><strong style="color:var(--red);display:block;margin-bottom:4px">Compte gratuit - 20 questions/jour</strong><span style="font-size:12px;color:var(--steel)">Passez Premium pour un acces illimite.</span></div></div><a href="abonnement.html"><button style="font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:9px 20px;border-radius:3px;background:var(--orange);border:none;color:white;cursor:pointer;">Passer Premium</button></a>';
+  }
+}
+
 function getUserPrenom() {
   try {
     // Chercher dans toutes les clés localStorage possibles
@@ -657,6 +735,7 @@ if (window.location.hash && window.location.hash.includes('access_token')) {
   init();
 }
 if (window.gererRetourPaiement) window.gererRetourPaiement();
+chargerStatutAbo();
 </script>
 </body>
 </html>
