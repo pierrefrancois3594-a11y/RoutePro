@@ -485,18 +485,70 @@ function renderGoals(sessions, examens, rep) {
   }
 }
 
+function handleOAuthCallback() {
+  var hash = window.location.hash;
+  if (!hash) return;
+  var params = {};
+  hash.substring(1).split("&").forEach(function(p) {
+    var kv = p.split("=");
+    params[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || "");
+  });
+  if (!params.access_token) return;
+
+  // Récupérer les infos utilisateur
+  fetch("https://eulkccufeddlhbltekxm.supabase.co/auth/v1/user", {
+    headers: {
+      "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g",
+      "Authorization": "Bearer " + params.access_token
+    }
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(user) {
+    var session = {
+      access_token: params.access_token,
+      refresh_token: params.refresh_token || "",
+      expires_at: Math.floor(Date.now()/1000) + parseInt(params.expires_in || 3600),
+      expires_in: parseInt(params.expires_in || 3600),
+      token_type: "bearer",
+      user: user
+    };
+    localStorage.setItem("sb_session", JSON.stringify(session));
+    window.history.replaceState(null, "", window.location.pathname);
+    init();
+  })
+  .catch(function() {
+    var session = {
+      access_token: params.access_token,
+      refresh_token: params.refresh_token || "",
+      expires_at: Math.floor(Date.now()/1000) + parseInt(params.expires_in || 3600),
+      token_type: "bearer",
+      user: null
+    };
+    localStorage.setItem("sb_session", JSON.stringify(session));
+    window.history.replaceState(null, "", window.location.pathname);
+  });
+}
+
 function getUserPrenom() {
   try {
-    var raw = localStorage.getItem("sb_session");
-    if (raw) {
+    // Chercher dans toutes les clés localStorage possibles
+    var keys = ["sb_session"];
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && (k.includes("auth-token") || k.includes("sb-"))) keys.push(k);
+    }
+    for (var j = 0; j < keys.length; j++) {
+      var raw = localStorage.getItem(keys[j]);
+      if (!raw) continue;
       var s = JSON.parse(raw);
-      var u = s.user;
-      if (u && u.user_metadata) {
-        if (u.user_metadata.prenom) return u.user_metadata.prenom;
-        if (u.user_metadata.full_name) return u.user_metadata.full_name.split(" ")[0];
-        if (u.user_metadata.name) return u.user_metadata.name.split(" ")[0];
-      }
-      if (u && u.email) return u.email.split("@")[0];
+      var u = s.user || (s.currentSession && s.currentSession.user);
+      if (!u) continue;
+      var m = u.user_metadata || {};
+      // Ordre de priorité : prénom saisi > full_name Google > name > email
+      if (m.prenom) return m.prenom;
+      if (m.full_name) return m.full_name.split(" ")[0];
+      if (m.name) return m.name.split(" ")[0];
+      if (u.email) return u.email.split("@")[0];
     }
   } catch(e) {}
   return "Utilisateur";
