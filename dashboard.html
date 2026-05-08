@@ -650,8 +650,13 @@ function init() {
   }
 }
 
-init();
-  if (window.gererRetourPaiement) window.gererRetourPaiement();
+// Gérer le retour OAuth Google si token dans le hash
+if (window.location.hash && window.location.hash.includes('access_token')) {
+  handleOAuthCallback();
+} else {
+  init();
+}
+if (window.gererRetourPaiement) window.gererRetourPaiement();
 </script>
 </body>
 </html>
