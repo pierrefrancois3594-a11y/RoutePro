@@ -4,7 +4,7 @@
 // ═══════════════════════════════════════════════════
 
 const SUPA_URL = 'https://eulkccufeddlhbltekxm.supabase.co';
-const SUPA_KEY = 'sb_publishable_hvmFBoqQ3qy3lAi5ZeK8kg_63_Wnws1';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g';
 
 // ── Client Supabase léger (sans librairie externe) ──
 const sb = {
