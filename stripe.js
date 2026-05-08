@@ -13,19 +13,50 @@ var SUPA_KEY = 'sb_publishable_hvmFBoqQ3qy3lAi5ZeK8kg_63_Wnws1';
 // ── Récupérer le token Supabase ──
 function getToken() {
   try {
-    var raw = localStorage.getItem('sb_session');
-    if (!raw) return null;
-    var s = JSON.parse(raw);
-    if (s.expires_at && Date.now()/1000 > s.expires_at) return null;
-    return s.access_token || null;
+    // Chercher dans toutes les clés possibles de Supabase
+    var keys = ['sb_session', 'supabase.auth.token'];
+    // Chercher aussi les clés dynamiques Supabase (sb-xxx-auth-token)
+    for (var i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i);
+      if (key && (key.includes('auth-token') || key.includes('sb_session'))) {
+        keys.push(key);
+      }
+    }
+    for (var j = 0; j < keys.length; j++) {
+      var raw = localStorage.getItem(keys[j]);
+      if (!raw) continue;
+      var s = JSON.parse(raw);
+      // Format nouveau Supabase
+      if (s.access_token) {
+        if (s.expires_at && Date.now()/1000 > s.expires_at) continue;
+        return s.access_token;
+      }
+      // Format avec currentSession
+      if (s.currentSession && s.currentSession.access_token) {
+        return s.currentSession.access_token;
+      }
+    }
+    return null;
   } catch(e) { return null; }
 }
 
 function getUser() {
   try {
-    var raw = localStorage.getItem('sb_session');
-    if (!raw) return null;
-    return JSON.parse(raw).user || null;
+    var keys = ['sb_session', 'supabase.auth.token'];
+    for (var i = 0; i < localStorage.length; i++) {
+      var key = localStorage.key(i);
+      if (key && (key.includes('auth-token') || key.includes('sb_session'))) {
+        keys.push(key);
+      }
+    }
+    for (var j = 0; j < keys.length; j++) {
+      var raw = localStorage.getItem(keys[j]);
+      if (!raw) continue;
+      var s = JSON.parse(raw);
+      if (s.user) return s.user;
+      if (s.currentSession && s.currentSession.user) return s.currentSession.user;
+    }
+    return null;
   } catch(e) { return null; }
 }
 

@@ -20,16 +20,32 @@ const sb = {
   },
 
   // Récupérer le token de session stocké
+  _findSession() {
+    try {
+      // Chercher dans toutes les clés localStorage possibles
+      var keys = ['sb_session'];
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && (k.includes('auth-token') || k.includes('sb-') && k.includes('auth'))) {
+          keys.push(k);
+        }
+      }
+      for (var j = 0; j < keys.length; j++) {
+        var raw = localStorage.getItem(keys[j]);
+        if (!raw) continue;
+        var s = JSON.parse(raw);
+        if (s.access_token) return s;
+        if (s.currentSession) return s.currentSession;
+      }
+      return null;
+    } catch(e) { return null; }
+  },
+
   _token() {
     try {
-      const raw = localStorage.getItem('sb_session');
-      if (!raw) return null;
-      const s = JSON.parse(raw);
-      // Vérifier expiration
-      if (s.expires_at && Date.now() / 1000 > s.expires_at) {
-        localStorage.removeItem('sb_session');
-        return null;
-      }
+      var s = this._findSession();
+      if (!s) return null;
+      if (s.expires_at && Date.now() / 1000 > s.expires_at) return null;
       return s.access_token || null;
     } catch(e) { return null; }
   },
@@ -37,9 +53,8 @@ const sb = {
   // Récupérer l'utilisateur courant
   _user() {
     try {
-      const raw = localStorage.getItem('sb_session');
-      if (!raw) return null;
-      const s = JSON.parse(raw);
+      var s = this._findSession();
+      if (!s) return null;
       return s.user || null;
     } catch(e) { return null; }
   },
