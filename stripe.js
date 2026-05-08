@@ -27,7 +27,7 @@ function getToken() {
       var s = JSON.parse(raw);
       // Format nouveau Supabase
       if (s.access_token) {
-        if (s.expires_at && Date.now()/1000 > s.expires_at) continue;
+        if (s.expires_at && Date.now()/1000 > s.expires_at + 300) continue; // tolérance 5min
         return s.access_token;
       }
       // Format avec currentSession

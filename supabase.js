@@ -45,7 +45,8 @@ const sb = {
     try {
       var s = this._findSession();
       if (!s) return null;
-      if (s.expires_at && Date.now() / 1000 > s.expires_at) return null;
+      // Tolérance de 5 minutes sur l'expiration
+      if (s.expires_at && Date.now() / 1000 > s.expires_at + 300) return null;
       return s.access_token || null;
     } catch(e) { return null; }
   },
@@ -60,6 +61,38 @@ const sb = {
   },
 
   // ── AUTH ──
+
+
+  // ── Rafraîchir le token si expiré ──
+  async refreshToken() {
+    try {
+      var s = this._findSession();
+      if (!s || !s.refresh_token) return false;
+      
+      var r = await fetch(SUPA_URL + '/auth/v1/token?grant_type=refresh_token', {
+        method: 'POST',
+        headers: this._headers(),
+        body: JSON.stringify({ refresh_token: s.refresh_token })
+      });
+      var data = await r.json();
+      if (data.access_token) {
+        localStorage.setItem('sb_session', JSON.stringify(data));
+        return true;
+      }
+      return false;
+    } catch(e) { return false; }
+  },
+
+  // ── Vérifier et rafraîchir si nécessaire ──
+  async ensureToken() {
+    var s = this._findSession();
+    if (!s) return null;
+    // Si expire dans moins de 5 minutes, rafraîchir
+    if (s.expires_at && Date.now()/1000 > s.expires_at - 300) {
+      await this.refreshToken();
+    }
+    return this._token();
+  },
 
   async inscription(email, password, prenom, nom) {
     const r = await fetch(SUPA_URL + '/auth/v1/signup', {
@@ -85,6 +118,8 @@ const sb = {
     });
     const data = await r.json();
     if (data.access_token) {
+      // Recalculer expires_at depuis maintenant
+      data.expires_at = Math.floor(Date.now() / 1000) + (data.expires_in || 3600);
       localStorage.setItem('sb_session', JSON.stringify(data));
     }
     return data;
