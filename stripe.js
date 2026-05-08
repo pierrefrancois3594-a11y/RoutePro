@@ -89,7 +89,7 @@ async function lancerPaiement(type) {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token,
-        'apikey': SUPA_KEY
+        'apikey': _SUPA_KEY
       },
       body: JSON.stringify({
         priceId: priceId,
