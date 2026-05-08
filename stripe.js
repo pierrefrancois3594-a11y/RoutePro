@@ -61,11 +61,20 @@ function getUser() {
 
 // ── Créer une session de paiement Stripe Checkout ──
 async function lancerPaiement(type) {
+  // Essayer de rafraîchir le token si nécessaire
   var token = getToken();
   var user = getUser();
 
+  if (!token && window.sb) {
+    var newToken = await window.sb.ensureToken();
+    if (newToken) {
+      token = newToken;
+      user = window.sb._user();
+    }
+  }
+
   if (!token || !user) {
-    window.location.href = 'auth.html?tab=register&next=abonnement';
+    window.location.href = 'auth.html?tab=login&next=abonnement';
     return;
   }
 
