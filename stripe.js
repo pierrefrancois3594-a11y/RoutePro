@@ -3,12 +3,11 @@
 // Gestion des abonnements Stripe
 // ═══════════════════════════════════════════════════
 
-var STRIPE_PK = 'pk_test_51TUbHB09pMGzPu5QVPProZRQJc5wNd58qQogmzNiIJbcZtTQUHHs1JEuxnWbbEOg0oImw805Os4EGl037qSatTjy00DNky9nlE';
 var PRICE_MENSUEL = 'price_1TUbK909pMGzPu5QtpTVZ8et';
 var PRICE_ANNUEL  = 'price_1TUbKg09pMGzPu5QxWhifyR2';
+var _SUPA_URL = 'https://eulkccufeddlhbltekxm.supabase.co';
+var _SUPA_KEY = 'sb_publishable_hvmFBoqQ3qy3lAi5ZeK8kg_63_Wnws1';
 
-var SUPA_URL = 'https://eulkccufeddlhbltekxm.supabase.co';
-var SUPA_KEY = 'sb_publishable_hvmFBoqQ3qy3lAi5ZeK8kg_63_Wnws1';
 
 // ── Récupérer le token Supabase ──
 function getToken() {
@@ -76,7 +75,7 @@ async function lancerPaiement(type) {
 
   try {
     // Appel à Supabase Edge Function (ou fallback direct Stripe)
-    var resp = await fetch(SUPA_URL + '/functions/v1/create-checkout', {
+    var resp = await fetch(_SUPA_URL + '/functions/v1/create-checkout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -125,8 +124,8 @@ async function verifierAbonnement() {
     }
 
     // Sinon vérifier dans la table profils Supabase
-    var resp = await fetch(SUPA_URL + '/rest/v1/profils?id=eq.' + (user ? user.id : ''), {
-      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + token }
+    var resp = await fetch(_SUPA_URL + '/rest/v1/profils?id=eq.' + (user ? user.id : ''), {
+      headers: { 'apikey': _SUPA_KEY, 'Authorization': 'Bearer ' + token }
     });
     var profils = await resp.json();
     if (profils && profils[0] && profils[0].abonnement === 'premium') {
