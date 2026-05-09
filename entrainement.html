@@ -548,18 +548,30 @@ function showPremiumOverlay(msg) {
   }
 }
 
+function getUserId() {
+  try {
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      var s = JSON.parse(raw);
+      var sess = s.access_token ? s : (s.currentSession || null);
+      if (sess && sess.user && sess.user.id) return sess.user.id;
+    }
+  } catch(e) {}
+  return 'anonymous';
+}
+
+function getQTodayKey() {
+  return 'ftr_q_' + getUserId() + '_' + new Date().toDateString();
+}
+
 function getQToday() {
-  var stats = {};
-  try { stats = JSON.parse(localStorage.getItem('ftr_stats') || '{}'); } catch(e) {}
-  var today = new Date().toDateString();
-  // Compter depuis le nouveau compteur temps réel
-  var fromCounter = (stats.qToday && stats.qToday[today]) ? stats.qToday[today] : 0;
-  // Compter aussi depuis les sessions terminées (compatibilité)
-  var sessions = stats.sessions || [];
-  var fromSessions = sessions
-    .filter(function(s) { return new Date(s.ts).toDateString() === today; })
-    .reduce(function(a, s) { return a + s.total; }, 0);
-  return Math.max(fromCounter, fromSessions);
+  try {
+    var count = parseInt(localStorage.getItem(getQTodayKey()) || '0');
+    return isNaN(count) ? 0 : count;
+  } catch(e) { return 0; }
 }
 
 function checkQuestionLimit() {
@@ -766,16 +778,13 @@ function pick(btn, rep, q) {
 
   // Incrémenter le compteur de questions du jour (compte gratuit)
   if (!window._isPremium) {
-    var stats = {};
-    try { stats = JSON.parse(localStorage.getItem('ftr_stats') || '{}'); } catch(e) {}
-    if (!stats.qToday) stats.qToday = {};
-    var today = new Date().toDateString();
-    if (!stats.qToday[today]) stats.qToday[today] = 0;
-    stats.qToday[today]++;
-    localStorage.setItem('ftr_stats', JSON.stringify(stats));
+    // Incrémenter le compteur par utilisateur
+    var qKey = getQTodayKey();
+    var qCount = parseInt(localStorage.getItem(qKey) || '0') + 1;
+    localStorage.setItem(qKey, qCount);
 
     // Vérifier si la limite est atteinte après cette question
-    if (stats.qToday[today] >= 10) {
+    if (qCount >= 10) {
       // Laisser afficher la réponse puis bloquer
       setTimeout(function() {
         showPremiumOverlay('Vous avez atteint votre limite de 10 questions gratuites aujourd hui. Revenez demain ou passez Premium !');
