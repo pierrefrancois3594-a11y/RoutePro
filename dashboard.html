@@ -825,7 +825,7 @@ function init() {
     var prev = pct(sessions[1].corr, sessions[1].total);
     var diff = last - prev;
     el = document.getElementById("s-taux-sub");
-    if (el) el.textContent = (diff>=0?"&#8593; +" : "&#8595; ") + diff + " pts vs derniere seance";
+    if (el) el.innerHTML = (diff>=0?"&#x2191; +" : "&#x2193; ") + diff + " pts vs derni&egrave;re s&eacute;ance";
   }
 
   // Stats examens
