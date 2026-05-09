@@ -716,7 +716,35 @@ async function chargerStatutAbo(retry) {
   var aboContent = document.getElementById("abo-content");
   if (!aboContent) return;
   if (premium) {
-    aboContent.innerHTML = '<div style="display:flex;align-items:center;gap:16px;padding:16px;background:rgba(39,201,63,.06);border:1px solid rgba(39,201,63,.15);border-radius:6px;margin-bottom:16px"><span style="font-size:28px">&#9989;</span><div><strong style="color:var(--green);display:block;margin-bottom:4px">Abonnement Premium actif</strong><span style="font-size:12px;color:var(--steel)">Acces illimite a toutes les questions, examens blancs et statistiques.</span></div></div><button id="btn-resilier" onclick="resilierAbonnement()" style="font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:9px 20px;border-radius:3px;background:none;border:1px solid rgba(255,95,86,.3);color:var(--red);cursor:pointer;">Resilier mon abonnement</button>';
+    // Vérifier si l'abonnement est en cours de résiliation via Stripe
+    var subId = profil.stripe_subscription_id;
+    var cancelInfo = '';
+    if (subId) {
+      try {
+        var subResp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/functions/v1/get-subscription-status', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g',
+            'Authorization': 'Bearer ' + (function(){
+              try { for (var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(!k)continue;var r=localStorage.getItem(k);if(!r)continue;var s=JSON.parse(r);var se=s.access_token?s:(s.currentSession||null);if(se&&se.access_token)return se.access_token;} } catch(e){} return '';
+            })()
+          },
+          body: JSON.stringify({ subscriptionId: subId })
+        });
+        var subData = await subResp.json();
+        if (subData.cancel_at_period_end && subData.current_period_end) {
+          var endDate = new Date(subData.current_period_end * 1000).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'});
+          cancelInfo = endDate;
+        }
+      } catch(e) {}
+    }
+
+    if (cancelInfo) {
+      aboContent.innerHTML = '<div style="display:flex;align-items:center;gap:16px;padding:16px;background:rgba(242,101,34,.06);border:1px solid rgba(242,101,34,.2);border-radius:6px;margin-bottom:16px"><span style="font-size:28px">⏳</span><div><strong style="color:var(--orange-lt);display:block;margin-bottom:4px">Résiliation programmée</strong><span style="font-size:12px;color:var(--steel)">Votre abonnement Premium sera actif jusqu'au <strong style="color:var(--steel-lt)">' + cancelInfo + '</strong>. Après cette date, vous passerez automatiquement en compte gratuit.</span></div></div><a href="abonnement.html"><button style="font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:9px 20px;border-radius:3px;background:var(--orange);border:none;color:white;cursor:pointer;">Renouveler mon abonnement</button></a>';
+    } else {
+      aboContent.innerHTML = '<div style="display:flex;align-items:center;gap:16px;padding:16px;background:rgba(39,201,63,.06);border:1px solid rgba(39,201,63,.15);border-radius:6px;margin-bottom:16px"><span style="font-size:28px">&#9989;</span><div><strong style="color:var(--green);display:block;margin-bottom:4px">Abonnement Premium actif</strong><span style="font-size:12px;color:var(--steel)">Acces illimite a toutes les questions, examens blancs et statistiques.</span></div></div><button id="btn-resilier" onclick="resilierAbonnement()" style="font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:9px 20px;border-radius:3px;background:none;border:1px solid rgba(255,95,86,.3);color:var(--red);cursor:pointer;">Resilier mon abonnement</button>';
+    }
   } else {
     aboContent.innerHTML = '<div style="display:flex;align-items:center;gap:16px;padding:16px;background:rgba(255,95,86,.06);border:1px solid rgba(255,95,86,.15);border-radius:6px;margin-bottom:16px"><span style="font-size:28px">&#128274;</span><div><strong style="color:var(--red);display:block;margin-bottom:4px">Compte gratuit - 10 questions/jour</strong><span style="font-size:12px;color:var(--steel)">Passez Premium pour un acces illimite.</span></div></div><a href="abonnement.html"><button style="font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:9px 20px;border-radius:3px;background:var(--orange);border:none;color:white;cursor:pointer;">Passer Premium</button></a>';
   }
