@@ -162,6 +162,7 @@
     <button class="tab" onclick="switchTab('stats',this)">&#128200; Statistiques</button>
     <button class="tab" onclick="switchTab('examens',this)">&#128221; Examens blancs</button>
     <button class="tab" onclick="switchTab('objectifs',this)">&#127919; Objectifs</button>
+    <button class="tab" onclick="switchTab('abonnement',this)">&#128179; Abonnement</button>
   </div>
 
   <!-- VUE D'ENSEMBLE -->
@@ -172,7 +173,7 @@
       <div class="stat blue"><div class="stat-lbl">Examens blancs</div><div class="stat-val" id="s-examens">0 <small>pass&eacute;s</small></div><div class="stat-sub" id="s-examens-sub">&mdash;</div></div>
       <div class="stat red"><div class="stat-lbl">S&eacute;ances d'entr&acirc;inement</div><div class="stat-val" id="s-sessions">0 <small>s&eacute;ances</small></div><div class="stat-sub" id="s-sessions-sub">&mdash;</div></div>
     </div>
-    <div class="grid-2">
+        <div class="grid-2">
       <div class="card">
         <div class="card-title">Progression par mati&egrave;re <span class="badge" id="prog-badge">CPC L&eacute;ger</span></div>
         <div class="prog-filter">
@@ -206,12 +207,6 @@
     <div class="card">
       <div class="card-title">Activit&eacute; r&eacute;cente <span class="badge">10 derni&egrave;res s&eacute;ances</span></div>
       <div class="act-list" id="act-list"><div class="empty"><div class="empty-icon">&#9889;</div><p>Pas encore d'activit&eacute;.</p></div></div>
-    </div>
-
-    <!-- Statut abonnement -->
-    <div class="card" style="margin-top:20px" id="abo-card">
-      <div class="card-title">Mon abonnement <span class="badge" id="abo-badge">...</span></div>
-      <div id="abo-content" style="font-size:13px;color:var(--steel)">Chargement...</div>
     </div>
 
   </div>
@@ -264,6 +259,45 @@
         <div style="margin-top:16px"><a href="entrainement.html"><button class="btn btn-primary" style="width:100%">S'entra&icirc;ner sur ces th&egrave;mes &rarr;</button></a></div>
       </div>
     </div>
+  </div>
+
+  <!-- ABONNEMENT -->
+  <div id="tab-abonnement" class="tab-content">
+    <div class="dash-header">
+      <div>
+        <h1>Mon <span>abonnement</span></h1>
+        <p>G&eacute;rez votre abonnement ForgeTaRoute</p>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat" id="abo-stat-1">
+        <div class="stat-lbl">Statut</div>
+        <div class="stat-val" id="abo-statut-val">...</div>
+        <div class="stat-sub" id="abo-statut-sub">&mdash;</div>
+      </div>
+      <div class="stat blue" id="abo-stat-2">
+        <div class="stat-lbl">Plan</div>
+        <div class="stat-val" id="abo-plan-val">&mdash;</div>
+        <div class="stat-sub">ForgeTaRoute Premium</div>
+      </div>
+      <div class="stat green" id="abo-stat-3">
+        <div class="stat-lbl">Prochaine &eacute;ch&eacute;ance</div>
+        <div class="stat-val" id="abo-date-val">&mdash;</div>
+        <div class="stat-sub" id="abo-date-sub">&mdash;</div>
+      </div>
+      <div class="stat" id="abo-stat-4">
+        <div class="stat-lbl">Questions</div>
+        <div class="stat-val" id="abo-questions-val">&mdash;</div>
+        <div class="stat-sub">par jour</div>
+      </div>
+    </div>
+
+    <div class="card" id="abo-card">
+      <div class="card-title">D&eacute;tail de l'abonnement <span class="badge" id="abo-badge">...</span></div>
+      <div id="abo-content" style="font-size:13px;color:var(--steel)">Chargement...</div>
+    </div>
+
   </div>
 
 </div>
@@ -674,7 +708,15 @@ async function resilierAbonnement() {
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token, "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g" }
     });
     var d2 = await resp.json();
-    if (d2.ok) { alert("Abonnement resilie."); chargerStatutAbo(); }
+    if (d2.ok) {
+      // Afficher message succès sans alert
+      var aboContent = document.getElementById("abo-content");
+      if (aboContent) {
+        aboContent.innerHTML = "<div style=\"display:flex;align-items:center;gap:16px;padding:16px;background:rgba(242,101,34,.06);border:1px solid rgba(242,101,34,.2);border-radius:6px;margin-bottom:16px\"><span style=\"font-size:28px\">&#x23F3;</span><div><strong style=\"color:var(--orange-lt);display:block;margin-bottom:4px\">R&eacute;siliation confirm&eacute;e</strong><span style=\"font-size:12px;color:var(--steel)\">Votre abonnement restera actif jusqu a la fin de la p&eacute;riode en cours. Le bouton se mettra &agrave; jour automatiquement.</span></div></div><a href=\"abonnement.html\"><button style=\"font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:9px 20px;border-radius:3px;background:var(--orange);border:none;color:white;cursor:pointer;\">Renouveler mon abonnement</button></a>";
+      }
+      // Recharger le statut complet depuis Supabase après 2 secondes
+      setTimeout(function() { chargerStatutAbo(); }, 2000);
+    }
     else { throw new Error(d2.error || "Erreur"); }
   } catch(e) {
     alert("Erreur. Contactez contact@forgetaroute.fr");
@@ -711,6 +753,14 @@ async function chargerStatutAbo(retry) {
     badge.style.color = premium ? "#27C93F" : "#FF5F56";
     badge.style.borderColor = premium ? "rgba(39,201,63,.2)" : "rgba(255,95,86,.2)";
   }
+
+  // Mettre à jour les stats cards de l'onglet abonnement
+  var aboStatutVal = document.getElementById("abo-statut-val");
+  var aboPlanVal = document.getElementById("abo-plan-val");
+  var aboQVal = document.getElementById("abo-questions-val");
+  if (aboStatutVal) aboStatutVal.innerHTML = premium ? "<span style=\"color:var(--green)\">Actif</span>" : "<span style=\"color:var(--red)\">Gratuit</span>";
+  if (aboPlanVal) aboPlanVal.innerHTML = premium ? "Premium" : "Gratuit";
+  if (aboQVal) aboQVal.innerHTML = premium ? "&#x221E;" : "10";
   var aboBadge = document.getElementById("abo-badge");
   if (aboBadge) { aboBadge.textContent = premium ? "Premium actif" : "Gratuit"; aboBadge.style.color = premium ? "var(--green)" : "var(--red)"; }
   var aboContent = document.getElementById("abo-content");
