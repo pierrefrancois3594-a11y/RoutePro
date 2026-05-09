@@ -684,7 +684,9 @@ function startTheme(themeObj) {
   if (S.diffFilter > 0) pool = pool.filter(q => q.d === S.diffFilter);
   if (!pool.length) { alert('Aucune question disponible pour ce filtre.'); return; }
 
-  S.qs = engine.getSmartSelection(themeObj.id, Math.min(15, pool.length))
+  var maxQ = window._isPremium ? 15 : Math.min(15, Math.max(0, 10 - getQToday()));
+  if (!window._isPremium && maxQ <= 0) { checkQuestionLimit(); return; }
+  S.qs = engine.getSmartSelection(themeObj.id, Math.min(maxQ, pool.length))
     .map(q => window.QuestionEngine.shuffleAnswers(q));
 
   show('quiz');
@@ -953,7 +955,8 @@ function restart() {
   if (!S.themeObj) return;
   S.corr=0; S.wrong=0; S.skipped=0; S.hist=[]; S.flagged=[]; S.idx=0; S.done=false;
   // Nouvelles questions via l'algo
-  S.qs = engine.getSmartSelection(S.themeObj.id, Math.min(15, engine.getByTheme(S.themeObj.id).length))
+  var maxQ2 = window._isPremium ? 15 : Math.min(15, Math.max(0, 10 - getQToday()));
+  S.qs = engine.getSmartSelection(S.themeObj.id, Math.min(maxQ2, engine.getByTheme(S.themeObj.id).length))
     .map(q => window.QuestionEngine.shuffleAnswers(q));
   show('quiz');
   renderQ();
