@@ -293,6 +293,17 @@
 </head>
 <body>
 
+<!-- Overlay premium -->
+<div id="premium-overlay" style="display:none;position:fixed;inset:0;background:rgba(11,24,41,.95);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:20px;text-align:center;padding:40px">
+  <div style="font-size:48px">🔒</div>
+  <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;text-transform:uppercase;color:#F0F4F8">Fonctionnalite Premium</div>
+  <div style="font-size:15px;color:#8FA3B8;max-width:420px">Les examens blancs complets sont reserves aux abonnes Premium. Passez Premium pour acceder aux examens blancs, aux statistiques detaillees et a des questions illimitees.</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px">
+    <button onclick="window.location.href='abonnement.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:12px 28px;border-radius:4px;background:#F26522;color:white;border:none;cursor:pointer">Passer Premium &#8594;</button>
+    <button onclick="window.location.href='entrainement.html'" style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:12px 28px;border-radius:4px;background:none;border:1px solid rgba(143,163,184,.2);color:#C4D4E2;cursor:pointer">S entrainer gratuitement</button>
+  </div>
+</div>
+
 <!-- ── NAV ── -->
 <nav>
   <a href="index.html" class="nav-logo">
@@ -1256,6 +1267,40 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }, 400);
 });
+
+async function checkExamenAccess() {
+  var premium = false;
+  try {
+    var token = null, userId = null;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      try {
+        var s = JSON.parse(raw);
+        var sess = s.access_token ? s : (s.currentSession || null);
+        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
+      } catch(e2) {}
+    }
+    if (token && userId) {
+      var resp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/rest/v1/profils?id=eq.' + userId + '&select=abonnement', {
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g',
+          'Authorization': 'Bearer ' + token
+        }
+      });
+      var data = await resp.json();
+      premium = data && data[0] && data[0].abonnement === 'premium';
+    }
+  } catch(e) {}
+
+  if (!premium) {
+    var overlay = document.getElementById('premium-overlay');
+    if (overlay) overlay.style.display = 'flex';
+  }
+}
+checkExamenAccess();
 </script>
 </body>
 </html>

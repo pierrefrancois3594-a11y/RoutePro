@@ -181,7 +181,7 @@ function appliquerFreemium(estPremium) {
     .filter(function(s) { return new Date(s.ts).toDateString() === today; })
     .reduce(function(a, s) { return a + s.total; }, 0);
 
-  if (qAujourdHui >= 20) {
+  if (qAujourdHui >= 10) {
     // Afficher bannière upgrade
     var banner = document.getElementById('freemium-banner');
     if (banner) banner.style.display = 'flex';
