@@ -331,9 +331,9 @@
   <div class="struct-grid">
     <div class="sc p1">
       <span class="sc-tag">Partie 1</span>
-      <h3>QCM — 50 questions</h3>
+      <h3>QCM — 10 questions</h3>
       <div class="sc-rows">
-        <div class="sc-row"><span class="k">Questions</span><span class="v hl">50 questions</span></div>
+        <div class="sc-row"><span class="k">Questions</span><span class="v hl">10 questions</span></div>
         <div class="sc-row"><span class="k">Barème</span><span class="v">2 pts / bonne réponse</span></div>
         <div class="sc-row"><span class="k">Note sur</span><span class="v hl">100 points</span></div>
         <div class="sc-row"><span class="k">Correction</span><span class="v">Immédiate + explication</span></div>
@@ -724,7 +724,7 @@ function startExam() {
   // Mélange avec seed temporelle pour garantir la variété
   pool = deepShuffle(pool, Date.now());
 
-  // Équilibrage par thème : 50 questions réparties sur tous les thèmes
+  // Équilibrage par thème : 10 questions réparties sur tous les thèmes
   const grouped = {};
   pool.forEach(q => {
     const t = q.theme || 'general';
