@@ -425,17 +425,52 @@ function ftrGetStats() {
 }
 
 function ftrSaveSession(prog, themeId, total, corr) {
+  // 1. Sauvegarder dans localStorage (fallback)
   var data = ftrGetStats();
   if (!data.sessions) data.sessions = [];
   if (!data.reponses) data.reponses = {};
-  // Ajouter la session
   data.sessions.unshift({ prog: prog, theme: themeId, total: total, corr: corr, ts: Date.now() });
   if (data.sessions.length > 100) data.sessions = data.sessions.slice(0, 100);
-  // Mettre à jour les stats par thème
   if (!data.reponses[themeId]) data.reponses[themeId] = { corr: 0, total: 0 };
   data.reponses[themeId].corr += corr;
   data.reponses[themeId].total += total;
   localStorage.setItem("ftr_stats", JSON.stringify(data));
+
+  // 2. Sauvegarder dans Supabase (permanent)
+  try {
+    var token = null, userId = null;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      try {
+        var s = JSON.parse(raw);
+        var sess = s.access_token ? s : (s.currentSession || null);
+        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
+      } catch(e2) {}
+    }
+    if (token && userId) {
+      fetch('https://eulkccufeddlhbltekxm.supabase.co/rest/v1/sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g',
+          'Authorization': 'Bearer ' + token,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          programme: prog,
+          theme: themeId,
+          nb_questions: total,
+          nb_correct: corr,
+          nb_wrong: total - corr,
+          duree_sec: 0
+        })
+      }).catch(function() {});
+    }
+  } catch(e) {}
 }
 
 function ftrSaveExamen(prog, score, admis) {

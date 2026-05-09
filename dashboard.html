@@ -307,6 +307,81 @@ function getSessions() { var d = getStats(); return d.sessions || []; }
 function getExamens() { var d = getStats(); return d.examens || []; }
 function getReponses() { var d = getStats(); return d.reponses || {}; }
 
+async function loadStatsFromSupabase() {
+  try {
+    var token = null, userId = null;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      try {
+        var s = JSON.parse(raw);
+        var sess = s.access_token ? s : (s.currentSession || null);
+        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
+      } catch(e2) {}
+    }
+    if (!token || !userId) return null;
+
+    var SUPA_URL3 = 'https://eulkccufeddlhbltekxm.supabase.co';
+    var SUPA_KEY3 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g';
+    var headers = { 'apikey': SUPA_KEY3, 'Authorization': 'Bearer ' + token };
+
+    // Charger sessions et examens en parallèle
+    var [sessResp, examResp] = await Promise.all([
+      fetch(SUPA_URL3 + '/rest/v1/sessions?user_id=eq.' + userId + '&order=created_at.desc&limit=100', { headers: headers }),
+      fetch(SUPA_URL3 + '/rest/v1/examens?user_id=eq.' + userId + '&order=created_at.desc&limit=50', { headers: headers })
+    ]);
+
+    var sessData = await sessResp.json();
+    var examData = await examResp.json();
+
+    if (!Array.isArray(sessData) || !Array.isArray(examData)) return null;
+
+    // Convertir au format localStorage
+    var sessions = sessData.map(function(s) {
+      return {
+        prog: s.programme,
+        theme: s.theme,
+        total: s.nb_questions,
+        corr: s.nb_correct,
+        ts: new Date(s.created_at).getTime()
+      };
+    });
+
+    var examens = examData.map(function(e) {
+      return {
+        prog: e.programme,
+        score: e.score_total,
+        admis: e.admis,
+        ts: new Date(e.created_at).getTime()
+      };
+    });
+
+    // Calculer reponses par thème depuis les sessions
+    var reponses = {};
+    sessions.forEach(function(s) {
+      if (!s.theme) return;
+      if (!reponses[s.theme]) reponses[s.theme] = { corr: 0, total: 0 };
+      reponses[s.theme].corr += s.corr;
+      reponses[s.theme].total += s.total;
+    });
+
+    // Fusionner avec localStorage et sauvegarder
+    var localData = getStats();
+    var merged = {
+      sessions: sessions.length > 0 ? sessions : (localData.sessions || []),
+      examens: examens.length > 0 ? examens : (localData.examens || []),
+      reponses: Object.keys(reponses).length > 0 ? reponses : (localData.reponses || {}),
+      qToday: localData.qToday || {}
+    };
+    localStorage.setItem('ftr_stats', JSON.stringify(merged));
+    return merged;
+  } catch(e) {
+    return null;
+  }
+}
+
 function pct(c,t) { return t>0 ? Math.round(c/t*100) : 0; }
 
 function switchTab(id, btn) {
@@ -734,7 +809,8 @@ function init() {
 if (window.location.hash && window.location.hash.includes('access_token')) {
   handleOAuthCallback();
 } else {
-  init();
+  // Charger stats depuis Supabase puis initialiser
+  loadStatsFromSupabase().then(function() { init(); }).catch(function() { init(); });
 }
 if (window.gererRetourPaiement) window.gererRetourPaiement();
 chargerStatutAbo();

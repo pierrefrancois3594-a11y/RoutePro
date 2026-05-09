@@ -331,9 +331,9 @@
   <div class="struct-grid">
     <div class="sc p1">
       <span class="sc-tag">Partie 1</span>
-      <h3>QCM — 10 questions</h3>
+      <h3>QCM — 50 questions</h3>
       <div class="sc-rows">
-        <div class="sc-row"><span class="k">Questions</span><span class="v hl">10 questions</span></div>
+        <div class="sc-row"><span class="k">Questions</span><span class="v hl">50 questions</span></div>
         <div class="sc-row"><span class="k">Barème</span><span class="v">2 pts / bonne réponse</span></div>
         <div class="sc-row"><span class="k">Note sur</span><span class="v hl">100 points</span></div>
         <div class="sc-row"><span class="k">Correction</span><span class="v">Immédiate + explication</span></div>
@@ -724,7 +724,10 @@ function startExam() {
   // Mélange avec seed temporelle pour garantir la variété
   pool = deepShuffle(pool, Date.now());
 
-  // Équilibrage par thème : 10 questions réparties sur tous les thèmes
+  // Nombre de questions selon le plan
+  const maxQ = window._maxQuestions || 50;
+
+  // Équilibrage par thème
   const grouped = {};
   pool.forEach(q => {
     const t = q.theme || 'general';
@@ -732,18 +735,18 @@ function startExam() {
     grouped[t].push(q);
   });
   const themes = Object.keys(grouped);
-  const perTheme = Math.ceil(50 / themes.length);
+  const perTheme = Math.ceil(maxQ / themes.length);
   let balanced = [];
   themes.forEach(t => {
     balanced.push(...deepShuffle(grouped[t], Date.now() + t.length).slice(0, perTheme));
   });
-  balanced = deepShuffle(balanced, Date.now()).slice(0, Math.min(50, balanced.length));
+  balanced = deepShuffle(balanced, Date.now()).slice(0, Math.min(maxQ, balanced.length));
 
   // Si toujours pas assez, remplir avec le reste
-  if (balanced.length < 50 && pool.length > balanced.length) {
+  if (balanced.length < maxQ && pool.length > balanced.length) {
     const ids = new Set(balanced.map(q => q.id));
     const extra = pool.filter(q => !ids.has(q.id));
-    balanced = [...balanced, ...extra].slice(0, 50);
+    balanced = [...balanced, ...extra].slice(0, maxQ);
   }
 
   // Mélange les réponses de chaque question
@@ -1120,6 +1123,42 @@ function finishExam() {
   if (_data.examens.length > 50) _data.examens = _data.examens.slice(0, 50);
   localStorage.setItem('ftr_stats', JSON.stringify(_data));
 
+  // Sauvegarder dans Supabase (permanent)
+  try {
+    var _token = null, _userId = null;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      try {
+        var s = JSON.parse(raw);
+        var sess = s.access_token ? s : (s.currentSession || null);
+        if (sess && sess.access_token) { _token = sess.access_token; _userId = sess.user && sess.user.id; break; }
+      } catch(e2) {}
+    }
+    if (_token && _userId) {
+      fetch('https://eulkccufeddlhbltekxm.supabase.co/rest/v1/examens', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g',
+          'Authorization': 'Bearer ' + _token,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          user_id: _userId,
+          programme: _prog,
+          score_p1: scoreP1 || 0,
+          score_p2: scoreP2 || 0,
+          score_total: total,
+          admis: admis,
+          duree_sec: Math.round((Date.now() - (CFG.startTime || Date.now())) / 1000)
+        })
+      }).catch(function() {});
+    }
+  } catch(e) {}
+
   // Sauvegarder aussi dans Supabase si connecté
   if (window.sb && window.sb.estConnecte()) {
     const prog = CFG.prog || 'LEGER';
@@ -1296,9 +1335,25 @@ async function checkExamenAccess() {
     }
   } catch(e) {}
 
+  // Stocker le statut premium globalement
+  window._isPremium = premium;
+
   if (!premium) {
-    var overlay = document.getElementById('premium-overlay');
-    if (overlay) overlay.style.display = 'flex';
+    // Gratuit : limiter à 10 questions et afficher un avertissement
+    window._maxQuestions = 10;
+    // Mettre à jour l'affichage
+    var qInfo = document.querySelector('.sc-row .v.hl');
+    if (qInfo) qInfo.textContent = '10 questions (gratuit)';
+    var qTitle = document.querySelector('h3');
+    if (qTitle && qTitle.textContent.includes('QCM')) qTitle.textContent = 'QCM — 10 questions (compte gratuit)';
+    // Afficher bannière info
+    var banner = document.createElement('div');
+    banner.style.cssText = 'background:rgba(242,101,34,.1);border:1px solid rgba(242,101,34,.3);border-radius:4px;padding:12px 16px;margin:12px 0;font-size:13px;color:#FF8A4C;display:flex;align-items:center;gap:10px';
+    banner.innerHTML = '<span>⚡</span><span>Compte gratuit : examen limité à <strong>10 questions</strong>. <a href="abonnement.html" style="color:var(--orange);font-weight:600">Passez Premium</a> pour l\'examen complet (50 questions).</span>';
+    var selProg = document.getElementById('sel-prog');
+    if (selProg) selProg.insertBefore(banner, selProg.firstChild);
+  } else {
+    window._maxQuestions = 50;
   }
 }
 checkExamenAccess();
