@@ -810,10 +810,15 @@ if (window.location.hash && window.location.hash.includes('access_token')) {
   handleOAuthCallback();
 } else {
   // Charger stats depuis Supabase puis initialiser
-  loadStatsFromSupabase().then(function() { init(); }).catch(function() { init(); });
+  loadStatsFromSupabase().then(function() { 
+    init(); 
+    chargerStatutAbo();
+  }).catch(function() { 
+    init(); 
+    chargerStatutAbo();
+  });
 }
 if (window.gererRetourPaiement) window.gererRetourPaiement();
-chargerStatutAbo();
 </script>
 </body>
 </html>
