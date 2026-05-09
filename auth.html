@@ -773,7 +773,8 @@ async function handleLogin(e) {
     const result = await window.sb.connexion(email, pass);
     setLoading('login', false);
     if (result.access_token) {
-      window.location.href = 'dashboard.html';
+      var nextPage = new URLSearchParams(window.location.search).get('next');
+      window.location.href = nextPage ? nextPage + '.html' : 'dashboard.html';
     } else {
       const alert = document.getElementById('login-alert');
       document.getElementById('login-alert-msg').textContent = result.error_description || result.msg || 'Email ou mot de passe incorrect.';
@@ -825,7 +826,8 @@ async function handleRegister(e) {
     setLoading('reg', false);
     if (result.access_token) {
       // Connecté directement → dashboard
-      window.location.href = 'dashboard.html';
+      var nextPage = new URLSearchParams(window.location.search).get('next');
+      window.location.href = nextPage ? nextPage + '.html' : 'dashboard.html';
     } else if (result.id || (result.user && result.user.id)) {
       // Email de confirmation envoyé
       document.getElementById('register-form-wrap').style.display = 'none';

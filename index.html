@@ -1467,7 +1467,7 @@
         <li><a href="entrainement.html">Entraînement CPC</a></li>
         <li><a href="entrainement.html?prog=ADR">Entraînement ADR</a></li>
         <li><a href="examen-blanc.html">Examen blanc</a></li>
-        <li><a href="dashboard.html">Mon tableau de bord</a></li>
+        <li><a href="javascript:goToDashboard()">Mon tableau de bord</a></li>
         <li><a href="#tarifs">Tarifs</a></li>
       </ul>
     </div>
@@ -1486,7 +1486,7 @@
       <ul>
         <li><a href="mailto:contact@forgetaroute.fr">Contact</a></li>
         <li><a href="#faq">FAQ</a></li>
-        <li><a href="dashboard.html">Mon compte</a></li>
+        <li><a href="javascript:goToDashboard()">Mon compte</a></li>
         <li><a href="mailto:contact@forgetaroute.fr?subject=Signalement erreur">Signaler une erreur</a></li>
       </ul>
     </div>
@@ -1531,6 +1531,35 @@
   document.querySelectorAll('.hero .reveal').forEach(el => {
     setTimeout(() => el.classList.add('visible'), 100);
   });
+</script>
+<script>
+function goToDashboard() {
+  // Vérifier si une session est active dans le localStorage
+  var connected = false;
+  try {
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      var s = JSON.parse(raw);
+      var sess = s.access_token ? s : (s.currentSession || null);
+      if (sess && sess.access_token) {
+        // Vérifier que le token n'est pas expiré
+        if (!sess.expires_at || Date.now()/1000 < sess.expires_at + 300) {
+          connected = true;
+          break;
+        }
+      }
+    }
+  } catch(e) {}
+  
+  if (connected) {
+    window.location.href = 'dashboard.html';
+  } else {
+    window.location.href = 'auth.html?tab=register&next=dashboard';
+  }
+}
 </script>
 </body>
 </html>
