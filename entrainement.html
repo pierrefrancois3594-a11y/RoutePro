@@ -532,14 +532,7 @@ async function checkAccess() {
 
   if (!premium) {
     // Vérifier le nombre de questions aujourd'hui
-    var stats = {};
-    try { stats = JSON.parse(localStorage.getItem('ftr_stats') || '{}'); } catch(e) {}
-    var sessions = stats.sessions || [];
-    var today = new Date().toDateString();
-    var qToday = sessions
-      .filter(function(s) { return new Date(s.ts).toDateString() === today; })
-      .reduce(function(a, s) { return a + s.total; }, 0);
-
+    var qToday = getQToday();
     if (qToday >= 10) {
       showPremiumOverlay('Vous avez utilise vos 10 questions gratuites aujourd hui. Revenez demain ou passez Premium !');
     }
@@ -555,17 +548,25 @@ function showPremiumOverlay(msg) {
   }
 }
 
-function checkQuestionLimit() {
-  if (window._isPremium) return true; // Pas de limite
+function getQToday() {
   var stats = {};
   try { stats = JSON.parse(localStorage.getItem('ftr_stats') || '{}'); } catch(e) {}
-  var sessions = stats.sessions || [];
   var today = new Date().toDateString();
-  var qToday = sessions
+  // Compter depuis le nouveau compteur temps réel
+  var fromCounter = (stats.qToday && stats.qToday[today]) ? stats.qToday[today] : 0;
+  // Compter aussi depuis les sessions terminées (compatibilité)
+  var sessions = stats.sessions || [];
+  var fromSessions = sessions
     .filter(function(s) { return new Date(s.ts).toDateString() === today; })
     .reduce(function(a, s) { return a + s.total; }, 0);
+  return Math.max(fromCounter, fromSessions);
+}
+
+function checkQuestionLimit() {
+  if (window._isPremium) return true;
+  var qToday = getQToday();
   if (qToday >= 10) {
-    showPremiumOverlay('Vous avez atteint votre limite de 10 questions gratuites aujourd hui.');
+    showPremiumOverlay('Vous avez atteint votre limite de 10 questions gratuites aujourd hui. Revenez demain ou passez Premium !');
     return false;
   }
   return true;
@@ -762,6 +763,25 @@ function renderQ() {
 function pick(btn, rep, q) {
   if (S.done) return;
   S.done = true;
+
+  // Incrémenter le compteur de questions du jour (compte gratuit)
+  if (!window._isPremium) {
+    var stats = {};
+    try { stats = JSON.parse(localStorage.getItem('ftr_stats') || '{}'); } catch(e) {}
+    if (!stats.qToday) stats.qToday = {};
+    var today = new Date().toDateString();
+    if (!stats.qToday[today]) stats.qToday[today] = 0;
+    stats.qToday[today]++;
+    localStorage.setItem('ftr_stats', JSON.stringify(stats));
+
+    // Vérifier si la limite est atteinte après cette question
+    if (stats.qToday[today] >= 10) {
+      // Laisser afficher la réponse puis bloquer
+      setTimeout(function() {
+        showPremiumOverlay('Vous avez atteint votre limite de 10 questions gratuites aujourd hui. Revenez demain ou passez Premium !');
+      }, 2000);
+    }
+  }
   const ok = rep.ok === true;
 
   document.querySelectorAll('.opt').forEach(b => {
