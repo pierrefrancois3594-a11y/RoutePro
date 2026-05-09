@@ -783,9 +783,25 @@ async function chargerStatutAbo(retry) {
           body: JSON.stringify({ subscriptionId: subId })
         });
         var subData = await subResp.json();
-        if (subData.cancel_at_period_end && subData.current_period_end) {
+        // Mettre à jour la date d'échéance dans les stats cards
+        if (subData.current_period_end) {
           var endDate = new Date(subData.current_period_end * 1000).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'});
-          cancelInfo = endDate;
+          var aboDateVal = document.getElementById('abo-date-val');
+          var aboDateSub = document.getElementById('abo-date-sub');
+          if (aboDateVal) aboDateVal.innerHTML = endDate;
+          if (aboDateSub) aboDateSub.textContent = subData.cancel_at_period_end ? 'Date de fin (resiliation)' : 'Prochain renouvellement';
+          
+          // Mettre aussi la stat ::before en rouge si resiliation
+          var aboStat3 = document.getElementById('abo-stat-3');
+          if (aboStat3 && subData.cancel_at_period_end) {
+            aboStat3.style.setProperty('--stat-color', 'var(--orange)');
+            aboStat3.querySelector(".stat-lbl").textContent = "Fin d abonnement";
+          }
+        }
+
+        if (subData.cancel_at_period_end && subData.current_period_end) {
+          var endDate2 = new Date(subData.current_period_end * 1000).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'});
+          cancelInfo = endDate2;
         }
       } catch(e) {}
     }
