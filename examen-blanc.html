@@ -1340,19 +1340,10 @@ async function checkExamenAccess() {
   window._premiumUserId = userId;
 
   if (!premium) {
-    // Gratuit : limiter à 10 questions et afficher un avertissement
-    window._maxQuestions = 10;
-    // Mettre à jour l'affichage
-    var qInfo = document.querySelector('.sc-row .v.hl');
-    if (qInfo) qInfo.textContent = '10 questions (gratuit)';
-    var qTitle = document.querySelector('h3');
-    if (qTitle && qTitle.textContent.includes('QCM')) qTitle.textContent = 'QCM — 10 questions (compte gratuit)';
-    // Afficher bannière info
-    var banner = document.createElement('div');
-    banner.style.cssText = 'background:rgba(242,101,34,.1);border:1px solid rgba(242,101,34,.3);border-radius:4px;padding:12px 16px;margin:12px 0;font-size:13px;color:#FF8A4C;display:flex;align-items:center;gap:10px';
-    banner.innerHTML = '<span>⚡</span><span>Compte gratuit : examen limité à <strong>10 questions</strong>. <a href="abonnement.html" style="color:var(--orange);font-weight:600">Passez Premium</a> pour l\'examen complet (50 questions).</span>';
-    var selProg = document.getElementById('sel-prog');
-    if (selProg) selProg.insertBefore(banner, selProg.firstChild);
+    // Gratuit : bloquer complètement l'accès à l'examen blanc
+    window._maxQuestions = 0;
+    var overlay = document.getElementById('premium-overlay');
+    if (overlay) overlay.style.display = 'flex';
   } else {
     window._maxQuestions = 50;
   }
