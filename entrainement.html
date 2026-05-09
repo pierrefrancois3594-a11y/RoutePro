@@ -535,10 +535,11 @@ let revHistory = []; // for filtering
 // ═══════════════════════════════════════════════════
 
 async function checkAccess() {
-  // Vérifier le statut abonnement depuis Supabase
+  // Vérifier le statut abonnement depuis Supabase (toujours frais)
   var premium = false;
+  var currentUserId = null;
   try {
-    var token = null, userId = null;
+    var token = null;
     for (var i = 0; i < localStorage.length; i++) {
       var k = localStorage.key(i);
       if (!k) continue;
@@ -547,11 +548,15 @@ async function checkAccess() {
       try {
         var s = JSON.parse(raw);
         var sess = s.access_token ? s : (s.currentSession || null);
-        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
+        if (sess && sess.access_token) {
+          token = sess.access_token;
+          currentUserId = sess.user && sess.user.id;
+          break;
+        }
       } catch(e2) {}
     }
-    if (token && userId) {
-      var resp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/rest/v1/profils?id=eq.' + userId + '&select=abonnement', {
+    if (token && currentUserId) {
+      var resp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/rest/v1/profils?id=eq.' + currentUserId + '&select=abonnement', {
         headers: {
           'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g',
           'Authorization': 'Bearer ' + token
@@ -562,8 +567,9 @@ async function checkAccess() {
     }
   } catch(e) {}
 
-  // Stocker le statut
+  // Stocker le statut avec l'ID utilisateur pour éviter les confusions entre comptes
   window._isPremium = premium;
+  window._premiumUserId = currentUserId;
 
   if (!premium) {
     // Vérifier le nombre de questions aujourd'hui
@@ -610,6 +616,23 @@ function getQToday() {
 }
 
 function checkQuestionLimit() {
+  // Vérifier que le statut premium correspond au bon utilisateur
+  var currentId = null;
+  try {
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      var s = JSON.parse(raw);
+      var sess = s.access_token ? s : (s.currentSession || null);
+      if (sess && sess.user) { currentId = sess.user.id; break; }
+    }
+  } catch(e) {}
+  // Si l'utilisateur a changé, réinitialiser le statut premium
+  if (window._premiumUserId && currentId && window._premiumUserId !== currentId) {
+    window._isPremium = false;
+  }
   if (window._isPremium) return true;
   var qToday = getQToday();
   if (qToday >= 10) {

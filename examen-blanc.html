@@ -1335,8 +1335,9 @@ async function checkExamenAccess() {
     }
   } catch(e) {}
 
-  // Stocker le statut premium globalement
+  // Stocker le statut premium avec l'ID utilisateur
   window._isPremium = premium;
+  window._premiumUserId = userId;
 
   if (!premium) {
     // Gratuit : limiter à 10 questions et afficher un avertissement
