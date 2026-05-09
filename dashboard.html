@@ -663,7 +663,26 @@ async function resilierAbonnement() {
   }
 }
 
-async function chargerStatutAbo() {
+async function chargerStatutAbo(retry) {
+  // Si pas de session, réessayer jusqu'à 3 fois avec délai
+  var token = null;
+  try {
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      var s = JSON.parse(raw);
+      var sess = s.access_token ? s : (s.currentSession || null);
+      if (sess && sess.access_token) { token = sess.access_token; break; }
+    }
+  } catch(e) {}
+
+  if (!token && (retry || 0) < 3) {
+    setTimeout(function() { chargerStatutAbo((retry || 0) + 1); }, 1000);
+    return;
+  }
+
   var profil = await verifierStatutAbo();
   var premium = profil && profil.abonnement === "premium";
   var badge = document.getElementById("badge-abo");
