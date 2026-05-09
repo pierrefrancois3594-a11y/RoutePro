@@ -633,7 +633,23 @@ function checkQuestionLimit() {
   if (window._premiumUserId && currentId && window._premiumUserId !== currentId) {
     window._isPremium = false;
   }
-  if (window._isPremium) return true;
+  // Vérifier que le statut premium est pour le bon utilisateur
+  var curId = null;
+  try {
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      var s = JSON.parse(raw);
+      var sess = s.access_token ? s : (s.currentSession || null);
+      if (sess && sess.user) { curId = sess.user.id; break; }
+    }
+  } catch(e) {}
+  if (window._isPremium && window._premiumUserId === curId) return true;
+  if (window._isPremium && window._premiumUserId !== curId) {
+    window._isPremium = false; // Réinitialiser si utilisateur différent
+  }
   var qToday = getQToday();
   if (qToday >= 10) {
     showPremiumOverlay('Vous avez atteint votre limite de 10 questions gratuites aujourd hui. Revenez demain ou passez Premium !');
@@ -728,7 +744,13 @@ function renderList() {
 // START THEME
 // ═══════════════════════════════════════════════════
 function startTheme(themeObj) {
-  if (!checkQuestionLimit()) return;
+  checkAccess().then(function() {
+    if (!checkQuestionLimit()) return;
+    _doStartTheme(themeObj);
+  });
+}
+
+function _doStartTheme(themeObj) {
   S.theme = themeObj.id;
   S.themeObj = themeObj;
   S.corr = 0; S.wrong = 0; S.skipped = 0;
