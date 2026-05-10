@@ -95,8 +95,8 @@ async function lancerPaiement(type) {
         priceId: priceId,
         email: user.email,
         userId: user.id,
-        successUrl: 'https://pierrefrancois3594-a11y.github.io/RoutePro/dashboard.html?payment=success',
-        cancelUrl: 'https://pierrefrancois3594-a11y.github.io/RoutePro/abonnement.html?payment=cancel'
+        successUrl: 'https://forgetaroute.fr/dashboard.html?payment=success',
+        cancelUrl: 'https://forgetaroute.fr/abonnement.html?payment=cancel'
       })
     });
 
