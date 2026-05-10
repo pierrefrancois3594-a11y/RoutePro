@@ -397,6 +397,7 @@
           <button class="rf-btn on" onclick="filterRev('all',this)">Tout</button>
           <button class="rf-btn" onclick="filterRev('ko',this)">❌ Faux</button>
           <button class="rf-btn" onclick="filterRev('ok',this)">✅ Justes</button>
+          <button class="rf-btn" id="btn-filter-flag" onclick="filterRev('flagged',this)">🚩 Marquées</button>
         </div>
       </div>
       <div class="rev-list" id="rev-list"></div>
@@ -995,6 +996,14 @@ function showResults() {
   // Build review
   revHistory = S.hist;
   renderRevList('all');
+  
+  // Mettre à jour le compteur de questions marquées
+  var flagBtn = document.getElementById('btn-filter-flag');
+  if (flagBtn) {
+    var flagCount = S.flagged.length;
+    flagBtn.textContent = '🚩 Marquées (' + flagCount + ')';
+    flagBtn.style.display = flagCount > 0 ? 'inline-block' : 'none';
+  }
 
   show('res');
   renderList();
@@ -1004,7 +1013,9 @@ function renderRevList(filter) {
   const list = document.getElementById('rev-list');
   list.innerHTML = '';
   const items = filter === 'ko' ? revHistory.filter(h => !h.ok) :
-                 filter === 'ok' ? revHistory.filter(h => h.ok === true) : revHistory;
+                 filter === 'ok' ? revHistory.filter(h => h.ok === true) :
+                 filter === 'flagged' ? revHistory.filter(h => S.flagged.includes(h.q.id)) :
+                 revHistory;
   items.forEach((h, i) => {
     const div = document.createElement('div');
     div.className = `rev-item ${h.ok===true?'ok':h.ok===false?'ko':''}`;
