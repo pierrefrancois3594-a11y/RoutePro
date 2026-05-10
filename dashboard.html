@@ -879,7 +879,21 @@ async function supprimerCompte() {
 
     // Vider le localStorage et rediriger
     localStorage.clear();
-    alert('Votre compte a ete supprime avec succes.');
+    // Vérifier si c'était un compte Google
+    var isGoogle = false;
+    try {
+      var sessData = JSON.parse(localStorage.getItem('sb_session') || '{}');
+      var user = sessData.user || {};
+      isGoogle = user.app_metadata && user.app_metadata.provider === 'google';
+    } catch(e) {}
+
+    localStorage.clear();
+
+    if (isGoogle) {
+      alert('Votre compte a ete supprime. Note : si vous vous reconnectez avec Google, un nouveau compte sera automatiquement cree. Pour eviter cela, ne vous reconnectez pas via Google.');
+    } else {
+      alert('Votre compte a ete supprime avec succes. Vous devrez creer un nouveau compte pour vous reconnecter.');
+    }
     window.location.href = 'index.html';
 
   } catch(e) {
