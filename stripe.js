@@ -110,7 +110,7 @@ async function lancerPaiement(type) {
   } catch(err) {
     console.error('Stripe error:', err);
     if (btn) { btn.textContent = type === 'annuel' ? 'Choisir l\'annuel' : 'S\'abonner maintenant'; btn.disabled = false; }
-    alert('Erreur de paiement. Veuillez réessayer ou nous contacter à contact@forgetaroute.fr');
+    alert('Erreur de paiement. Veuillez réessayer ou nous contacter à forgetaroute@outlook.fr');
   }
 }
 
