@@ -3,8 +3,8 @@
 // Gestion des abonnements Stripe
 // ═══════════════════════════════════════════════════
 
-var PRICE_MENSUEL = 'price_1TUbK909pMGzPu5QtpTVZ8et';
-var PRICE_ANNUEL  = 'price_1TUbKg09pMGzPu5QxWhifyR2';
+var PRICE_MENSUEL = 'price_1TVbQj1Q1II1fAmFJ8xlWzGn';
+var PRICE_ANNUEL  = 'price_1TVbRI1Q1II1fAmFNOFnWxzt';
 var _SUPA_URL = 'https://eulkccufeddlhbltekxm.supabase.co';
 var _SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g';
 
