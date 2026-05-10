@@ -298,6 +298,13 @@
       <div id="abo-content" style="font-size:13px;color:var(--steel)">Chargement...</div>
     </div>
 
+    <!-- Supprimer le compte -->
+    <div class="card" style="margin-top:20px;border-color:rgba(255,95,86,.2)">
+      <div class="card-title" style="color:var(--red)">Zone de danger</div>
+      <p style="font-size:13px;color:var(--steel);margin-bottom:16px">La suppression de votre compte est d&eacute;finitive. Toutes vos donn&eacute;es (statistiques, examens, historique) seront effac&eacute;es et ne pourront pas &ecirc;tre r&eacute;cup&eacute;r&eacute;es.</p>
+      <button id="btn-supprimer-compte" onclick="supprimerCompte()" style="font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:9px 20px;border-radius:3px;background:none;border:1px solid rgba(255,95,86,.4);color:var(--red);cursor:pointer;">&#128465; Supprimer mon compte</button>
+    </div>
+
   </div>
 
 </div>
@@ -823,6 +830,63 @@ async function chargerStatutAbo(retry) {
   }
 }
 
+
+async function supprimerCompte() {
+  var confirm1 = confirm("Etes-vous sur de vouloir supprimer votre compte ? Cette action est irreversible.");
+  if (!confirm1) return;
+  var confirm2 = confirm("Toutes vos donnees (stats, examens, abonnement) seront supprimees definitvement. Confirmer ?");
+  if (!confirm2) return;
+
+  var btn = document.getElementById('btn-supprimer-compte');
+  if (btn) { btn.textContent = 'Suppression en cours...'; btn.disabled = true; }
+
+  try {
+    var token = null, userId = null;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      try {
+        var s = JSON.parse(raw);
+        var sess = s.access_token ? s : (s.currentSession || null);
+        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
+      } catch(e2) {}
+    }
+
+    if (!token || !userId) throw new Error('Non connecte');
+
+    var SUPA_URL4 = 'https://eulkccufeddlhbltekxm.supabase.co';
+    var SUPA_KEY4 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g';
+    var headers = { 'apikey': SUPA_KEY4, 'Authorization': 'Bearer ' + token };
+
+    // Supprimer toutes les données de l'utilisateur
+    await Promise.all([
+      fetch(SUPA_URL4 + '/rest/v1/reponses?user_id=eq.' + userId, { method: 'DELETE', headers: headers }),
+      fetch(SUPA_URL4 + '/rest/v1/examens?user_id=eq.' + userId, { method: 'DELETE', headers: headers }),
+      fetch(SUPA_URL4 + '/rest/v1/sessions?user_id=eq.' + userId, { method: 'DELETE', headers: headers }),
+    ]);
+
+    // Supprimer le profil
+    await fetch(SUPA_URL4 + '/rest/v1/profils?id=eq.' + userId, { method: 'DELETE', headers: headers });
+
+    // Supprimer le compte auth via Edge Function
+    await fetch(SUPA_URL4 + '/functions/v1/delete-account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...headers },
+      body: JSON.stringify({ userId: userId })
+    });
+
+    // Vider le localStorage et rediriger
+    localStorage.clear();
+    alert('Votre compte a ete supprime avec succes.');
+    window.location.href = 'index.html';
+
+  } catch(e) {
+    alert('Erreur lors de la suppression. Contactez forgetaroute@outlook.fr');
+    if (btn) { btn.textContent = 'Supprimer mon compte'; btn.disabled = false; }
+  }
+}
 function getUserPrenom() {
   try {
     // Chercher dans toutes les clés localStorage possibles
