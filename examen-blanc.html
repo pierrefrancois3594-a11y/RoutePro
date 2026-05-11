@@ -1208,6 +1208,31 @@ function finishExam() {
   tst.className = `scard-status ${admis?'ok':'ko'}`;
   tst.textContent = admis ? '✓ Admis' : total >= 120 ? '✗ Note éliminatoire' : `✗ ${total}/200 — insuffisant`;
 
+
+  // Mapping des IDs de thèmes vers leurs noms complets
+  const THEME_NAMES = {
+    'cl-civil': 'Droit civil & commercial',
+    'cl-social': 'Droit social',
+    'cl-fiscal': 'Droit fiscal',
+    'cl-gestion': 'Gestion financière',
+    'cl-regl': 'Réglementation VUL',
+    'cl-secu': 'Sécurité routière',
+    'cl-acces': 'Accès à la profession',
+    'lo-social': 'Droit social PL',
+    'lo-civil': 'Droit civil & commercial PL',
+    'lo-gestion': 'Gestion financière PL',
+    'lo-regl': 'Réglementation transport PL',
+    'lo-secu': 'Sécurité routière PL',
+    'lo-acces': 'Accès à la profession PL',
+    'lo-intl': 'Transport international',
+    'adr-gen': 'ADR Général',
+    'adr-class': 'Classification matières',
+    'adr-emb': 'Emballage & étiquetage',
+    'adr-doc': 'Documentation ADR',
+    'adr-trans': 'Dispositions transport',
+    'adr-veh': 'Véhicules & équipements',
+    'adr-sec': 'Sécurité & urgences'
+  };
   // Breakdown QCM par thème
   const byTheme = {};
   P1.qs.forEach((q, i) => {
@@ -1223,7 +1248,8 @@ function finishExam() {
     const cls = pct>=70?'g':pct>=50?'m':'r';
     const col = pct>=70?'var(--green)':pct>=50?'var(--yellow)':'var(--red)';
     const div = document.createElement('div'); div.className = 'bk-item';
-    div.innerHTML = `<div class="bk-row"><span class="bk-name">${theme}</span><span class="bk-sc" style="color:${col}">${d.c}/${d.tot} — ${d.pts} pts</span></div><div class="bk-bar"><div class="bk-fill ${cls}" style="width:0%" data-w="${pct}%"></div></div>`;
+    const themeName = THEME_NAMES[theme] || theme;
+    div.innerHTML = `<div class="bk-row"><span class="bk-name">${themeName}</span><span class="bk-sc" style="color:${col}">${d.c}/${d.tot} — ${d.pts} pts</span></div><div class="bk-bar"><div class="bk-fill ${cls}" style="width:0%" data-w="${pct}%"></div></div>`;
     bkQcm.appendChild(div);
   });
 
