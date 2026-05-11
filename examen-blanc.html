@@ -1116,8 +1116,21 @@ function finishExam() {
 
   // Sauvegarder dans localStorage (dashboard)
   var _prog = CFG.prog || 'LEGER';
+  // Définir la clé stats par utilisateur
+  var _uid2 = (function() {
+    try {
+      for (var ii = 0; ii < localStorage.length; ii++) {
+        var kk = localStorage.key(ii); if (!kk) continue;
+        var rr = localStorage.getItem(kk); if (!rr) continue;
+        var ss = JSON.parse(rr);
+        var se = ss.access_token ? ss : (ss.currentSession || null);
+        if (se && se.user && se.user.id) return se.user.id;
+      }
+    } catch(e2) {} return 'anonymous';
+  })();
+  var _statsKey = 'ftr_stats_' + _uid2;
   var _data = {};
-  try { _data = JSON.parse(localStorage.getItem('ftr_stats') || '{}') || {}; } catch(e) {}
+  try { _data = JSON.parse(localStorage.getItem(_statsKey) || '{}') || {}; } catch(e) {}
   if (!_data.examens) _data.examens = [];
   _data.examens.unshift({ prog: _prog, score: total, admis: admis, ts: Date.now() });
   if (_data.examens.length > 50) _data.examens = _data.examens.slice(0, 50);
