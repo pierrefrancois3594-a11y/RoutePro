@@ -351,6 +351,15 @@
     }
   </style>
 <script src="supabase.js"></script>
+<script>
+// Capturer le hash immédiatement avant qu'il soit perdu
+(function() {
+  var hash = window.location.hash;
+  if (hash && hash.includes('type=recovery')) {
+    sessionStorage.setItem('_pending_hash', hash);
+  }
+})();
+</script>
 </head>
 <body>
 
@@ -1017,7 +1026,8 @@ function showResetAlert(msg) {
 
 // Détecter si c'est un lien de réinitialisation
 function checkRecoveryToken() {
-  var hash = window.location.hash;
+  var hash = sessionStorage.getItem('_pending_hash') || window.location.hash;
+  sessionStorage.removeItem('_pending_hash');
   if (!hash) return;
   
   var params = {};
