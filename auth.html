@@ -909,6 +909,104 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// ═══════════════════════════════════════════
+// RESET PASSWORD HANDLER
+// ═══════════════════════════════════════════
+async function handleResetPassword() {
+  var pass = document.getElementById('reset-pass').value;
+  var pass2 = document.getElementById('reset-pass2').value;
+  
+  if (pass.length < 6) {
+    showResetAlert('Le mot de passe doit contenir au moins 6 caractères.');
+    return;
+  }
+  if (pass !== pass2) {
+    showResetAlert('Les mots de passe ne correspondent pas.');
+    return;
+  }
+
+  document.getElementById('reset-text').textContent = 'Chargement...';
+
+  try {
+    // Utiliser le token de la session pour mettre à jour le mot de passe
+    var token = null;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      try {
+        var s = JSON.parse(raw);
+        var sess = s.access_token ? s : (s.currentSession || null);
+        if (sess && sess.access_token) { token = sess.access_token; break; }
+      } catch(e2) {}
+    }
+
+    var resp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/auth/v1/user', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({ password: pass })
+    });
+
+    var data = await resp.json();
+    if (data.id) {
+      localStorage.clear();
+      alert('Mot de passe modifié avec succès ! Vous pouvez maintenant vous connecter.');
+      window.location.href = 'auth.html?tab=login';
+    } else {
+      showResetAlert('Erreur : ' + (data.message || 'Réessayez.'));
+      document.getElementById('reset-text').textContent = 'Changer mon mot de passe';
+    }
+  } catch(e) {
+    showResetAlert('Erreur de connexion. Réessayez.');
+    document.getElementById('reset-text').textContent = 'Changer mon mot de passe';
+  }
+}
+
+function showResetAlert(msg) {
+  var alert = document.getElementById('reset-alert');
+  var alertMsg = document.getElementById('reset-alert-msg');
+  if (alert && alertMsg) {
+    alertMsg.textContent = msg;
+    alert.style.display = 'block';
+  }
+}
+
+// Détecter si c'est un lien de réinitialisation
+function checkRecoveryToken() {
+  var hash = window.location.hash;
+  if (!hash) return;
+  
+  var params = {};
+  hash.substring(1).split('&').forEach(function(p) {
+    var kv = p.split('=');
+    params[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || '');
+  });
+
+  if (params.type === 'recovery' && params.access_token) {
+    // Sauvegarder la session de récupération
+    var session = {
+      access_token: params.access_token,
+      refresh_token: params.refresh_token || '',
+      expires_at: Math.floor(Date.now()/1000) + parseInt(params.expires_in || 3600),
+      token_type: 'bearer'
+    };
+    localStorage.setItem('sb_session', JSON.stringify(session));
+    
+    // Afficher le panel de réinitialisation
+    document.querySelectorAll('.tab-panel').forEach(function(p) { p.style.display = 'none'; });
+    document.getElementById('reset-panel').style.display = 'block';
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    window.history.replaceState(null, '', window.location.pathname);
+  }
+}
+
+checkRecoveryToken();
 </script>
 </body>
 </html>
