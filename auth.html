@@ -1015,20 +1015,26 @@ function checkRecoveryToken() {
     var session = {
       access_token: params.access_token,
       refresh_token: params.refresh_token || '',
-      expires_at: Math.floor(Date.now()/1000) + parseInt(params.expires_in || 3600),
+      expires_at: Math.floor(Date.now()/1000) + 3600,
       token_type: 'bearer'
     };
     localStorage.setItem('sb_session', JSON.stringify(session));
     
     // Afficher le panel de réinitialisation
-    document.querySelectorAll('.tab-panel').forEach(function(p) { p.style.display = 'none'; });
-    document.getElementById('reset-panel').style.display = 'block';
+    var panelLogin = document.getElementById('panel-login');
+    var panelRegister = document.getElementById('panel-register');
+    var resetPanel = document.getElementById('reset-panel');
+    
+    if (panelLogin) panelLogin.style.display = 'none';
+    if (panelRegister) panelRegister.style.display = 'none';
+    if (resetPanel) resetPanel.style.display = 'block';
+    
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
     window.history.replaceState(null, '', window.location.pathname);
   }
 }
 
-checkRecoveryToken();
+window.addEventListener('DOMContentLoaded', checkRecoveryToken);
 </script>
 </body>
 </html>
