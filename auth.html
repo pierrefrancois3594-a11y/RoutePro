@@ -951,18 +951,42 @@ async function handleResetPassword() {
   document.getElementById('reset-text').textContent = 'Chargement...';
 
   try {
-    // Utiliser le token de la session pour mettre à jour le mot de passe
-    var token = null;
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      try {
-        var s = JSON.parse(raw);
-        var sess = s.access_token ? s : (s.currentSession || null);
-        if (sess && sess.access_token) { token = sess.access_token; break; }
-      } catch(e2) {}
+    // Récupérer le token depuis le hash URL ou localStorage
+    var accessToken = null;
+    var hashParams = {};
+    window.location.hash.substring(1).split('&').forEach(function(p) {
+      var kv = p.split('=');
+      hashParams[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || '');
+    });
+    
+    // Essayer d'abord le token du hash
+    if (hashParams.access_token) {
+      // Échanger le token OTP contre un JWT via Supabase
+      var exchResp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/auth/v1/token?grant_type=pkce', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g'
+        },
+        body: JSON.stringify({ auth_code: hashParams.access_token })
+      });
+      var exchData = await exchResp.json();
+      if (exchData.access_token) {
+        accessToken = exchData.access_token;
+        localStorage.setItem('sb_session', JSON.stringify(exchData));
+      }
+    }
+    
+    // Fallback: utiliser le token du localStorage
+    if (!accessToken) {
+      var sess = JSON.parse(localStorage.getItem('sb_session') || '{}');
+      accessToken = sess.access_token;
+    }
+
+    if (!accessToken) {
+      showResetAlert('Session expirée. Demandez un nouveau lien de réinitialisation.');
+      document.getElementById('reset-text').textContent = 'Changer mon mot de passe';
+      return;
     }
 
     var resp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/auth/v1/user', {
@@ -970,18 +994,18 @@ async function handleResetPassword() {
       headers: {
         'Content-Type': 'application/json',
         'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g',
-        'Authorization': 'Bearer ' + token
+        'Authorization': 'Bearer ' + accessToken
       },
       body: JSON.stringify({ password: pass })
     });
 
     var data = await resp.json();
-    if (data.id) {
+    if (data.id || data.email) {
       localStorage.clear();
       alert('Mot de passe modifié avec succès ! Vous pouvez maintenant vous connecter.');
       window.location.href = 'auth.html?tab=login';
     } else {
-      showResetAlert('Erreur : ' + (data.message || 'Réessayez.'));
+      showResetAlert('Erreur : ' + (data.message || data.msg || 'Réessayez.'));
       document.getElementById('reset-text').textContent = 'Changer mon mot de passe';
     }
   } catch(e) {
