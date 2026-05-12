@@ -746,15 +746,37 @@ function toggleForgot() {
   panel.classList.toggle('visible');
 }
 
-function handleForgot() {
+async function handleForgot() {
   const email = document.getElementById('forgot-email').value.trim();
   if (!isValidEmail(email)) {
     document.getElementById('forgot-email').classList.add('error');
     return;
   }
-  // En production : appel API Supabase auth.resetPasswordForEmail(email)
-  alert(`✅ Si un compte existe pour ${email}, vous recevrez un e-mail de réinitialisation dans quelques minutes.`);
-  toggleForgot();
+
+  var btn = document.querySelector('#forgot-panel .form-submit');
+  if (btn) { btn.textContent = 'Envoi en cours...'; btn.disabled = true; }
+
+  try {
+    var resp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/auth/v1/recover', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g'
+      },
+      body: JSON.stringify({ 
+        email: email,
+        gotrue_meta_security: {}
+      })
+    });
+
+    // Toujours afficher le message de succès (sécurité)
+    alert('✅ Si un compte existe pour ' + email + ', vous recevrez un e-mail de réinitialisation dans quelques minutes.');
+    toggleForgot();
+  } catch(e) {
+    alert('Erreur de connexion. Réessayez.');
+  } finally {
+    if (btn) { btn.textContent = 'Envoyer le lien'; btn.disabled = false; }
+  }
 }
 
 // ═══════════════════════════════════════════
