@@ -517,6 +517,28 @@
     </div>
 
     <!-- ══════════════════════
+         RESET PASSWORD PANEL
+    ══════════════════════ -->
+    <div id="reset-panel" style="display:none;padding:32px">
+      <h3 style="font-family:var(--display);font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--white);margin-bottom:8px">🔑 Nouveau mot de passe</h3>
+      <p style="font-size:13px;color:var(--steel);margin-bottom:20px">Choisissez un nouveau mot de passe pour votre compte.</p>
+      <div id="reset-alert" style="display:none;background:rgba(255,95,86,.1);border:1px solid rgba(255,95,86,.2);border-radius:4px;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--red)">
+        <span id="reset-alert-msg"></span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nouveau mot de passe</label>
+        <input type="password" id="reset-pass" class="form-input" placeholder="••••••••" minlength="6"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirmer le mot de passe</label>
+        <input type="password" id="reset-pass2" class="form-input" placeholder="••••••••" minlength="6"/>
+      </div>
+      <button class="form-submit" onclick="handleResetPassword()">
+        <span id="reset-text">Changer mon mot de passe</span>
+      </button>
+    </div>
+
+    <!-- ══════════════════════
          INSCRIPTION PANEL
     ══════════════════════ -->
     <div class="form-panel" id="panel-register">
