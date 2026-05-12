@@ -951,61 +951,53 @@ async function handleResetPassword() {
   document.getElementById('reset-text').textContent = 'Chargement...';
 
   try {
-    // Récupérer le token depuis le hash URL ou localStorage
-    var accessToken = null;
-    var hashParams = {};
-    window.location.hash.substring(1).split('&').forEach(function(p) {
-      var kv = p.split('=');
-      hashParams[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || '');
-    });
-    
-    // Essayer d'abord le token du hash
-    if (hashParams.access_token) {
-      // Échanger le token OTP contre un JWT via Supabase
-      var exchResp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/auth/v1/token?grant_type=pkce', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g'
-        },
-        body: JSON.stringify({ auth_code: hashParams.access_token })
-      });
-      var exchData = await exchResp.json();
-      if (exchData.access_token) {
-        accessToken = exchData.access_token;
-        localStorage.setItem('sb_session', JSON.stringify(exchData));
-      }
-    }
-    
-    // Fallback: utiliser le token du localStorage
-    if (!accessToken) {
-      var sess = JSON.parse(localStorage.getItem('sb_session') || '{}');
-      accessToken = sess.access_token;
-    }
+    var SUPA_URL = 'https://eulkccufeddlhbltekxm.supabase.co';
+    var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g';
 
-    if (!accessToken) {
+    // Récupérer token_hash et email depuis sessionStorage (stockés par checkRecoveryToken)
+    var tokenHash = sessionStorage.getItem('recovery_token');
+    var email = sessionStorage.getItem('recovery_email');
+
+    if (!tokenHash || !email) {
       showResetAlert('Session expirée. Demandez un nouveau lien de réinitialisation.');
       document.getElementById('reset-text').textContent = 'Changer mon mot de passe';
       return;
     }
 
-    var resp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/auth/v1/user', {
+    // Étape 1 : Vérifier le token OTP pour obtenir un JWT
+    var verifyResp = await fetch(SUPA_URL + '/auth/v1/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPA_KEY },
+      body: JSON.stringify({ token: tokenHash, type: 'recovery', email: email })
+    });
+    var verifyData = await verifyResp.json();
+
+    if (!verifyData.access_token) {
+      showResetAlert('Lien expiré. Demandez un nouveau lien de réinitialisation.');
+      document.getElementById('reset-text').textContent = 'Changer mon mot de passe';
+      return;
+    }
+
+    // Étape 2 : Mettre à jour le mot de passe avec le JWT obtenu
+    var updateResp = await fetch(SUPA_URL + '/auth/v1/user', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g',
-        'Authorization': 'Bearer ' + accessToken
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + verifyData.access_token
       },
       body: JSON.stringify({ password: pass })
     });
 
-    var data = await resp.json();
-    if (data.id || data.email) {
+    var updateData = await updateResp.json();
+    if (updateData.id || updateData.email) {
+      sessionStorage.removeItem('recovery_token');
+      sessionStorage.removeItem('recovery_email');
       localStorage.clear();
       alert('Mot de passe modifié avec succès ! Vous pouvez maintenant vous connecter.');
       window.location.href = 'auth.html?tab=login';
     } else {
-      showResetAlert('Erreur : ' + (data.message || data.msg || 'Réessayez.'));
+      showResetAlert('Erreur : ' + (updateData.message || updateData.msg || 'Réessayez.'));
       document.getElementById('reset-text').textContent = 'Changer mon mot de passe';
     }
   } catch(e) {
@@ -1035,14 +1027,9 @@ function checkRecoveryToken() {
   });
 
   if (params.type === 'recovery' && params.access_token) {
-    // Sauvegarder la session de récupération
-    var session = {
-      access_token: params.access_token,
-      refresh_token: params.refresh_token || '',
-      expires_at: Math.floor(Date.now()/1000) + 3600,
-      token_type: 'bearer'
-    };
-    localStorage.setItem('sb_session', JSON.stringify(session));
+    // Stocker le token OTP et email dans sessionStorage pour handleResetPassword
+    sessionStorage.setItem('recovery_token', params.access_token);
+    if (params.email) sessionStorage.setItem('recovery_email', decodeURIComponent(params.email));
     
     // Afficher le panel de réinitialisation
     var panelLogin = document.getElementById('panel-login');
