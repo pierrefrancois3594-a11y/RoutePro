@@ -1132,8 +1132,15 @@ function finishExam() {
   var _data = {};
   try { _data = JSON.parse(localStorage.getItem(_statsKey) || '{}') || {}; } catch(e) {}
   if (!_data.examens) _data.examens = [];
-  _data.examens.unshift({ prog: _prog, score: total, admis: admis, ts: Date.now() });
-  if (_data.examens.length > 50) _data.examens = _data.examens.slice(0, 50);
+  // Anti-doublon : même score + prog dans les 30 dernières secondes
+  var _now = Date.now();
+  var _isDuplicate = _data.examens.some(function(e) {
+    return e.score === total && e.prog === _prog && Math.abs(e.ts - _now) < 30000;
+  });
+  if (!_isDuplicate) {
+    _data.examens.unshift({ prog: _prog, score: total, admis: admis, ts: _now });
+    if (_data.examens.length > 50) _data.examens = _data.examens.slice(0, 50);
+  }
   localStorage.setItem(_statsKey, JSON.stringify(_data));
 
   // Sauvegarder dans Supabase (permanent)

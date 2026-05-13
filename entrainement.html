@@ -445,12 +445,19 @@ function ftrGetStats() {
 }
 
 function ftrSaveSession(prog, themeId, total, corr) {
-  // 1. Sauvegarder dans localStorage (fallback)
+  // Sauvegarder dans localStorage pour affichage immédiat
   var data = ftrGetStats();
   if (!data.sessions) data.sessions = [];
   if (!data.reponses) data.reponses = {};
-  data.sessions.unshift({ prog: prog, theme: themeId, total: total, corr: corr, ts: Date.now() });
-  if (data.sessions.length > 100) data.sessions = data.sessions.slice(0, 100);
+  // Vérifier qu'on ne crée pas de doublon (même thème + total dans les 30 dernières secondes)
+  var now = Date.now();
+  var isDuplicate = data.sessions.some(function(s) {
+    return s.theme === themeId && s.total === total && Math.abs(s.ts - now) < 30000;
+  });
+  if (!isDuplicate) {
+    data.sessions.unshift({ prog: prog, theme: themeId, total: total, corr: corr, ts: now });
+    if (data.sessions.length > 100) data.sessions = data.sessions.slice(0, 100);
+  }
   if (!data.reponses[themeId]) data.reponses[themeId] = { corr: 0, total: 0 };
   data.reponses[themeId].corr += corr;
   data.reponses[themeId].total += total;

@@ -435,13 +435,23 @@ async function loadStatsFromSupabase() {
       reponses: Object.keys(reponses).length > 0 ? reponses : (localData.reponses || {}),
       qToday: localData.qToday || {}
     };
-    // Dédupliquer les sessions par timestamp
+    // Dédupliquer les sessions et examens
     if (merged.sessions.length > 0) {
       var seen = {};
       merged.sessions = merged.sessions.filter(function(s) {
-        var key = s.ts + '_' + s.theme;
+        // Clé basée sur le thème + total + heure arrondie à 10 secondes
+        var key = s.theme + '_' + s.total + '_' + Math.round(s.ts/10000);
         if (seen[key]) return false;
         seen[key] = true;
+        return true;
+      });
+    }
+    if (merged.examens.length > 0) {
+      var seenE = {};
+      merged.examens = merged.examens.filter(function(e) {
+        var key = e.score + '_' + e.prog + '_' + Math.round(e.ts/10000);
+        if (seenE[key]) return false;
+        seenE[key] = true;
         return true;
       });
     }
