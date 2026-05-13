@@ -21,7 +21,7 @@
     .logo-icon{width:32px;height:32px;background:var(--orange);border-radius:6px;display:flex;align-items:center;justify-content:center}
     .nav-right{display:flex;align-items:center;gap:12px}
     .nav-user{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--steel-lt)}
-    .nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--orange);font-family:var(--display);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;color:white}
+    .nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--orange);font-family:var(--display);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;color:white;overflow:hidden;flex-shrink:0} .nav-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
     .nav-btn{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:8px 18px;border-radius:3px;border:1px solid rgba(143,163,184,.2);color:var(--steel-lt);cursor:pointer;background:none;transition:all .2s}
     .nav-btn:hover{background:var(--navy-lt);color:var(--white)}
     .nav-btn.primary{background:var(--orange);border-color:var(--orange);color:white}
@@ -985,7 +985,38 @@ function deconnexion() {
 function init() {
   var prenom = getUserPrenom();
   var nav = document.getElementById("nav-prenom"); if (nav) nav.textContent = prenom;
-  var avt = document.getElementById("nav-avatar"); if (avt) avt.textContent = prenom.substring(0,2).toUpperCase();
+  var avt = document.getElementById("nav-avatar");
+  if (avt) {
+    // Essayer de récupérer la photo Google
+    var avatarUrl = null;
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (!k) continue;
+        var raw = localStorage.getItem(k);
+        if (!raw) continue;
+        var s = JSON.parse(raw);
+        var sess = s.access_token ? s : (s.currentSession || null);
+        if (sess && sess.user && sess.user.user_metadata) {
+          avatarUrl = sess.user.user_metadata.avatar_url || sess.user.user_metadata.picture || null;
+          break;
+        }
+      }
+    } catch(e) {}
+    
+    if (avatarUrl) {
+      var initiales = prenom.substring(0,2).toUpperCase();
+      var img = document.createElement('img');
+      img.src = avatarUrl;
+      img.alt = initiales;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%';
+      img.onerror = function() { avt.innerHTML = ''; avt.textContent = initiales; };
+      avt.innerHTML = '';
+      avt.appendChild(img);
+    } else {
+      avt.textContent = prenom.substring(0,2).toUpperCase();
+    }
+  }
   var heure = new Date().getHours();
   var salut = heure<12?"Bonjour":heure<18?"Bon apres-midi":"Bonsoir";
   var date = new Date().toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
