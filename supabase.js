@@ -121,22 +121,27 @@ const sb = {
       // Recalculer expires_at depuis maintenant
       data.expires_at = Math.floor(Date.now() / 1000) + (data.expires_in || 3600);
       
-      // Générer un session_id unique pour cette session
-      const sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-      data.ftr_session_id = sessionId;
+      // Extraire le session_id du JWT Supabase
+      var jwtPayload = {};
+      try {
+        jwtPayload = JSON.parse(atob(data.access_token.split('.')[1]));
+      } catch(e) {}
+      data.ftr_session_id = jwtPayload.session_id || ('sess_' + Date.now());
       localStorage.setItem('sb_session', JSON.stringify(data));
       
-      // Sauvegarder le session_id dans Supabase
+      // Sauvegarder le session_id dans Supabase via service role
       if (data.user && data.user.id) {
-        fetch(SUPA_URL + '/rest/v1/profils?id=eq.' + data.user.id, {
-          method: 'PATCH',
+        fetch(SUPA_URL + '/functions/v1/update-session', {
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'apikey': SUPA_KEY,
-            'Authorization': 'Bearer ' + data.access_token,
-            'Prefer': 'return=minimal'
+            'Authorization': 'Bearer ' + data.access_token
           },
-          body: JSON.stringify({ session_id: sessionId })
+          body: JSON.stringify({ 
+            userId: data.user.id, 
+            sessionId: data.ftr_session_id 
+          })
         }).catch(function() {});
       }
     }
@@ -153,7 +158,7 @@ const sb = {
       
       var sess = this._findSession();
       var localSessionId = sess && sess.ftr_session_id;
-      if (!localSessionId) return true; // Ancienne session sans session_id, laisser passer
+      if (!localSessionId) return true;
       
       var resp = await fetch(SUPA_URL + '/rest/v1/profils?id=eq.' + user.id + '&select=session_id', {
         headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + token }
@@ -161,7 +166,6 @@ const sb = {
       var data = await resp.json();
       
       if (data && data[0] && data[0].session_id && data[0].session_id !== localSessionId) {
-        // Session révoquée — déconnecter
         this.deconnexion();
         return false;
       }
