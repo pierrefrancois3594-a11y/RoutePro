@@ -1075,6 +1075,17 @@ function goSel() {
 init();
   // Vérifier abonnement
   checkAccess();
+
+  // Vérifier que la session n'a pas été révoquée (connexion depuis un autre appareil)
+  if (window.sb && window.sb.verifierSession) {
+    window.sb.verifierSession().then(function(valide) {
+      if (!valide) {
+        alert('Votre session a été fermée car une connexion a été détectée depuis un autre appareil.');
+        window.location.href = 'auth.html';
+      }
+    });
+  }
+
 </script>
 </body>
 </html>

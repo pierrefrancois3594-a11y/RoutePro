@@ -742,7 +742,18 @@ async function resilierAbonnement() {
         aboContent.innerHTML = "<div style=\"display:flex;align-items:center;gap:16px;padding:16px;background:rgba(242,101,34,.06);border:1px solid rgba(242,101,34,.2);border-radius:6px;margin-bottom:16px\"><span style=\"font-size:28px\">&#x23F3;</span><div><strong style=\"color:var(--orange-lt);display:block;margin-bottom:4px\">R&eacute;siliation confirm&eacute;e</strong><span style=\"font-size:12px;color:var(--steel)\">Votre abonnement restera actif jusqu a la fin de la p&eacute;riode en cours. Le bouton se mettra &agrave; jour automatiquement.</span></div></div><a href=\"abonnement.html\"><button style=\"font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:9px 20px;border-radius:3px;background:var(--orange);border:none;color:white;cursor:pointer;\">Renouveler mon abonnement</button></a>";
       }
       // Recharger le statut complet depuis Supabase après 2 secondes
-      setTimeout(function() { chargerStatutAbo(); }, 2000);
+      setTimeout(function() { chargerStatutAbo();
+
+  // Vérifier que la session n'a pas été révoquée (connexion depuis un autre appareil)
+  if (window.sb && window.sb.verifierSession) {
+    window.sb.verifierSession().then(function(valide) {
+      if (!valide) {
+        alert('Votre session a été fermée car une connexion a été détectée depuis un autre appareil.');
+        window.location.href = 'auth.html';
+      }
+    });
+  }
+ }, 2000);
     }
     else { throw new Error(d2.error || "Erreur"); }
   } catch(e) {
@@ -1077,9 +1088,31 @@ if (window.location.hash && window.location.hash.includes('access_token')) {
   loadStatsFromSupabase().then(function() { 
     init(); 
     chargerStatutAbo();
+
+  // Vérifier que la session n'a pas été révoquée (connexion depuis un autre appareil)
+  if (window.sb && window.sb.verifierSession) {
+    window.sb.verifierSession().then(function(valide) {
+      if (!valide) {
+        alert('Votre session a été fermée car une connexion a été détectée depuis un autre appareil.');
+        window.location.href = 'auth.html';
+      }
+    });
+  }
+
   }).catch(function() { 
     init(); 
     chargerStatutAbo();
+
+  // Vérifier que la session n'a pas été révoquée (connexion depuis un autre appareil)
+  if (window.sb && window.sb.verifierSession) {
+    window.sb.verifierSession().then(function(valide) {
+      if (!valide) {
+        alert('Votre session a été fermée car une connexion a été détectée depuis un autre appareil.');
+        window.location.href = 'auth.html';
+      }
+    });
+  }
+
   });
 }
 if (window.gererRetourPaiement) window.gererRetourPaiement();

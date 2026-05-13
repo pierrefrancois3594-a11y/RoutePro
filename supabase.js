@@ -120,9 +120,53 @@ const sb = {
     if (data.access_token) {
       // Recalculer expires_at depuis maintenant
       data.expires_at = Math.floor(Date.now() / 1000) + (data.expires_in || 3600);
+      
+      // Générer un session_id unique pour cette session
+      const sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      data.ftr_session_id = sessionId;
       localStorage.setItem('sb_session', JSON.stringify(data));
+      
+      // Sauvegarder le session_id dans Supabase
+      if (data.user && data.user.id) {
+        fetch(SUPA_URL + '/rest/v1/profils?id=eq.' + data.user.id, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPA_KEY,
+            'Authorization': 'Bearer ' + data.access_token,
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ session_id: sessionId })
+        }).catch(function() {});
+      }
     }
     return data;
+  },
+
+
+  // ── Vérifier si la session est toujours valide (pas remplacée par une autre) ──
+  async verifierSession() {
+    try {
+      var token = this._token();
+      var user = this._user();
+      if (!token || !user) return false;
+      
+      var sess = this._findSession();
+      var localSessionId = sess && sess.ftr_session_id;
+      if (!localSessionId) return true; // Ancienne session sans session_id, laisser passer
+      
+      var resp = await fetch(SUPA_URL + '/rest/v1/profils?id=eq.' + user.id + '&select=session_id', {
+        headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + token }
+      });
+      var data = await resp.json();
+      
+      if (data && data[0] && data[0].session_id && data[0].session_id !== localSessionId) {
+        // Session révoquée — déconnecter
+        this.deconnexion();
+        return false;
+      }
+      return true;
+    } catch(e) { return true; }
   },
 
   deconnexion() {
