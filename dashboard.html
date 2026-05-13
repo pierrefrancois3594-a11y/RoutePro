@@ -743,16 +743,6 @@ async function resilierAbonnement() {
       }
       // Recharger le statut complet depuis Supabase après 2 secondes
       setTimeout(function() { chargerStatutAbo();
-
-  // Vérifier que la session n'a pas été révoquée (connexion depuis un autre appareil)
-  if (window.sb && window.sb.verifierSession) {
-    window.sb.verifierSession().then(function(valide) {
-      if (!valide) {
-        alert('Votre session a été fermée car une connexion a été détectée depuis un autre appareil.');
-        window.location.href = 'auth.html';
-      }
-    });
-  }
  }, 2000);
     }
     else { throw new Error(d2.error || "Erreur"); }
@@ -1089,56 +1079,14 @@ if (window.location.hash && window.location.hash.includes('access_token')) {
     init(); 
     chargerStatutAbo();
 
-  // Vérifier que la session n'a pas été révoquée (connexion depuis un autre appareil)
-  if (window.sb && window.sb.verifierSession) {
-    window.sb.verifierSession().then(function(valide) {
-      if (!valide) {
-        alert('Votre session a été fermée car une connexion a été détectée depuis un autre appareil.');
-        window.location.href = 'auth.html';
-      }
-    });
-  }
-
   }).catch(function() { 
     init(); 
     chargerStatutAbo();
-
-  // Vérifier que la session n'a pas été révoquée (connexion depuis un autre appareil)
-  if (window.sb && window.sb.verifierSession) {
-    window.sb.verifierSession().then(function(valide) {
-      if (!valide) {
-        alert('Votre session a été fermée car une connexion a été détectée depuis un autre appareil.');
-        window.location.href = 'auth.html';
-      }
-    });
-  }
 
   });
 }
 if (window.gererRetourPaiement) window.gererRetourPaiement();
 
-// Mettre à jour le session_id dans Supabase au chargement
-(function() {
-  try {
-    var sess = JSON.parse(localStorage.getItem('sb_session') || '{}');
-    if (!sess.access_token || !sess.user) return;
-    if (!sess.ftr_session_id) {
-      var jwtPayload = {};
-      try { jwtPayload = JSON.parse(atob(sess.access_token.split('.')[1])); } catch(e) {}
-      sess.ftr_session_id = jwtPayload.session_id || ('sess_' + Date.now() + '_' + Math.random().toString(36).substr(2,6));
-      localStorage.setItem('sb_session', JSON.stringify(sess));
-    }
-    fetch('https://eulkccufeddlhbltekxm.supabase.co/functions/v1/update-session', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g',
-        'Authorization': 'Bearer ' + sess.access_token
-      },
-      body: JSON.stringify({ userId: sess.user.id, sessionId: sess.ftr_session_id })
-    }).catch(function() {});
-  } catch(e) {}
-})();
 </script>
 </body>
 </html>
