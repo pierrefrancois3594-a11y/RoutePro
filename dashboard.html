@@ -427,7 +427,7 @@ async function loadStatsFromSupabase() {
       reponses[s.theme].total += s.total;
     });
 
-    // Fusionner avec localStorage et sauvegarder
+    // Remplacer les données localStorage par celles de Supabase
     var localData = getStats();
     var merged = {
       sessions: sessions.length > 0 ? sessions : (localData.sessions || []),
@@ -435,6 +435,16 @@ async function loadStatsFromSupabase() {
       reponses: Object.keys(reponses).length > 0 ? reponses : (localData.reponses || {}),
       qToday: localData.qToday || {}
     };
+    // Dédupliquer les sessions par timestamp
+    if (merged.sessions.length > 0) {
+      var seen = {};
+      merged.sessions = merged.sessions.filter(function(s) {
+        var key = s.ts + '_' + s.theme;
+        if (seen[key]) return false;
+        seen[key] = true;
+        return true;
+      });
+    }
     localStorage.setItem(dashStatsKey(), JSON.stringify(merged));
     return merged;
   } catch(e) {
@@ -540,7 +550,7 @@ function renderActivity(sessions) {
       '<div class="act-ico ' + icoC + '">' + ico + '</div>',
       '<div class="act-body">',
       '<div class="act-title">Entrainement - ' + (labels[s.prog]||s.prog) + '</div>',
-      '<div class="act-sub">' + (s.theme||"") + ' - ' + s.total + ' questions</div>',
+      '<div class="act-sub">' + getThemeName(s.theme||"") + ' - ' + s.total + ' questions</div>',
       '</div>',
       '<div class="act-right">',
       '<div class="act-score ' + cls + '">' + p + ' %</div>',
@@ -930,6 +940,33 @@ function deconnexion() {
   if (window.sb) window.sb.deconnexion();
   else { localStorage.removeItem("sb_session"); window.location.href = "auth.html"; }
 }
+
+
+  // Mapping des IDs de thèmes vers leurs noms complets
+  const THEME_NAMES = {
+    'cl-civil': 'Droit civil & commercial',
+    'cl-social': 'Droit social',
+    'cl-fiscal': 'Droit fiscal',
+    'cl-gestion': 'Gestion financière',
+    'cl-regl': 'Réglementation VUL',
+    'cl-secu': 'Sécurité routière',
+    'cl-acces': 'Accès à la profession',
+    'lo-social': 'Droit social PL',
+    'lo-civil': 'Droit civil & commercial PL',
+    'lo-gestion': 'Gestion financière PL',
+    'lo-regl': 'Réglementation transport PL',
+    'lo-secu': 'Sécurité routière PL',
+    'lo-acces': 'Accès à la profession PL',
+    'lo-intl': 'Transport international',
+    'adr-gen': 'ADR Général',
+    'adr-class': 'Classification matières',
+    'adr-emb': 'Emballage & étiquetage',
+    'adr-doc': 'Documentation ADR',
+    'adr-trans': 'Dispositions transport',
+    'adr-veh': 'Véhicules & équipements',
+    'adr-sec': 'Sécurité & urgences'
+  };
+  function getThemeName(id) { return THEME_NAMES[id] || id; }
 
 function init() {
   var prenom = getUserPrenom();
