@@ -826,9 +826,26 @@ async function handleLogin(e) {
 
   // ── Connexion Supabase ──
   try {
+    // Gérer "Se souvenir de moi"
+    var remember = document.getElementById('login-remember') && document.getElementById('login-remember').checked;
+    if (remember) {
+      localStorage.setItem('ftr_remembered_email', email);
+    } else {
+      localStorage.removeItem('ftr_remembered_email');
+    }
+
     const result = await window.sb.connexion(email, pass);
     setLoading('login', false);
     if (result.access_token) {
+      // Si "Se souvenir de moi" pas coché, la session expire à la fermeture du navigateur
+      if (!remember) {
+        // Marquer la session comme temporaire
+        try {
+          var sess = JSON.parse(localStorage.getItem('sb_session') || '{}');
+          sess.ftr_temp_session = true;
+          localStorage.setItem('sb_session', JSON.stringify(sess));
+        } catch(e) {}
+      }
       var nextPage = new URLSearchParams(window.location.search).get('next');
       window.location.href = nextPage ? nextPage + '.html' : 'dashboard.html';
     } else {
@@ -1092,7 +1109,17 @@ function checkRecoveryToken() {
   }
 }
 
-window.addEventListener('DOMContentLoaded', checkRecoveryToken);
+window.addEventListener('DOMContentLoaded', function() {
+  checkRecoveryToken();
+  // Pré-remplir l'email si "se souvenir de moi" était coché
+  var rememberedEmail = localStorage.getItem('ftr_remembered_email');
+  if (rememberedEmail) {
+    var emailInput = document.getElementById('login-email');
+    var rememberCheck = document.getElementById('login-remember');
+    if (emailInput) emailInput.value = rememberedEmail;
+    if (rememberCheck) rememberCheck.checked = true;
+  }
+});
 </script>
 </body>
 </html>
