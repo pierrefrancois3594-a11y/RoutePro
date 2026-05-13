@@ -22,6 +22,12 @@ const sb = {
   // Récupérer le token de session stocké
   _findSession() {
     try {
+      // Chercher d'abord dans sessionStorage (session temporaire sans "se souvenir")
+      var sessData = sessionStorage.getItem('sb_session');
+      if (sessData) {
+        var s = JSON.parse(sessData);
+        if (s && s.access_token) return s;
+      }
       // Chercher dans toutes les clés localStorage possibles
       var keys = ['sb_session'];
       for (var i = 0; i < localStorage.length; i++) {
@@ -176,6 +182,7 @@ const sb = {
   },
 
   deconnexion() {
+    sessionStorage.removeItem('sb_session');
     localStorage.removeItem('sb_session');
     window.location.href = 'auth.html';
   },

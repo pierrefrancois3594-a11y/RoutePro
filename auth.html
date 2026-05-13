@@ -837,13 +837,15 @@ async function handleLogin(e) {
     const result = await window.sb.connexion(email, pass);
     setLoading('login', false);
     if (result.access_token) {
-      // Si "Se souvenir de moi" pas coché, la session expire à la fermeture du navigateur
       if (!remember) {
-        // Marquer la session comme temporaire
+        // Pas de "se souvenir" → déplacer la session dans sessionStorage
+        // sessionStorage est effacé à la fermeture du navigateur
         try {
-          var sess = JSON.parse(localStorage.getItem('sb_session') || '{}');
-          sess.ftr_temp_session = true;
-          localStorage.setItem('sb_session', JSON.stringify(sess));
+          var sessData = localStorage.getItem('sb_session');
+          if (sessData) {
+            sessionStorage.setItem('sb_session', sessData);
+            localStorage.removeItem('sb_session');
+          }
         } catch(e) {}
       }
       var nextPage = new URLSearchParams(window.location.search).get('next');
