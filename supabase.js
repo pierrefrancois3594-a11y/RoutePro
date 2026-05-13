@@ -129,20 +129,22 @@ const sb = {
       data.ftr_session_id = jwtPayload.session_id || ('sess_' + Date.now());
       localStorage.setItem('sb_session', JSON.stringify(data));
       
-      // Sauvegarder le session_id dans Supabase via service role
+      // Sauvegarder le session_id dans Supabase
       if (data.user && data.user.id) {
-        fetch(SUPA_URL + '/functions/v1/update-session', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': SUPA_KEY,
-            'Authorization': 'Bearer ' + data.access_token
-          },
-          body: JSON.stringify({ 
-            userId: data.user.id, 
-            sessionId: data.ftr_session_id 
-          })
-        }).catch(function() {});
+        var _userId = data.user.id;
+        var _sessionId = data.ftr_session_id;
+        var _token = data.access_token;
+        setTimeout(function() {
+          fetch(SUPA_URL + '/functions/v1/update-session', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPA_KEY,
+              'Authorization': 'Bearer ' + _token
+            },
+            body: JSON.stringify({ userId: _userId, sessionId: _sessionId })
+          }).catch(function() {});
+        }, 500);
       }
     }
     return data;
