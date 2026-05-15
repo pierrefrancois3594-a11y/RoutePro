@@ -647,7 +647,7 @@ const P2_BANK = {
        ctx:`Semaine conducteur PL :\nLundi : 8h conduite, 1h autre\nMardi : 9h conduite, 1h30 autre\nMercredi : 4h conduite, 2h livraison, 3h30 conduite\nJeudi : Repos\nVendredi : 8h conduite, 2h autre`,
        subs:[
          {id:'PL1E2Q1',pts:10,num:'Q 2.1',text:"Total heures de conduite — limite respectée ?",type:'calcul',unit:'h',corr:"32h30 de conduite\n= 8 + 9 + 7,5 + 0 + 8 = 32,5 h\nLimite 56 h/semaine : respectée ✓"},
-         {id:'PL1E2Q2',pts:10,num:'Q 2.2',text:"Mercredi : 4h conduite puis livraison puis 3h30 conduite — règle des 4h30 respectée ?",type:'redige',corr:"Oui. La livraison de 2h interrompt le comptage des 4h30 continus.\n4h → interruption → 3h30 = aucun dépassement de 4h30 continus ✓"},
+         {id:'PL1E2Q2',pts:10,num:'Q 2.2',text:"Mercredi : 4h conduite puis livraison puis 3h30 conduite — règle des 4h30 respectée ?",type:'redige',corr:"Non. La livraison est une période de travail (autre travail), elle n'est PAS une interruption réglementaire au sens du règlement 561/2006.\nSeule une pause sans conduite NI autre travail interrompt le comptage.\n4h conduite + livraison (travail) + 3h30 conduite = 7h30 sans pause valide → règle des 4h30 NON respectée. Une pause de 45 min (ou 15+30 min) était obligatoire."},
          {id:'PL1E2Q3',pts:10,num:'Q 2.3',text:"Calculez le temps de travail total (conduite + autre). Limite respectée ?",type:'calcul',unit:'h',corr:"Travail total = 32,5 + (1 + 1,5 + 2 + 2) = 32,5 + 6,5 = 39 h\nLimite 48 h/semaine : respectée ✓"},
        ]},
       {id:'PL1E3',titre:'Exercice 3 — Gestion financière',totalPts:20,

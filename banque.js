@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════
-// ROUTEPRO — banque.js — 1007 questions
+// FORGETAROUTE — banque.js — 1007 questions
 // CPC Léger (<3,5t) + CPC Lourd (>3,5t) + ADR
 // ═══════════════════════════════════════════════════
 
@@ -71,9 +71,9 @@ r:[{t:"44 heures / semaine"},{t:"48 heures / semaine",ok:true},{t:"52 heures / s
 x:"La durée maximale absolue de travail est de 48 heures par semaine (ou 44 heures en moyenne sur 12 semaines). Au-delà, il y a infraction au Code du travail."},
 
 {id:1103,prog:'LEGER',theme:'cl-social',d:1,
-e:"Le SMIC horaire brut en France (2024) est d'environ :",
-r:[{t:"10,00 €"},{t:"11,65 €",ok:true},{t:"13,00 €"},{t:"9,50 €"}],
-x:"Le SMIC horaire brut est revalorisé chaque année au 1er janvier (et parfois en cours d'année). En 2024, il est de 11,65 € brut/heure. Ce chiffre est susceptible d'évoluer : vérifiez toujours la valeur officielle en vigueur."},
+e:"Le SMIC horaire brut en France (2026) est d'environ :",
+r:[{t:"10,00 €"},{t:"11,65 €"},{t:"12,02 €",ok:true},{t:"9,50 €"}],
+x:"Le SMIC horaire brut est revalorisé chaque année au 1er janvier (décret n°2025-1228). Au 1er janvier 2026, il est de 12,02 € brut/heure, soit 1 823,03 € brut mensuel pour 35h. Il était de 11,88 € en 2025 et 11,65 € début 2024."},
 
 {id:1104,prog:'LEGER',theme:'cl-social',d:2,
 e:"Un artisan sans salarié qui conduit lui-même son VUL pour compte d'autrui est soumis :",
@@ -121,7 +121,7 @@ x:"Les prestations de transport de marchandises en France sont soumises au taux 
 {id:1202,prog:'LEGER',theme:'cl-fiscal',d:2,
 e:"Un auto-entrepreneur dont le CA dépasse le seuil de franchise en base de TVA doit :",
 r:[{t:"Fermer son auto-entreprise"},{t:"Facturer la TVA à ses clients et la reverser à l'État",ok:true},{t:"Passer automatiquement au régime réel simplifié d'imposition"},{t:"Demander une dérogation à l'administration fiscale"}],
-x:"Lorsque le CA dépasse le seuil de franchise en base de TVA (36 800 € pour les prestations de services en 2024), l'auto-entrepreneur perd le bénéfice de la franchise et doit collecter et reverser la TVA."},
+x:"Lorsque le CA dépasse le seuil de franchise en base de TVA (37 500 € pour les prestations de services depuis 2026, 85 000 € pour les ventes), l'auto-entrepreneur doit collecter et reverser la TVA. Si le seuil de tolérance est dépassé (41 250 € services / 93 500 € ventes), l'assujettissement est immédiat."},
 
 {id:1203,prog:'LEGER',theme:'cl-fiscal',d:2,
 e:"La cotisation foncière des entreprises (CFE) est due par :",
@@ -134,9 +134,9 @@ r:[{t:"La dépréciation constatée du véhicule inscrite en charge sur plusieur
 x:"L'amortissement est une technique comptable qui répartit le coût d'un bien sur sa durée d'utilisation. Pour un VUL, la durée d'amortissement est généralement de 4 à 5 ans en linéaire."},
 
 {id:1205,prog:'LEGER',theme:'cl-fiscal',d:2,
-e:"Le taux de cotisation social de l'auto-entrepreneur pour une activité de prestation de services BIC (transport) est d'environ :",
-r:[{t:"6,4 %"},{t:"12,3 %",ok:true},{t:"22 %"},{t:"33 %"}],
-x:"Pour les activités de prestation de services BIC (dont le transport), le taux de cotisations sociales de l'auto-entrepreneur est d'environ 21,2 % du CA (taux 2024 — vérifier les dernières mises à jour officielles)."},
+e:"Le taux de cotisations sociales de l'auto-entrepreneur pour une activité de prestation de services BIC (transport) est de :",
+r:[{t:"6,4 %"},{t:"12,3 % (vente de marchandises)"},{t:"21,2 %",ok:true},{t:"33 %"}],
+x:"Pour les prestations de services BIC (dont le transport pour compte d'autrui), le taux de cotisations sociales de l'auto-entrepreneur est de 21,2 % du CA (taux 2025-2026). Le taux de 12,3 % concerne uniquement les activités d'achat-revente (vente de marchandises). Ne pas confondre les deux."},
 
 {id:1206,prog:'LEGER',theme:'cl-fiscal',d:1,
 e:"La déclaration de TVA mensuelle (régime normal) doit être déposée :",
@@ -399,8 +399,8 @@ x:"Le permis C est obligatoire pour conduire un véhicule dont le PTAC dépasse 
 
 {id:2503,prog:'LOURD',theme:'lo-regl',d:2,
 e:"La FIMO (Formation Initiale Minimale Obligatoire) pour les conducteurs PL a une durée de :",
-r:[{t:"105 heures (3 semaines)",ok:true},{t:"140 heures (4 semaines)"},{t:"35 heures (1 semaine)"},{t:"280 heures (8 semaines)"}],
-x:"La FIMO (ou CQC Initial) est une formation de 280 heures pour les débutants (ou 140 heures avec équivalence). La FCOS (Formation Continue Obligatoire de Sécurité) est de 35 heures tous les 5 ans."},
+r:[{t:"105 heures (3 semaines)"},{t:"140 heures (4 semaines)",ok:true},{t:"35 heures (1 semaine)"},{t:"280 heures (8 semaines)"}],
+x:"La FIMO est une formation accélérée de 140 heures (4 semaines) effectuée dans un centre agréé. Elle permet d'obtenir la carte CQC (Carte de Qualification de Conducteur). Il existe aussi une voie longue de 280 heures (titre professionnel : CAP, Bac Pro, Titre pro CTRMV) qui donne une équivalence FIMO. La FCOS (formation continue) est de 35 heures tous les 5 ans."},
 
 {id:2504,prog:'LOURD',theme:'lo-regl',d:2,
 e:"Le document de transport (lettre de voiture) doit accompagner la marchandise :",
@@ -470,7 +470,7 @@ x:"Le système des points (1.1.3.6 de l'ADR) permet de calculer si une exemption
 
 {id:3008,prog:'ADR',theme:'adr-gen',d:2,
 e:"Le certificat de formation ADR du conducteur est valable :",
-r:[{t:"1 an"},{t:"3 ans",ok:true},{t:"5 ans"},{t:"Indéfiniment si aucun accident"}],
+r:[{t:"1 an"},{t:"3 ans"},{t:"5 ans",ok:true},{t:"Indéfiniment si aucun accident"}],
 x:"Le certificat ADR du conducteur est valable 5 ans. Pour le conserver, le conducteur doit suivre une formation de recyclage dans les 12 mois précédant l'expiration. S'il n'est pas renouvelé à temps, une nouvelle formation initiale complète est nécessaire."},
 
 {id:3009,prog:'ADR',theme:'adr-gen',d:1,
@@ -722,8 +722,8 @@ x:"L'exception d'inexécution (art. 1219 du Code civil) est un mécanisme de dé
 
 {id:5020,prog:'LEGER',theme:'Droit civil & commercial',d:1,
 e:"Qu'est-ce qu'un devis estimatif ?",
-r:[{t:"Un contrat ferme et définitif"},{t:"Une estimation non engageante du coût d'une prestation"},{t:"Un document fiscal obligatoire"},{t:"Un devis qui peut varier de 10 % maximum",ok:true}],
-x:"Un devis estimatif ou prévisionnel n'est pas ferme : il peut varier selon l'évolution réelle des travaux ou prestations. Un devis forfaitaire, en revanche, engage le prestataire sur un prix définitif. La nature du devis doit être clairement indiquée."},
+r:[{t:"Un contrat ferme et définitif"},{t:"Une estimation non engageante du coût d'une prestation, pouvant varier selon l'évolution réelle",ok:true},{t:"Un document fiscal obligatoire"},{t:"Un devis qui peut varier de 10 % maximum"}],
+x:"Un devis estimatif (ou prévisionnel) n'est pas ferme : il peut varier selon l'évolution réelle des travaux ou prestations. Il n'existe aucune règle légale limitant la variation à 10 %. Un devis forfaitaire, en revanche, engage le prestataire sur un prix définitif. La nature du devis doit être clairement indiquée."},
 
 {id:5021,prog:'LEGER',theme:'Droit civil & commercial',d:2,
 e:"Le registre des bénéficiaires effectifs (RBE) doit être déposé par :",
@@ -794,9 +794,9 @@ r:[{t:"Dans les 8 jours suivant la rupture"},{t:"Dans les 30 jours suivant la ru
 x:"Il n'y a pas de délai légal imposé pour la remise du solde de tout compte. Il doit cependant être remis lors de la rupture définitive du contrat (dernier jour ou peu après). Le salarié dispose de 6 mois pour le contester après signature."},
 
 {id:5104,prog:'LEGER',theme:'Droit social',d:2,
-e:"Le congé maternité pour un premier enfant est de :",
-r:[{t:"14 semaines (6 avant + 8 après)",ok:true},{t:"18 semaines (6 avant + 12 après)"},{t:"26 semaines (8 avant + 18 après)"},{t:"8 semaines uniquement après la naissance"}],
-x:"Pour un premier ou deuxième enfant, le congé maternité est de 16 semaines au total (6 semaines avant et 10 semaines après l'accouchement). Pour un 3ème enfant, il est de 26 semaines. La réponse correcte (14 semaines) correspond à l'ancienne règle — vérifiez les mises à jour légales."},
+e:"Le congé maternité pour un premier ou deuxième enfant est de :",
+r:[{t:"14 semaines (6 avant + 8 après)"},{t:"16 semaines (6 avant + 10 après)",ok:true},{t:"26 semaines (8 avant + 18 après)"},{t:"8 semaines uniquement après la naissance"}],
+x:"Pour un premier ou deuxième enfant, le congé maternité est de 16 semaines au total : 6 semaines avant et 10 semaines après l'accouchement. Pour un 3ème enfant et au-delà, il est de 26 semaines. Ces durées sont indemnisées par la CPAM sous conditions."},
 
 {id:5105,prog:'LEGER',theme:'Droit social',d:2,
 e:"La visite médicale d'embauche doit avoir lieu :",
@@ -844,9 +844,9 @@ r:[{t:"Un contrat de prestation de services uniquement"},{t:"Un contrat de trava
 x:"Le VRP est un salarié qui prospecte une clientèle pour le compte d'un ou plusieurs employeurs. Son statut est régi par les articles L.7311-1 et suivants du Code du travail, avec des règles spécifiques : clause de non-concurrence, indemnité de clientèle, commission sur chiffre d'affaires."},
 
 {id:5114,prog:'LEGER',theme:'Droit social',d:1,
-e:"Le congé de paternité et d'accueil de l'enfant est de :",
-r:[{t:"3 jours"},{t:"11 jours"},{t:"25 jours",ok:true},{t:"28 jours"}],
-x:"Depuis le 1er juillet 2021, le congé de paternité est de 25 jours calendaires (32 jours pour une naissance multiple), dont 4 jours obligatoires qui doivent être pris immédiatement après la naissance. Il est indemnisé par la CPAM."},
+e:"La durée totale du congé de paternité et d'accueil de l'enfant (congé naissance inclus) est de :",
+r:[{t:"3 jours"},{t:"11 jours"},{t:"25 jours"},{t:"28 jours calendaires",ok:true}],
+x:"Depuis le 1er juillet 2021, le congé total est de 28 jours : 3 jours de congé de naissance (payés par l'employeur) + 25 jours de congé paternité (indemnisés par la CPAM). Les 4 premiers jours du congé paternité sont obligatoires immédiatement après la naissance. En cas de naissance multiple : 32 jours au total."},
 
 {id:5115,prog:'LEGER',theme:'Droit social',d:2,
 e:"La clause de mobilité dans un contrat de travail permet à l'employeur de :",
@@ -856,7 +856,7 @@ x:"La clause de mobilité (validée par la Cour de cassation) permet à l'employ
 {id:5116,prog:'LEGER',theme:'Droit social',d:3,
 e:"Le plafond de la Sécurité Sociale (PASS) sert à :",
 r:[{t:"Définir le salaire maximum des dirigeants"},{t:"Calculer certaines cotisations sociales et le montant des prestations sociales",ok:true},{t:"Fixer le SMIC annuel"},{t:"Déterminer le seuil d'assujettissement à l'IS"}],
-x:"Le PASS (Plafond Annuel de la Sécurité Sociale) est une valeur de référence fixée chaque année (environ 43 992 € en 2024). Il sert à calculer les cotisations plafonnées (retraite de base, chômage…) et certaines prestations (IJ maladie, retraite…). Son montant mensuel (3 666 €) sert de base pour de nombreux calculs sociaux."},
+x:"Le PASS (Plafond Annuel de la Sécurité Sociale) est fixé à 48 060 € en 2026 (PMSS : 4 005 €/mois), soit une hausse de 2 % vs 2025. Il sert à calculer les cotisations plafonnées (retraite de base, chômage…) et certaines prestations (indemnités journalières, retraite…). Il est revalorisé chaque 1er janvier par arrêté ministériel."},
 
 {id:5117,prog:'LEGER',theme:'Droit social',d:2,
 e:"En cas d'accident du travail, la déclaration doit être faite par l'employeur à la CPAM dans un délai de :",
@@ -870,8 +870,8 @@ x:"La CSG est une contribution fiscale prélevée sur l'ensemble des revenus : s
 
 {id:5119,prog:'LEGER',theme:'Droit social',d:2,
 e:"Le registre unique du personnel doit être conservé par l'employeur pendant :",
-r:[{t:"5 ans après le départ du salarié"},{t:"10 ans",ok:true},{t:"3 ans"},{t:"Indéfiniment"}],
-x:"Le registre unique du personnel doit être tenu dans chaque établissement (art. L.1221-13 du Code du travail). Il doit être conservé pendant 5 ans après la date à laquelle le salarié a quitté l'établissement. Les bulletins de paie doivent être conservés sans limite de durée depuis 2017."},
+r:[{t:"5 ans après le départ du salarié",ok:true},{t:"10 ans"},{t:"3 ans"},{t:"Indéfiniment"}],
+x:"Le registre unique du personnel doit être tenu dans chaque établissement (art. L.1221-13 du Code du travail). Il doit être conservé pendant 5 ans après la date à laquelle le dernier salarié inscrit a quitté l'établissement. Les bulletins de paie, eux, doivent être conservés sans limite de durée depuis 2017."},
 
 {id:5120,prog:'LEGER',theme:'Droit social',d:3,
 e:"La garantie AGS (Association pour la Gestion des créances des Salariés) intervient :",
@@ -914,7 +914,7 @@ x:"L'auto-entrepreneur peut choisir entre une déclaration mensuelle ou trimestr
 {id:5202,prog:'LEGER',theme:'Droit fiscal',d:2,
 e:"Le régime de la franchise en base de TVA signifie que :",
 r:[{t:"La TVA est remboursée immédiatement"},{t:"L'entreprise ne facture pas de TVA à ses clients et ne la récupère pas",ok:true},{t:"La TVA est réduite à 5,5 %"},{t:"L'entreprise est exonérée d'impôt sur les bénéfices"}],
-x:"La franchise en base de TVA (art. 293 B du CGI) exonère les petites entreprises dont le CA est sous les seuils (36 800 € pour les services, 91 900 € pour les ventes) de la collecte et du reversement de la TVA. En contrepartie, elles ne peuvent pas récupérer la TVA sur leurs achats."},
+x:"La franchise en base de TVA (art. 293 B du CGI) exonère les petites entreprises dont le CA est sous les seuils — depuis le 1er janvier 2026 : 37 500 € pour les services, 85 000 € pour les ventes de marchandises. En contrepartie, elles ne peuvent pas récupérer la TVA sur leurs achats."},
 
 {id:5203,prog:'LEGER',theme:'Droit fiscal',d:2,
 e:"L'impôt sur les sociétés (IS) est calculé sur :",
@@ -1385,9 +1385,9 @@ r:[{t:"Légal si le salarié est d'accord"},{t:"Illégal — constitue du marcha
 x:"Le prêt de main-d'œuvre à but lucratif (art. L.8241-1 du Code du travail) est interdit : c'est du marchandage ou de la fourniture illicite de main-d'œuvre. Exception : le prêt à but non lucratif entre entreprises (seuls les salaires, charges et frais sont remboursés, avec accord du salarié et du CSE)."},
 
 {id:5729,prog:'LEGER',theme:'Droit social',d:2,
-e:"Le montant maximum de l'aide à l'embauche d'un apprenti pour une TPE (moins de 250 salariés) est de :",
-r:[{t:"1 000 €"},{t:"6 000 € la 1ère année",ok:true},{t:"3 000 €"},{t:"Il n'y a pas d'aide spécifique"}],
-x:"L'aide unique à l'apprentissage est de 6 000 € maximum pour la 1ère année de contrat (pour les entreprises de moins de 250 salariés, pour les diplômes jusqu'au bac+2). Elle est versée par l'ASP (Agence de Services et de Paiement). Son montant et ses conditions peuvent évoluer selon les dispositions budgétaires annuelles."},
+e:"Le montant maximum de l'aide unique à l'embauche d'un apprenti pour une entreprise de moins de 250 salariés est de :",
+r:[{t:"1 000 €"},{t:"5 000 € la 1ère année",ok:true},{t:"6 000 €"},{t:"Il n'y a pas d'aide spécifique"}],
+x:"Depuis le 24 février 2025 (décret n°2025-174), l'aide unique à l'apprentissage est de 5 000 € maximum pour la 1ère année (entreprises < 250 salariés, diplômes jusqu'au bac — niveau 4). Elle est portée à 6 000 € si l'apprenti est en situation de handicap. Versée par l'ASP automatiquement chaque mois."},
 
 // ══════════════════════════════════════
 // FISCALITÉ LÉGER — suite (30 questions)
@@ -1419,8 +1419,8 @@ x:"Le numéro de TVA intracommunautaire français est : FR + 2 chiffres (clé de
 
 {id:5745,prog:'LEGER',theme:'Droit fiscal',d:2,
 e:"Le régime du réel simplifié s'applique aux entreprises dont le CA HT est compris entre :",
-r:[{t:"0 et 36 800 €"},{t:"36 800 € et 254 000 € (services) ou 840 000 € (ventes)",ok:true},{t:"254 000 € et 2 000 000 €"},{t:"Au-delà de 2 000 000 €"}],
-x:"Le régime réel simplifié (RSI) s'applique aux entreprises entre les seuils de franchise en base et ceux du régime réel normal. Pour les prestataires de services : entre 36 800 € et 254 000 € de CA HT. Pour les activités de vente : entre 91 900 € et 840 000 €."},
+r:[{t:"0 et 37 500 €"},{t:"37 500 € et 254 000 € (services) ou 85 000 € et 840 000 € (ventes)",ok:true},{t:"254 000 € et 2 000 000 €"},{t:"Au-delà de 2 000 000 €"}],
+x:"Le régime réel simplifié (RSI) s'applique aux entreprises entre les seuils de franchise en base et ceux du régime réel normal. Pour les prestataires de services (depuis 2026) : entre 37 500 € et 254 000 € de CA HT. Pour les activités de vente : entre 85 000 € et 840 000 €."},
 
 {id:5746,prog:'LEGER',theme:'Droit fiscal',d:2,
 e:"La contribution foncière des entreprises (CFE) est calculée sur :",
@@ -1451,8 +1451,8 @@ r:[{t:"Résultat d'exploitation + Résultat financier",ok:true},{t:"Résultat d'
 x:"Le RCAI = Résultat d'exploitation + Résultat financier (produits financiers - charges financières). Il mesure la performance récurrente de l'entreprise avant les éléments exceptionnels et l'IS. C'est un indicateur clé car il reflète l'activité normale et le mode de financement."},
 
 {id:5761,prog:'LEGER',theme:'Gestion financière',d:2,
-e:"Le taux de rotation des créances clients se calcule ainsi :",
-r:[{t:"CA / Créances clients × 360",ok:true},{t:"Créances clients / CA × 360"},{t:"CA / Total actif"},{t:"Résultat / Créances clients"}],
+e:"Le taux de rotation des créances clients (DSO) se calcule ainsi :",
+r:[{t:"CA / Créances clients × 360"},{t:"Créances clients / CA × 360",ok:true},{t:"CA / Total actif"},{t:"Résultat / Créances clients"}],
 x:"DSO (Days Sales Outstanding) = Créances clients / CA × 360 jours. Il mesure le délai moyen d'encaissement. Un DSO de 45 jours signifie que les clients paient en moyenne 45 jours après la facturation. Plus le DSO est court, mieux c'est pour la trésorerie."},
 
 {id:5762,prog:'LEGER',theme:'Gestion financière',d:2,
@@ -1818,8 +1818,8 @@ x:"L'astreinte (art. L.3121-9 du Code du travail) est une période pendant laque
 
 {id:5857,prog:'LEGER',theme:'Droit social',d:1,
 e:"Le congé de paternité et d'accueil de l'enfant est actuellement de :",
-r:[{t:"11 jours calendaires"},{t:"25 jours calendaires dont 4 obligatoires",ok:true},{t:"14 jours"},{t:"7 jours ouvrés"}],
-x:"Depuis le 1er juillet 2021, le congé de paternité est de 25 jours calendaires (32 pour une naissance multiple), dont 4 jours obligatoires à prendre immédiatement après la naissance. Il est indemnisé par la CPAM sous conditions (comme le congé maternité)."},
+r:[{t:"11 jours calendaires"},{t:"25 jours calendaires (hors congé de naissance)"},{t:"28 jours calendaires au total",ok:true},{t:"7 jours ouvrés"}],
+x:"Depuis le 1er juillet 2021, le congé total est de 28 jours : 3 jours de congé de naissance (payés par l'employeur) + 25 jours de congé paternité (indemnisés par la CPAM). Les 4 premiers jours du congé paternité sont obligatoires. En cas de naissance multiple : 32 jours au total (35 en comptant les 3 jours de naissance)."},
 
 {id:5858,prog:'LEGER',theme:'Droit social',d:2,
 e:"La mutuelle d'entreprise est obligatoire pour tous les salariés du secteur privé depuis :",
@@ -2276,8 +2276,8 @@ x:"Au régime réel normal, la déclaration CA3 est mensuelle. Si la TVA annuell
 
 {id:5927,prog:'LEGER',theme:'Droit fiscal',d:2,
 e:"La franchise en base de TVA pour un prestataire de services s'applique si le CA est inférieur à :",
-r:[{t:"10 000 €"},{t:"36 800 €",ok:true},{t:"91 900 €"},{t:"188 700 €"}],
-x:"La franchise en base de TVA (art. 293 B du CGI) exonère les petits prestataires de services dont le CA HT ne dépasse pas 36 800 € (seuil 2024). Au-delà, ils doivent collecter et reverser la TVA. Les vendeurs de biens ont un seuil plus élevé (91 900 €). Sous ce seuil, pas de TVA facturée et pas de TVA déductible sur achats."},
+r:[{t:"10 000 €"},{t:"37 500 €",ok:true},{t:"85 000 €"},{t:"203 100 €"}],
+x:"Depuis le 1er janvier 2026, la franchise en base de TVA pour les prestataires de services s'applique si le CA HT ne dépasse pas 37 500 € (seuil de tolérance : 41 250 €). Pour les ventes de marchandises, le seuil est de 85 000 € (tolérance : 93 500 €). Au-delà du seuil de base, la TVA s'applique au 1er janvier suivant sauf dépassement du seuil majoré qui déclenche l'assujettissement immédiatement."},
 
 {id:5928,prog:'LEGER',theme:'Droit fiscal',d:3,
 e:"Le report en avant des déficits à l'IS est plafonné chaque année à :",
@@ -2680,8 +2680,8 @@ x:"Les autorités compétentes (DREAL en France) peuvent, en cas d'infractions g
 // ══════════════════════════════════════
 {id:6301,prog:'LOURD',theme:'Réglementation transport PL',d:1,
 e:"La FIMO (Formation Initiale Minimale Obligatoire) pour les nouveaux conducteurs PL dure :",
-r:[{t:"105 heures (3 semaines)"},{t:"280 heures (8 semaines) pour les débutants complets",ok:true},{t:"35 heures"},{t:"140 heures"}],
-x:"La FIMO initiale (CQC Initial) est de 280 heures (8 semaines) pour les conducteurs n'ayant aucune expérience. Elle peut être réduite à 140 heures pour les conducteurs justifiant d'une expérience antérieure. Elle est sanctionnée par un examen."},
+r:[{t:"105 heures (3 semaines)"},{t:"280 heures — voie longue (titre professionnel)"},{t:"35 heures"},{t:"140 heures (4 semaines)",ok:true}],
+x:"La FIMO est une formation accélérée de 140 heures (4 semaines) dans un centre agréé. Il existe aussi une voie longue de 280 heures (CAP, Bac Pro, Titre professionnel CTRMV/CTRMP) donnant une équivalence FIMO. La FCOS de renouvellement est de 35 heures tous les 5 ans."},
 
 {id:6302,prog:'LOURD',theme:'Réglementation transport PL',d:2,
 e:"Le transport sous température dirigée de produits laitiers frais exige une température maximale de :",
