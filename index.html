@@ -1,158 +1,1615 @@
-// ═══════════════════════════════════════════════════
-// FORGETAROUTE — Edge Function : delete-account
-// Supprime toutes les données d'un utilisateur
-// + son compte auth → réinscription repart de zéro
-// ═══════════════════════════════════════════════════
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta name="google-site-verification" content="oaWSVZu3xzWQKDYwZYygwa2f6boN3aUcEH5JxlThZOQ" />
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+  <!-- ─── Open Graph / SEO social ─── -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://forgetaroute.fr/" />
+  <meta property="og:site_name" content="ForgeTaRoute" />
+  <meta property="og:title" content="ForgeTaRoute — Prépare ton examen CPC Marchandises & ADR" />
+  <meta property="og:description" content="Plus de 1 007 questions pour te préparer aux examens CPC Marchandises (léger & lourd) et ADR théorique. Entraînement gratuit ou premium." />
+  <meta property="og:image" content="https://forgetaroute.fr/Logo.png" />
+  <meta property="og:image:alt" content="Logo ForgeTaRoute — plateforme d'entraînement CPC & ADR" />
+  <meta property="og:locale" content="fr_FR" />
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+  <!-- ─── Twitter Card ─── -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="ForgeTaRoute — Prépare ton examen CPC Marchandises & ADR" />
+  <meta name="twitter:description" content="Plus de 1 007 questions pour te préparer aux examens CPC Marchandises et ADR théorique. Accès gratuit ou premium." />
+  <meta name="twitter:image" content="https://forgetaroute.fr/Logo.png" />
 
-Deno.serve(async (req) => {
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ForgeTaRoute – Entraînement CPC Marchandises & ADR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-  // Gestion CORS preflight
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+  <!-- ─── Données structurées JSON-LD (Google) ─── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "ForgeTaRoute",
+    "url": "https://forgetaroute.fr",
+    "description": "Plateforme d'entraînement aux examens CPC Marchandises (léger & lourd) et ADR théorique. Plus de 1 007 questions avec corrections détaillées.",
+    "image": "https://forgetaroute.fr/Logo.png",
+    "inLanguage": "fr-FR",
+    "publisher": {
+      "@type": "Organization",
+      "name": "ForgeTaRoute",
+      "url": "https://forgetaroute.fr",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://forgetaroute.fr/Logo.png",
+        "width": 512,
+        "height": 512
+      }
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://forgetaroute.fr/entrainement.html",
+      "query-input": "required name=search_term_string"
+    }
   }
+  </script>
+  <style>
+    /* ─── RESET & BASE ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:     #0B1829;
+      --navy-mid: #132338;
+      --navy-lt:  #1C3252;
+      --orange:   #F26522;
+      --orange-lt:#FF8A4C;
+      --steel:    #8FA3B8;
+      --steel-lt: #C4D4E2;
+      --white:    #F0F4F8;
+      --cream:    #E8EDF2;
+      --mono:     'JetBrains Mono', monospace;
+      --display:  'Barlow Condensed', sans-serif;
+      --body:     'Barlow', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
 
+    /* ─── DISCLAIMER BANNER ─── */
+    #disclaimer-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(11,24,41,0.96);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      animation: fadeIn .3s ease;
+    }
+    @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+    .disclaimer-box {
+      background: var(--navy-mid);
+      border: 1px solid var(--orange);
+      border-radius: 4px;
+      max-width: 640px;
+      width: 100%;
+      padding: 40px;
+      position: relative;
+    }
+    .disclaimer-box .tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      background: rgba(242,101,34,.12);
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
+    .disclaimer-box h2 {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: .02em;
+      color: var(--white);
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .disclaimer-box p {
+      color: var(--steel-lt);
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .disclaimer-box p strong { color: var(--white); }
+    .disclaimer-btn {
+      margin-top: 24px;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 14px 32px;
+      border-radius: 3px;
+      cursor: pointer;
+      width: 100%;
+      transition: background .2s, transform .15s;
+    }
+    .disclaimer-btn:hover { background: var(--orange-lt); transform: translateY(-1px); }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(11,24,41,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(143,163,184,.15);
+      padding: 0 40px;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--display);
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-logo span.accent { color: var(--orange); }
+    .nav-logo .logo-icon {
+      width: 32px; height: 32px;
+      background: var(--orange);
+      border-radius: 3px;
+      display: grid; place-items: center;
+    }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--steel-lt);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: var(--orange);
+      color: #fff !important;
+      padding: 8px 20px;
+      border-radius: 3px;
+      font-weight: 700 !important;
+      transition: background .2s !important;
+    }
+    .nav-cta:hover { background: var(--orange-lt) !important; color: #fff !important; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: calc(100vh - 64px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse 60% 60% at 80% 50%, rgba(242,101,34,.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 80% at 10% 80%, rgba(28,50,82,.6) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    /* Grid texture */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(143,163,184,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(143,163,184,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+    .hero-left {
+      padding: 80px 60px 80px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 32px; height: 2px;
+      background: var(--orange);
+    }
+    .hero-title {
+      font-family: var(--display);
+      font-size: clamp(52px, 5.5vw, 80px);
+      font-weight: 800;
+      line-height: .95;
+      letter-spacing: .01em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+    .hero-title .line-orange { color: var(--orange); }
+    .hero-title .line-steel { color: var(--steel); }
+    .hero-sub {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--steel-lt);
+      max-width: 440px;
+      line-height: 1.7;
+      margin-bottom: 40px;
+    }
+    .hero-sub strong { color: var(--white); font-weight: 500; }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--orange);
+      color: #fff;
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border-radius: 3px;
+      border: none;
+      cursor: pointer;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn-primary:hover {
+      background: var(--orange-lt);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(242,101,34,.3);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--steel-lt);
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border-radius: 3px;
+      border: 1px solid rgba(143,163,184,.3);
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn-secondary:hover { border-color: var(--steel); color: var(--white); }
+    .hero-badges {
+      margin-top: 48px;
+      display: flex; gap: 24px; flex-wrap: wrap;
+    }
+    .badge {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px;
+      font-family: var(--mono);
+      letter-spacing: .05em;
+      color: var(--steel);
+    }
+    .badge-dot {
+      width: 6px; height: 6px;
+      background: var(--orange);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .hero-right {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 80px 60px 20px;
+    }
+
+    /* ─── MOCK UI CARD ─── */
+    .mock-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(143,163,184,.15);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 440px;
+      overflow: hidden;
+      box-shadow: 0 32px 64px rgba(0,0,0,.5), 0 0 0 1px rgba(242,101,34,.08);
+      animation: floatCard 4s ease-in-out infinite;
+    }
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    .mock-header {
+      background: var(--navy-lt);
+      padding: 14px 20px;
+      display: flex; align-items: center; gap: 12px;
+      border-bottom: 1px solid rgba(143,163,184,.1);
+    }
+    .mock-dots { display: flex; gap: 6px; }
+    .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mock-dot:nth-child(1) { background: #FF5F56; }
+    .mock-dot:nth-child(2) { background: #FFBD2E; }
+    .mock-dot:nth-child(3) { background: #27C93F; }
+    .mock-title-bar {
+      flex: 1;
+      background: rgba(143,163,184,.1);
+      border-radius: 3px;
+      height: 22px;
+      display: flex; align-items: center; padding: 0 10px;
+      font-family: var(--mono); font-size: 10px; color: var(--steel);
+    }
+    .mock-body { padding: 24px; }
+    .mock-progress-label {
+      font-family: var(--mono); font-size: 10px;
+      color: var(--steel); letter-spacing: .08em;
+      text-transform: uppercase;
+      display: flex; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .mock-progress-bar {
+      height: 4px; background: rgba(143,163,184,.15);
+      border-radius: 2px; margin-bottom: 24px; overflow: hidden;
+    }
+    .mock-progress-fill {
+      height: 100%; width: 62%;
+      background: linear-gradient(90deg, var(--orange), var(--orange-lt));
+      border-radius: 2px;
+      animation: progressAnim 3s ease-in-out infinite alternate;
+    }
+    @keyframes progressAnim { from { width: 55% } to { width: 72% } }
+    .mock-question {
+      font-family: var(--body);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--white);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(143,163,184,.1);
+    }
+    .mock-question .qnum {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--orange);
+      letter-spacing: .1em;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .mock-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .mock-option {
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-size: 12px;
+      display: flex; align-items: center; gap: 10px;
+      cursor: default;
+      transition: background .2s;
+    }
+    .mock-option.correct {
+      background: rgba(39,201,63,.1);
+      border: 1px solid rgba(39,201,63,.3);
+      color: #6EE387;
+    }
+    .mock-option.wrong {
+      background: rgba(255,95,86,.08);
+      border: 1px solid rgba(255,95,86,.2);
+      color: rgba(240,244,248,.5);
+      text-decoration: line-through;
+    }
+    .mock-option.neutral {
+      background: rgba(143,163,184,.06);
+      border: 1px solid rgba(143,163,184,.12);
+      color: var(--steel-lt);
+    }
+    .mock-option .opt-letter {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      width: 20px; height: 20px;
+      border-radius: 3px;
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+    .mock-option.correct .opt-letter { background: rgba(39,201,63,.2); color: #6EE387; }
+    .mock-option.wrong .opt-letter { background: rgba(255,95,86,.15); color: #FF7B73; }
+    .mock-option.neutral .opt-letter { background: rgba(143,163,184,.15); color: var(--steel); }
+    .mock-explication {
+      background: rgba(242,101,34,.08);
+      border-left: 3px solid var(--orange);
+      border-radius: 0 4px 4px 0;
+      padding: 12px 14px;
+      font-size: 11px;
+      color: var(--steel-lt);
+      line-height: 1.6;
+    }
+    .mock-explication strong { color: var(--orange); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+    .mock-timer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 16px;
+    }
+    .mock-timer-val {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--white);
+    }
+    .mock-timer-val span { color: var(--steel); font-size: 12px; }
+    .mock-next-btn {
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      font-family: var(--display);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    /* ─── SECTION STYLES ─── */
+    section { padding: 100px 80px; }
+    .section-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-tag::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(242,101,34,.25);
+      max-width: 60px;
+    }
+    .section-title {
+      font-family: var(--display);
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 800;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+    .section-sub {
+      color: var(--steel-lt);
+      font-size: 16px;
+      font-weight: 300;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    /* ─── DISCLAIMER SECTION ─── */
+    .disclaimer-strip {
+      background: rgba(242,101,34,.08);
+      border-top: 1px solid rgba(242,101,34,.2);
+      border-bottom: 1px solid rgba(242,101,34,.2);
+      padding: 20px 80px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .disclaimer-strip .ds-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .disclaimer-strip p {
+      font-size: 13px;
+      color: var(--steel-lt);
+      line-height: 1.6;
+    }
+    .disclaimer-strip p strong { color: var(--orange-lt); }
+
+    /* ─── FEATURES ─── */
+    .features-section { background: var(--navy); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 60px;
+      border: 1px solid rgba(143,163,184,.1);
+    }
+    .feature-card {
+      background: var(--navy-mid);
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      transition: background .25s;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--orange), transparent);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .feature-card:hover { background: var(--navy-lt); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(143,163,184,.4);
+      letter-spacing: .1em;
+      margin-bottom: 20px;
+    }
+    .feature-icon {
+      width: 48px; height: 48px;
+      background: rgba(242,101,34,.1);
+      border: 1px solid rgba(242,101,34,.2);
+      border-radius: 4px;
+      display: grid; place-items: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .feature-card h3 {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      color: var(--white);
+    }
+    .feature-card p {
+      font-size: 13px;
+      color: var(--steel);
+      line-height: 1.65;
+    }
+
+    /* ─── MATIERES ─── */
+    .matieres-section {
+      background: var(--navy-mid);
+    }
+    .matieres-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      margin-top: 60px;
+    }
+    .matiere-group h3 {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--orange);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(242,101,34,.2);
+    }
+    .matiere-list { display: flex; flex-direction: column; gap: 8px; }
+    .matiere-item {
+      background: rgba(11,24,41,.5);
+      border: 1px solid rgba(143,163,184,.1);
+      border-radius: 3px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--steel-lt);
+      transition: border-color .2s, color .2s;
+      cursor: pointer;
+    }
+    .matiere-item:hover { border-color: rgba(242,101,34,.3); color: var(--white); }
+    .matiere-item .mat-badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      background: rgba(143,163,184,.1);
+      color: var(--steel);
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+
+    /* ─── MODES ─── */
+    .modes-section { background: var(--navy); }
+    .modes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 60px;
+    }
+    .mode-card {
+      border: 1px solid rgba(143,163,184,.12);
+      border-radius: 6px;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+      background: var(--navy-mid);
+    }
+    .mode-card.featured {
+      border-color: rgba(242,101,34,.3);
+      background: linear-gradient(135deg, var(--navy-mid) 0%, rgba(242,101,34,.05) 100%);
+    }
+    .mode-card .mode-badge {
+      position: absolute; top: 20px; right: 20px;
+      font-family: var(--mono); font-size: 10px;
+      background: var(--orange);
+      color: #fff;
+      padding: 4px 10px; border-radius: 2px;
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+    .mode-card .mode-icon { font-size: 36px; margin-bottom: 24px; }
+    .mode-card h3 {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 12px;
+    }
+    .mode-card p {
+      color: var(--steel-lt);
+      font-size: 14px;
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+    .mode-features { display: flex; flex-direction: column; gap: 8px; }
+    .mode-feature {
+      font-size: 12px;
+      color: var(--steel);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .mode-feature::before {
+      content: '✓';
+      color: var(--orange);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ─── STATS ─── */
+    .stats-section {
+      background: var(--navy-lt);
+      padding: 60px 80px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+    .stat-item {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .stat-num {
+      font-family: var(--display);
+      font-size: 56px;
+      font-weight: 800;
+      color: var(--orange);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--steel);
+    }
+
+    /* ─── PRICING ─── */
+    .pricing-section { background: var(--navy); }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 60px;
+    }
+    .pricing-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(143,163,184,.1);
+      padding: 48px 40px;
+      position: relative;
+    }
+    .pricing-card.featured {
+      background: var(--navy-lt);
+      border-color: var(--orange);
+      transform: scale(1.02);
+      z-index: 1;
+    }
+    .pricing-card .plan-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 20px;
+      display: block;
+    }
+    .pricing-card .plan-name {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .pricing-card .plan-price {
+      font-family: var(--display);
+      font-size: 52px;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .pricing-card .plan-price sup { font-size: 24px; vertical-align: top; margin-top: 8px; }
+    .pricing-card .plan-price span { font-size: 16px; color: var(--steel); font-weight: 300; font-family: var(--body); }
+    .pricing-card .plan-period {
+      font-size: 12px; color: var(--steel); margin-bottom: 32px;
+    }
+    .plan-sep {
+      height: 1px;
+      background: rgba(143,163,184,.1);
+      margin-bottom: 28px;
+    }
+    .plan-perks { display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+    .plan-perk {
+      font-size: 13px;
+      color: var(--steel-lt);
+      display: flex; align-items: flex-start; gap: 10px;
+      line-height: 1.4;
+    }
+    .plan-perk .perk-icon { flex-shrink: 0; color: var(--orange); margin-top: 1px; }
+    .plan-perk.disabled { color: rgba(143,163,184,.3); }
+    .plan-perk.disabled .perk-icon { color: rgba(143,163,184,.2); }
+    .plan-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 3px;
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .2s;
+      border: none;
+    }
+    .plan-btn.primary { background: var(--orange); color: #fff; }
+    .plan-btn.primary:hover { background: var(--orange-lt); }
+    .plan-btn.outline {
+      background: transparent;
+      color: var(--steel-lt);
+      border: 1px solid rgba(143,163,184,.25);
+    }
+    .plan-btn.outline:hover { border-color: var(--steel); color: var(--white); }
+    .featured-badge {
+      position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+      background: var(--orange);
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 0 0 4px 4px;
+    }
+    .pricing-note {
+      margin-top: 40px;
+      padding: 20px 28px;
+      background: rgba(143,163,184,.05);
+      border: 1px solid rgba(143,163,184,.1);
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--steel);
+      line-height: 1.6;
+    }
+    .pricing-note strong { color: var(--steel-lt); }
+
+    /* ─── TESTIMONIALS ─── */
+    .testimonials-section { background: var(--navy-mid); }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 60px;
+    }
+    .testimonial-card {
+      background: var(--navy);
+      border: 1px solid rgba(143,163,184,.1);
+      border-radius: 4px;
+      padding: 32px;
+    }
+    .testimonial-stars { color: var(--orange); font-size: 14px; margin-bottom: 16px; }
+    .testimonial-text {
+      font-size: 14px;
+      color: var(--steel-lt);
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .testimonial-author {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .author-avatar {
+      width: 36px; height: 36px;
+      background: var(--navy-lt);
+      border-radius: 50%;
+      display: grid; place-items: center;
+      font-family: var(--display);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--orange);
+      border: 1px solid rgba(242,101,34,.3);
+    }
+    .author-info .author-name { font-size: 13px; font-weight: 600; color: var(--white); }
+    .author-info .author-detail { font-size: 11px; color: var(--steel); font-family: var(--mono); }
+
+    /* ─── FAQ ─── */
+    .faq-section { background: var(--navy); }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 60px;
+    }
+    .faq-item {
+      background: var(--navy-mid);
+      padding: 32px 36px;
+      cursor: pointer;
+    }
+    .faq-item h4 {
+      font-family: var(--display);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: .03em;
+      color: var(--white);
+      margin-bottom: 12px;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+    }
+    .faq-item h4 .faq-plus {
+      color: var(--orange);
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .faq-item p {
+      font-size: 13px;
+      color: var(--steel);
+      line-height: 1.65;
+    }
+
+    /* ─── CTA SECTION ─── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--navy-lt) 0%, var(--navy-mid) 100%);
+      border-top: 1px solid rgba(242,101,34,.2);
+      border-bottom: 1px solid rgba(242,101,34,.2);
+      padding: 100px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 600px; height: 300px;
+      background: radial-gradient(ellipse, rgba(242,101,34,.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-section h2 {
+      font-family: var(--display);
+      font-size: clamp(40px, 5vw, 68px);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      line-height: .95;
+      margin-bottom: 20px;
+    }
+    .cta-section p {
+      color: var(--steel-lt);
+      font-size: 16px;
+      max-width: 480px;
+      margin: 0 auto 36px;
+      line-height: 1.65;
+    }
+    .cta-section .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #060F1A;
+      border-top: 1px solid rgba(143,163,184,.1);
+      padding: 60px 80px 40px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand .logo {
+      font-family: var(--display);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+    .footer-brand .logo span { color: var(--orange); }
+    .footer-brand p {
+      font-size: 13px;
+      color: var(--steel);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+    .footer-disclaimer {
+      background: rgba(242,101,34,.07);
+      border-left: 2px solid var(--orange);
+      padding: 12px 14px;
+      font-size: 11px;
+      color: rgba(143,163,184,.7);
+      line-height: 1.6;
+    }
+    .footer-col h4 {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul li a {
+      font-size: 13px;
+      color: var(--steel);
+      transition: color .2s;
+    }
+    .footer-col ul li a:hover { color: var(--white); }
+    .footer-bottom {
+      border-top: 1px solid rgba(143,163,184,.1);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .footer-legal {
+      font-size: 11px;
+      color: rgba(143,163,184,.5);
+      line-height: 1.8;
+      max-width: 700px;
+    }
+    .footer-legal a { color: rgba(143,163,184,.6); text-decoration: underline; text-decoration-color: rgba(143,163,184,.3); }
+    .footer-legal a:hover { color: var(--steel-lt); }
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: rgba(143,163,184,.35);
+      white-space: nowrap;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      section { padding: 80px 40px; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 60px 40px; }
+      .hero-right { display: none; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .pricing-card.featured { transform: none; }
+      .stats-section { grid-template-columns: repeat(2, 1fr); padding: 40px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .disclaimer-strip { padding: 20px 40px; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      section { padding: 60px 24px; }
+      .hero-left { padding: 60px 24px 40px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .matieres-grid { grid-template-columns: 1fr; }
+      .modes-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .stats-section { grid-template-columns: 1fr 1fr; padding: 40px 24px; }
+      footer { padding: 40px 24px 32px; }
+      .disclaimer-strip { padding: 16px 24px; }
+      .cta-section { padding: 60px 24px; }
+    }
+
+    /* ─── ANIMATIONS ON SCROLL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     DISCLAIMER OVERLAY (1ère visite)
+════════════════════════════════════════ -->
+<div id="disclaimer-overlay" role="dialog" aria-modal="true" aria-labelledby="disclaimer-title">
+  <div class="disclaimer-box">
+    <span class="tag">⚠ Information importante</span>
+    <h2 id="disclaimer-title">Outil d'entraînement indépendant</h2>
+    <p>
+      <strong>ForgeTaRoute est une plateforme d'entraînement et de simulation d'examen.</strong>
+      Elle ne constitue en aucun cas une formation officielle et ne remplace pas les 
+      formations dispensées par des organismes agréés.
+    </p>
+    <p>
+      Pour les questions <strong>ADR</strong> : la formation initiale et les spécialisations, 
+      ainsi que le certificat ADR, doivent obligatoirement être obtenus auprès d'un organisme 
+      de formation agréé par le Ministère chargé des Transports. La partie pratique ne peut 
+      pas être réalisée en ligne.
+    </p>
+    <p>
+      Les questions présentes sur cette plateforme ont été créées par nos soins à des fins 
+      d'entraînement. <strong>Elles ne sont pas issues des examens officiels.</strong>
+    </p>
+    <button class="disclaimer-btn" onclick="closeDisclaimer()">
+      J'ai compris — Accéder à la plateforme
+    </button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     NAVIGATION
+════════════════════════════════════════ -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <rect x="1" y="8" width="16" height="3" rx="1.5" fill="white"/>
+        <rect x="3" y="4" width="12" height="3" rx="1.5" fill="white" opacity=".6"/>
+        <rect x="3" y="11" width="12" height="3" rx="1.5" fill="white" opacity=".6"/>
+        <circle cx="5" cy="15" r="2" fill="white"/>
+        <circle cx="13" cy="15" r="2" fill="white"/>
+      </svg>
+    </div>
+    Forge<span class="accent">Ta</span>Route
+  </a>
+  <div class="nav-links">
+    <a href="#fonctionnalites">Fonctionnalités</a>
+    <a href="#matieres">Matières</a>
+    <a href="#modes">Modes</a>
+    <a href="#tarifs">Tarifs</a>
+    <a href="#faq">FAQ</a>
+    <a href="auth.html?tab=login">Connexion</a>
+    <a href="auth.html?tab=register" class="nav-cta">Commencer gratuitement</a>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-left reveal">
+    <p class="hero-eyebrow">Plateforme d'entraînement</p>
+    <h1 class="hero-title">
+      Entraîne-toi<br/>
+      <span class="line-orange">CPC &amp; ADR</span><br/>
+      <span class="line-steel">Marchandises</span>
+    </h1>
+    <p class="hero-sub">
+      Des centaines de QCM classés par matière, deux modes d'entraînement, 
+      des statistiques détaillées. Tout ce qu'il faut pour <strong>réviser efficacement</strong> 
+      la capacité de transport et l'ADR théorique.
+    </p>
+    <div class="hero-actions">
+      <a href="auth.html?tab=register" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1L11.5 6.5H17L12.5 10L14.5 16L9 12.5L3.5 16L5.5 10L1 6.5H6.5L9 1Z" fill="white"/></svg>
+        Commencer — C'est gratuit
+      </a>
+      <a href="#modes" class="btn-secondary">Voir les modes ↓</a>
+    </div>
+    <div class="hero-badges">
+      <span class="badge"><span class="badge-dot"></span> 500+ questions CPC</span>
+      <span class="badge"><span class="badge-dot"></span> 200+ questions ADR</span>
+      <span class="badge"><span class="badge-dot"></span> Examen blanc chronométré</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="mock-card">
+      <div class="mock-header">
+        <div class="mock-dots">
+          <div class="mock-dot"></div>
+          <div class="mock-dot"></div>
+          <div class="mock-dot"></div>
+        </div>
+        <div class="mock-title-bar">forgetaroute.fr — Entraînement CPC</div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-progress-label">
+          <span>Droit social</span>
+          <span>7/12 questions</span>
+        </div>
+        <div class="mock-progress-bar">
+          <div class="mock-progress-fill"></div>
+        </div>
+        <div class="mock-question">
+          <span class="qnum">QUESTION 08/12</span>
+          Quel est le délai légal de prévenance pour modifier les horaires de travail d'un chauffeur selon la réglementation en vigueur ?
+        </div>
+        <div class="mock-options">
+          <div class="mock-option wrong">
+            <span class="opt-letter">A</span>
+            24 heures minimum
+          </div>
+          <div class="mock-option correct">
+            <span class="opt-letter">B</span>
+            7 jours ouvrés minimum
+          </div>
+          <div class="mock-option neutral">
+            <span class="opt-letter">C</span>
+            48 heures minimum
+          </div>
+        </div>
+        <div class="mock-explication">
+          <strong>💡 Explication</strong>
+          Selon la convention collective du transport routier, le délai de prévenance est de 7 jours ouvrés, sauf accord entre les parties ou urgence justifiée.
+        </div>
+        <div class="mock-timer">
+          <div class="mock-timer-val">01:24 <span>restant</span></div>
+          <button class="mock-next-btn">Suivant →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     DISCLAIMER STRIP
+════════════════════════════════════════ -->
+<div class="disclaimer-strip">
+  <span class="ds-icon">⚠️</span>
+  <p>
+    <strong>Outil d'entraînement indépendant.</strong> Cette plateforme ne constitue en aucun cas une formation officielle et ne remplace pas les formations dispensées par des organismes agréés. 
+    Les questions ont été créées par nos soins et ne sont pas issues des examens officiels.
+    <strong>ADR :</strong> la formation et le certificat ADR doivent obligatoirement être obtenus auprès d'un organisme agréé par le Ministère des Transports.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════
+     STATS
+════════════════════════════════════════ -->
+<div class="stats-section reveal">
+  <div class="stat-item">
+    <div class="stat-num">1 007</div>
+    <div class="stat-label">Questions dans la banque</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">12</div>
+    <div class="stat-label">Matières couvertes</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Modes d'entraînement</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">En ligne, sans téléchargement</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     FONCTIONNALITÉS
+════════════════════════════════════════ -->
+<section class="features-section" id="fonctionnalites">
+  <div class="section-tag">Fonctionnalités</div>
+  <h2 class="section-title reveal">Tout pour réviser<br/><span style="color:var(--orange)">efficacement</span></h2>
+  <p class="section-sub reveal">Une plateforme conçue pour optimiser tes révisions avec les bons outils, au bon moment.</p>
+  <div class="features-grid reveal">
+    <div class="feature-card">
+      <div class="feature-num">01</div>
+      <div class="feature-icon">📚</div>
+      <h3>Banque de questions</h3>
+      <p>Plus de 700 QCM classés par matière et par niveau de difficulté, couvrant l'intégralité du programme CPC Marchandises et ADR théorique.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">02</div>
+      <div class="feature-icon">🎯</div>
+      <h3>Correction immédiate</h3>
+      <p>Chaque réponse est corrigée instantanément avec une explication détaillée. Tu comprends pourquoi tu as juste ou faux, pas seulement le résultat.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">03</div>
+      <div class="feature-icon">⏱</div>
+      <h3>Examen blanc chrono</h3>
+      <p>Simule les conditions réelles : temps limité, questions aléatoires tirées de toutes les matières, scoring adapté aux exigences de l'examen officiel.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">04</div>
+      <div class="feature-icon">📈</div>
+      <h3>Suivi de progression</h3>
+      <p>Visualise ton taux de réussite par matière, ton évolution dans le temps, et identifie tes points faibles pour cibler tes révisions.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">05</div>
+      <div class="feature-icon">🗂</div>
+      <h3>Révision par thème</h3>
+      <p>Travaille matière par matière : droit du travail, gestion financière, réglementation transport, sécurité routière, ADR… à ton rythme.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">06</div>
+      <div class="feature-icon">🔄</div>
+      <h3>Questions actualisées</h3>
+      <p>La banque de questions est régulièrement mise à jour pour rester en phase avec les évolutions réglementaires (code du transport, RSE, etc.).</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     MATIÈRES COUVERTES
+════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════
+     QU'EST-CE QUE LE CPC ?
+════════════════════════════════════════ -->
+<section style="background:var(--navy-mid);padding:80px 80px;">
+  <div class="section-tag">À savoir</div>
+  <h2 class="section-title reveal">C'est quoi le <span style="color:var(--orange)">CPC</span> et l'<span style="color:var(--orange)">ADR</span> ?</h2>
+  <p class="section-sub reveal">Deux certifications obligatoires dans le transport routier de marchandises.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:40px" class="reveal">
+
+    <div style="background:var(--navy);border:1px solid rgba(143,163,184,.1);border-radius:6px;padding:28px;border-top:2px solid var(--orange)">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:12px">CPC Marchandises &lt;3,5t</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:var(--white);margin-bottom:12px">Véhicules Légers</div>
+      <p style="font-size:13px;color:var(--steel);line-height:1.7;margin-bottom:16px">Le <strong style="color:var(--steel-lt)">Certificat de Compétence Professionnelle</strong> pour les véhicules utilitaires légers (VUL) jusqu'à 3,5 tonnes. Obligatoire pour créer ou gérer une entreprise de transport léger (livraison, coursiers, déménagement léger…).</p>
+      <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--steel);padding:10px 14px;background:rgba(143,163,184,.05);border-radius:3px;border-left:2px solid var(--orange)">Délivré par les CCI après examen écrit</div>
+    </div>
+
+    <div style="background:var(--navy);border:1px solid rgba(143,163,184,.1);border-radius:6px;padding:28px;border-top:2px solid var(--orange)">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:12px">CPC Marchandises &gt;3,5t</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:var(--white);margin-bottom:12px">Poids Lourds</div>
+      <p style="font-size:13px;color:var(--steel);line-height:1.7;margin-bottom:16px">Le <strong style="color:var(--steel-lt)">Certificat de Compétence Professionnelle</strong> pour les poids lourds de plus de 3,5 tonnes. Indispensable pour diriger une entreprise de transport routier (fret, logistique, messagerie…).</p>
+      <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--steel);padding:10px 14px;background:rgba(143,163,184,.05);border-radius:3px;border-left:2px solid var(--orange)">Délivré par les CCI après examen écrit</div>
+    </div>
+
+    <div style="background:var(--navy);border:1px solid rgba(143,163,184,.1);border-radius:6px;padding:28px;border-top:2px solid #FF8A4C">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FF8A4C;margin-bottom:12px">ADR Théorique</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:var(--white);margin-bottom:12px">Matières Dangereuses</div>
+      <p style="font-size:13px;color:var(--steel);line-height:1.7;margin-bottom:16px">L'<strong style="color:var(--steel-lt)">Accord européen relatif au transport international de marchandises Dangereuses par Route</strong>. Certification obligatoire pour transporter des matières dangereuses (carburants, produits chimiques, gaz…).</p>
+      <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--steel);padding:10px 14px;background:rgba(143,163,184,.05);border-radius:3px;border-left:2px solid #FF8A4C">⚠ ForgeTaRoute couvre uniquement la partie théorique</div>
+    </div>
+
+  </div>
+
+  <div style="margin-top:32px;padding:20px 24px;background:rgba(242,101,34,.06);border:1px solid rgba(242,101,34,.15);border-radius:6px;display:flex;align-items:center;gap:16px" class="reveal">
+    <span style="font-size:24px">💡</span>
+    <p style="font-size:13.5px;color:var(--steel);line-height:1.65"><strong style="color:var(--steel-lt)">ForgeTaRoute vous aide à préparer la partie théorique</strong> de ces examens. L'examen CPC comporte une Partie 1 (QCM) et une Partie 2 (cas pratiques rédigés). Nos 1 007 questions couvrent l'intégralité du programme officiel.</p>
+  </div>
+</section>
+
+<section class="matieres-section" id="matieres">
+  <div class="section-tag">Programme</div>
+  <h2 class="section-title reveal">Matières couvertes</h2>
+  <p class="section-sub reveal">L'ensemble des thèmes du programme officiel, découpés en modules pour une révision ciblée.</p>
+  <div class="matieres-grid reveal">
+    <div class="matiere-group">
+      <h3>📦 CPC Marchandises &gt;3,5t</h3>
+      <div class="matiere-list">
+        <div class="matiere-item">Droit civil et commercial <span class="mat-badge">85 q.</span></div>
+        <div class="matiere-item">Droit social — Réglementation du travail <span class="mat-badge">70 q.</span></div>
+        <div class="matiere-item">Droit fiscal — TVA, taxes sur les transports <span class="mat-badge">45 q.</span></div>
+        <div class="matiere-item">Gestion commerciale et financière <span class="mat-badge">90 q.</span></div>
+        <div class="matiere-item">Accès à la profession — Réglementation transport <span class="mat-badge">65 q.</span></div>
+        <div class="matiere-item">Réglementation technique — Véhicules <span class="mat-badge">55 q.</span></div>
+        <div class="matiere-item">Sécurité routière &amp; normes de conduite <span class="mat-badge">60 q.</span></div>
+        <div class="matiere-item">Transport international — CMR, douanes <span class="mat-badge">40 q.</span></div>
+      </div>
+    </div>
+    <div class="matiere-group">
+      <h3>☢ ADR — Marchandises dangereuses</h3>
+      <div class="matiere-list">
+        <div class="matiere-item">Dispositions générales &amp; classes de danger <span class="mat-badge">50 q.</span></div>
+        <div class="matiere-item">Classification &amp; étiquetage <span class="mat-badge">40 q.</span></div>
+        <div class="matiere-item">Documents de transport &amp; documents de bord <span class="mat-badge">30 q.</span></div>
+        <div class="matiere-item">Conditionnement &amp; emballages <span class="mat-badge">35 q.</span></div>
+        <div class="matiere-item">Signalisation &amp; marquage des véhicules <span class="mat-badge">25 q.</span></div>
+        <div class="matiere-item">Mesures de sécurité &amp; consignes écrites <span class="mat-badge">30 q.</span></div>
+      </div>
+      <div style="margin-top:16px; padding:14px 16px; background:rgba(242,101,34,.07); border:1px solid rgba(242,101,34,.2); border-radius:4px; font-size:12px; color:var(--steel); line-height:1.65;">
+        ⚠️ <strong style="color:var(--orange-lt)">Rappel ADR :</strong> cet entraînement couvre uniquement la partie théorique. La formation complète et le certificat ADR doivent être obtenus auprès d'un organisme agréé.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     MODES D'ENTRAÎNEMENT
+════════════════════════════════════════ -->
+<section class="modes-section" id="modes">
+  <div class="section-tag">Modes</div>
+  <h2 class="section-title reveal">Deux modes,<br/><span style="color:var(--orange)">un seul objectif</span></h2>
+  <div class="modes-grid reveal">
+    <div class="mode-card">
+      <div class="mode-icon">🎓</div>
+      <h3>Mode Entraînement</h3>
+      <p>Révise par thème à ton rythme. Chaque réponse est corrigée immédiatement avec une explication. Idéal pour consolider tes connaissances matière par matière.</p>
+      <div class="mode-features">
+        <div class="mode-feature">Sélection par matière</div>
+        <div class="mode-feature">Correction + explication immédiate</div>
+        <div class="mode-feature">Sans limite de temps</div>
+        <div class="mode-feature">Historique des sessions</div>
+        <div class="mode-feature">Filtre par niveau de difficulté</div>
+      </div>
+    </div>
+    <div class="mode-card featured">
+      <div class="mode-badge">Recommandé</div>
+      <div class="mode-icon">🏁</div>
+      <h3>Examen Blanc</h3>
+      <p>Simule les conditions réelles de l'examen officiel. Questions aléatoires, chronomètre activé, scoring adapté. Découvre ton niveau de préparation.</p>
+      <div class="mode-features">
+        <div class="mode-feature">Durée limitée (comme le vrai examen)</div>
+        <div class="mode-feature">Questions piochées aléatoirement</div>
+        <div class="mode-feature">Score détaillé par matière</div>
+        <div class="mode-feature">Corrigé complet à la fin</div>
+        <div class="mode-feature">Historique de tous tes examens blancs</div>
+      </div>
+    </div>
+  </div>
+  <div class="disclaimer-strip" style="margin-top:24px; border-radius:4px; border:1px solid rgba(242,101,34,.2);">
+    <span class="ds-icon">⚠️</span>
+    <p>Cette simulation est un outil d'auto-évaluation. Les conditions, le barème et les questions peuvent différer de ceux de l'examen officiel organisé par les autorités compétentes.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     TARIFS
+════════════════════════════════════════ -->
+<section class="pricing-section" id="tarifs">
+  <div class="section-tag">Tarifs</div>
+  <h2 class="section-title reveal">Simple &amp; transparent</h2>
+  <p class="section-sub reveal">Commence gratuitement. Passe en illimité quand tu en as besoin.</p>
+  <div class="pricing-grid reveal">
+    <!-- GRATUIT -->
+    <div class="pricing-card">
+      <span class="plan-tag">Accès libre</span>
+      <div class="plan-name">Gratuit</div>
+      <div class="plan-price"><sup>0</sup>€<span> / mois</span></div>
+      <div class="plan-period">Sans carte bancaire</div>
+      <div class="plan-sep"></div>
+      <div class="plan-perks">
+        <div class="plan-perk"><span class="perk-icon">✓</span> 10 questions/jour (CPC + ADR)</div>
+        <div class="plan-perk"><span class="perk-icon">✓</span> Tous les thèmes disponibles</div>
+        <div class="plan-perk"><span class="perk-icon">✓</span> Correction + explication incluse</div>
+        <div class="plan-perk disabled"><span class="perk-icon">✗</span> Examens blancs</div>
+        <div class="plan-perk disabled"><span class="perk-icon">✗</span> Statistiques avancées</div>
+        <div class="plan-perk disabled"><span class="perk-icon">✗</span> Suivi de progression</div>
+      </div>
+      <button class="plan-btn outline" onclick="location.href='auth.html?tab=register'">Créer un compte gratuit</button>
+    </div>
+    <!-- MENSUEL -->
+    <div class="pricing-card featured">
+      <div class="featured-badge">Le plus choisi</div>
+      <span class="plan-tag">Accès illimité</span>
+      <div class="plan-name">Mensuel</div>
+      <div class="plan-price"><sup>€</sup>9<span>,90 / mois</span></div>
+      <div class="plan-period">Sans engagement — résiliable en ligne à tout moment</div>
+      <div class="plan-sep"></div>
+      <div class="plan-perks">
+        <div class="plan-perk"><span class="perk-icon">✓</span> Questions illimitées (1 007 questions)</div>
+        <div class="plan-perk"><span class="perk-icon">✓</span> CPC Léger + Lourd + ADR complet</div>
+        <div class="plan-perk"><span class="perk-icon">✓</span> Examens blancs illimités</div>
+        <div class="plan-perk"><span class="perk-icon">✓</span> Statistiques complètes par matière</div>
+        <div class="plan-perk"><span class="perk-icon">✓</span> Suivi de progression détaillé</div>
+        <div class="plan-perk"><span class="perk-icon">✓</span> Annulation à tout moment</div>
+      </div>
+      <button class="plan-btn primary" onclick="location.href='abonnement.html'">S'abonner maintenant</button>
+    </div>
+    <!-- ANNUEL -->
+    <div class="pricing-card">
+      <span class="plan-tag">Meilleur tarif</span>
+      <div class="plan-name">Annuel</div>
+      <div class="plan-price"><sup>€</sup>79<span> / an</span></div>
+      <div class="plan-period">Soit 6,58 €/mois — économisez 39,80 €</div>
+      <div class="plan-sep"></div>
+      <div class="plan-perks">
+        <div class="plan-perk"><span class="perk-icon">✓</span> Tout le plan Mensuel inclus</div>
+        <div class="plan-perk"><span class="perk-icon">✓</span> 2 mois offerts vs mensuel</div>
+        <div class="plan-perk"><span class="perk-icon">✓</span> 1 007 questions CPC + ADR</div>
+        <div class="plan-perk"><span class="perk-icon">✓</span> Examens blancs illimités</div>
+        <div class="plan-perk"><span class="perk-icon">✓</span> Résiliable en ligne à tout moment</div>
+        <div class="plan-perk"><span class="perk-icon">✓</span> Idéal pour une préparation complète</div>
+      </div>
+      <button class="plan-btn outline" onclick="location.href='abonnement.html'">Choisir l'annuel</button>
+    </div>
+  </div>
+  <div class="pricing-note reveal">
+    <strong>Résiliation :</strong> Vous pouvez résilier votre abonnement en ligne à tout moment depuis votre espace personnel, sans frais ni justification, conformément à la loi du 9 mars 2023 sur la résiliation en ligne. La résiliation prend effet à la fin de la période en cours.
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     TÉMOIGNAGES
+════════════════════════════════════════ -->
+
+
+<!-- ════════════════════════════════════════
+     FAQ
+════════════════════════════════════════ -->
+<section class="faq-section" id="faq">
+  <div class="section-tag">Questions fréquentes</div>
+  <h2 class="section-title reveal">On répond à<br/><span style="color:var(--orange)">vos questions</span></h2>
+  <div class="faq-grid reveal">
+    <div class="faq-item">
+      <h4>ForgeTaRoute est-il une formation officielle ? <span class="faq-plus">+</span></h4>
+      <p>Non. ForgeTaRoute est exclusivement une plateforme d'entraînement et de révision indépendante. Il ne remplace pas une formation dispensée par un organisme agréé, qui reste obligatoire pour se présenter à l'examen officiel.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Les questions viennent-elles des vrais examens ? <span class="faq-plus">+</span></h4>
+      <p>Non. Toutes les questions ont été créées par notre équipe à des fins pédagogiques. Elles couvrent le même programme mais ne sont pas extraites des sujets officiels passés.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Puis-je obtenir mon certificat ADR grâce à ForgeTaRoute ? <span class="faq-plus">+</span></h4>
+      <p>Non. Le certificat ADR ne peut être délivré que par un organisme agréé par le Ministère des Transports. ForgeTaRoute permet uniquement de réviser la théorie en complément d'une formation officielle.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Comment résilier mon abonnement ? <span class="faq-plus">+</span></h4>
+      <p>La résiliation se fait directement depuis votre espace personnel, en un clic, sans justification ni frais, conformément à la loi du 9 mars 2023. Elle prend effet à la fin de la période en cours.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Le plan gratuit est-il limité dans le temps ? <span class="faq-plus">+</span></h4>
+      <p>Non, le plan gratuit est permanent. Il est limité en nombre de questions par jour et en fonctionnalités, mais vous pouvez l'utiliser sans limite de durée.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Mes données personnelles sont-elles protégées ? <span class="faq-plus">+</span></h4>
+      <p>Oui. ForgeTaRoute respecte le RGPD. Vos données ne sont jamais vendues à des tiers. Vous disposez d'un droit d'accès, de rectification et de suppression de vos données depuis votre espace personnel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     CTA FINAL
+════════════════════════════════════════ -->
+<div class="cta-section">
+  <h2>Commence à<br/><span style="color:var(--orange)">t'entraîner</span><br/>maintenant</h2>
+  <p>Accès gratuit immédiat. Pas de carte bancaire requise. 50 questions par jour offertes.</p>
+  <div class="cta-actions">
+    <a href="auth.html?tab=register" class="btn-primary">Créer mon compte gratuit</a>
+    <a href="#tarifs" class="btn-secondary">Voir les offres</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">Route<span>Pro</span></div>
+      <p>Plateforme d'entraînement indépendante aux examens CPC Marchandises &gt;3,5t et ADR théorique. Outil de révision uniquement.</p>
+      <div class="footer-disclaimer">
+        Cette plateforme est un outil d'entraînement et de révision indépendant. Elle ne constitue en aucun cas une formation officielle et ne remplace pas les formations dispensées par des organismes agréés.
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Plateforme</h4>
+      <ul>
+        <li><a href="entrainement.html">Entraînement CPC</a></li>
+        <li><a href="entrainement.html?prog=ADR">Entraînement ADR</a></li>
+        <li><a href="examen-blanc.html">Examen blanc</a></li>
+        <li><a href="javascript:goToDashboard()">Mon tableau de bord</a></li>
+        <li><a href="#tarifs">Tarifs</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Légal</h4>
+      <ul>
+        <li><a href="mentions-legales.html">Mentions légales</a></li>
+        <li><a href="mentions-legales.html#cgv">CGV</a></li>
+        <li><a href="mentions-legales.html#rgpd">Politique de confidentialité</a></li>
+        <li><a href="mentions-legales.html#cgu">CGU</a></li>
+        <li><a href="mentions-legales.html#resiliation">Résiliation</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Aide</h4>
+      <ul>
+        <li><a href="mailto:forgetaroute@outlook.fr">Contact</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="javascript:goToDashboard()">Mon compte</a></li>
+        <li><a href="mailto:forgetaroute@outlook.fr?subject=Signalement erreur">Signaler une erreur</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-legal">
+      <strong style="color:rgba(143,163,184,.6)">Avertissement important :</strong> ForgeTaRoute est une plateforme d'entraînement et de simulation d'examen indépendante. Elle ne constitue en aucun cas une formation officielle. Les questions présentes sur ce site ont été créées par nos soins et ne sont pas issues des examens officiels. Pour l'ADR : la formation initiale et spécialisée ainsi que le certificat ADR doivent obligatoirement être obtenus auprès d'un organisme de formation agréé par le Ministère chargé des Transports. La partie pratique ne peut pas être réalisée en ligne. — 
+      <a href="mentions-legales.html">Mentions légales</a> · <a href="mentions-legales.html#cgv">CGV</a> · <a href="mentions-legales.html#rgpd">Politique de confidentialité</a>
+    </div>
+    <div class="footer-copy">© 2026 ForgeTaRoute — Tous droits réservés</div>
+  </div>
+</footer>
+
+<script>
+  // ── Disclaimer overlay ──
+  function closeDisclaimer() {
+    const overlay = document.getElementById('disclaimer-overlay');
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity .3s ease';
+    setTimeout(() => overlay.remove(), 300);
+    try { sessionStorage.setItem('disclaimer-seen', '1'); } catch(e) {}
+  }
+  // Ne pas ré-afficher si déjà vu dans la session
   try {
-    // ── 1. Récupérer le token de l'utilisateur connecté ──
-    const authHeader = req.headers.get('Authorization')
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: 'Token manquant' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+    if (sessionStorage.getItem('disclaimer-seen')) {
+      document.getElementById('disclaimer-overlay').remove();
     }
+  } catch(e) {}
 
-    // ── 2. Client avec le token utilisateur (pour vérifier l'identité) ──
-    const supabaseUser = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      { global: { headers: { Authorization: authHeader } } }
-    )
+  // ── Reveal on scroll ──
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
 
-    // ── 3. Récupérer l'utilisateur connecté ──
-    const { data: { user }, error: userError } = await supabaseUser.auth.getUser()
-    if (userError || !user) {
-      return new Response(
-        JSON.stringify({ error: 'Utilisateur non authentifié' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
-
-    const userId = user.id
-
-    // ── 4. Client admin (service_role) pour supprimer les données ──
-    const supabaseAdmin = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
-
-    // ── 5. Récupérer le stripe_subscription_id avant suppression ──
-    const { data: profil } = await supabaseAdmin
-      .from('profils')
-      .select('stripe_subscription_id, abonnement')
-      .eq('id', userId)
-      .single()
-
-    // ── 6. Annuler l'abonnement Stripe si actif ──
-    if (profil?.stripe_subscription_id && profil?.abonnement === 'premium') {
-      try {
-        const stripeKey = Deno.env.get('STRIPE_SECRET_KEY') ?? ''
-        const stripeResp = await fetch(
-          `https://api.stripe.com/v1/subscriptions/${profil.stripe_subscription_id}`,
-          {
-            method: 'DELETE',
-            headers: {
-              'Authorization': `Bearer ${stripeKey}`,
-              'Content-Type': 'application/x-www-form-urlencoded',
-            }
-          }
-        )
-        const stripeData = await stripeResp.json()
-        if (stripeData.error) {
-          console.error('Erreur annulation Stripe:', stripeData.error)
-          // On continue quand même — ne pas bloquer la suppression
-        } else {
-          console.log('Abonnement Stripe annulé:', profil.stripe_subscription_id)
+  // ── Trigger hero reveal immediately ──
+  document.querySelectorAll('.hero .reveal').forEach(el => {
+    setTimeout(() => el.classList.add('visible'), 100);
+  });
+</script>
+<script>
+function goToDashboard() {
+  // Vérifier si une session est active dans le localStorage
+  var connected = false;
+  try {
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      var s = JSON.parse(raw);
+      var sess = s.access_token ? s : (s.currentSession || null);
+      if (sess && sess.access_token) {
+        // Vérifier que le token n'est pas expiré
+        if (!sess.expires_at || Date.now()/1000 < sess.expires_at + 300) {
+          connected = true;
+          break;
         }
-      } catch (stripeErr) {
-        console.error('Erreur Stripe inattendue:', stripeErr)
       }
     }
-
-    // ── 7. Supprimer toutes les données dans l'ordre ──
-    // (les FK doivent être supprimées avant le profil et le compte auth)
-
-    // 7a. Supprimer les réponses
-    const { error: reponsesError } = await supabaseAdmin
-      .from('reponses')
-      .delete()
-      .eq('user_id', userId)
-
-    if (reponsesError) {
-      console.error('Erreur suppression reponses:', reponsesError)
-      // On continue quand même — ne pas bloquer si la table est vide
-    }
-
-    // 7b. Supprimer les sessions d'entraînement
-    const { error: sessionsError } = await supabaseAdmin
-      .from('sessions')
-      .delete()
-      .eq('user_id', userId)
-
-    if (sessionsError) {
-      console.error('Erreur suppression sessions:', sessionsError)
-    }
-
-    // 7c. Supprimer les examens blancs
-    const { error: examensError } = await supabaseAdmin
-      .from('examens')
-      .delete()
-      .eq('user_id', userId)
-
-    if (examensError) {
-      console.error('Erreur suppression examens:', examensError)
-    }
-
-    // 7d. Supprimer le profil
-    const { error: profilError } = await supabaseAdmin
-      .from('profils')
-      .delete()
-      .eq('id', userId)
-
-    if (profilError) {
-      console.error('Erreur suppression profil:', profilError)
-    }
-
-    // 7e. Supprimer le compte auth (doit être en dernier)
-    const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(userId)
-
-    if (authError) {
-      console.error('Erreur suppression compte auth:', authError)
-      return new Response(
-        JSON.stringify({ error: 'Erreur lors de la suppression du compte : ' + authError.message }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
-
-    // ── 6. Succès — toutes les données sont supprimées ──
-    console.log(`Compte supprimé avec succès : ${userId}`)
-
-    return new Response(
-      JSON.stringify({ success: true, message: 'Compte et toutes les données supprimés.' }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
-
-  } catch (err) {
-    console.error('Erreur inattendue:', err)
-    return new Response(
-      JSON.stringify({ error: 'Erreur serveur inattendue' }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+  } catch(e) {}
+  
+  if (connected) {
+    window.location.href = 'dashboard.html';
+  } else {
+    window.location.href = 'auth.html?tab=register&next=dashboard';
   }
-})
+}
+</script>
+</body>
+</html>
