@@ -345,18 +345,8 @@ var THEMES = {
 };
 
 function getDashUserId() {
-  try {
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      var s = JSON.parse(raw);
-      var sess = s.access_token ? s : (s.currentSession || null);
-      if (sess && sess.user && sess.user.id) return sess.user.id;
-    }
-  } catch(e) {}
-  return 'anonymous';
+  var s = getSession();
+  return s.userId || 'anonymous';
 }
 
 function dashStatsKey() {
@@ -372,19 +362,7 @@ function getReponses() { var d = getStats(); return d.reponses || {}; }
 
 async function loadStatsFromSupabase() {
   try {
-    var token = null, userId = null;
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      try {
-        var s = JSON.parse(raw);
-        var sess = s.access_token ? s : (s.currentSession || null);
-        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
-      } catch(e2) {}
-    }
-    if (!token || !userId) return null;
+    var _sess = getSession(); var token = _sess.token, userId = _sess.userId;if (!token || !userId) return null;
 
     var SUPA_URL3 = 'https://eulkccufeddlhbltekxm.supabase.co';
     var SUPA_KEY3 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g';
@@ -697,9 +675,16 @@ function handleOAuthCallback() {
 }
 
 
-async function verifierStatutAbo() {
+// ── Utilitaire : récupérer token + userId depuis sessionStorage ou localStorage ──
+function getSession() {
   try {
-    var token = null, userId = null;
+    var sessRaw = sessionStorage.getItem('sb_session');
+    if (sessRaw) {
+      var s = JSON.parse(sessRaw);
+      if (s && s.access_token) return { token: s.access_token, userId: s.user && s.user.id, user: s.user };
+    }
+  } catch(e) {}
+  try {
     for (var i = 0; i < localStorage.length; i++) {
       var k = localStorage.key(i);
       if (!k) continue;
@@ -708,8 +693,37 @@ async function verifierStatutAbo() {
       try {
         var s = JSON.parse(raw);
         var sess = s.access_token ? s : (s.currentSession || null);
-        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
+        if (sess && sess.access_token) return { token: sess.access_token, userId: sess.user && sess.user.id, user: sess.user };
       } catch(e2) {}
+    }
+  } catch(e) {}
+  return { token: null, userId: null, user: null };
+}
+
+async function verifierStatutAbo() {
+  try {
+    var token = null, userId = null;
+    // sessionStorage en premier
+    try {
+      var sessRaw = sessionStorage.getItem('sb_session');
+      if (sessRaw) {
+        var sessObj = JSON.parse(sessRaw);
+        if (sessObj && sessObj.access_token) { token = sessObj.access_token; userId = sessObj.user && sessObj.user.id; }
+      }
+    } catch(e3) {}
+    // puis localStorage
+    if (!token) {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (!k) continue;
+        var raw = localStorage.getItem(k);
+        if (!raw) continue;
+        try {
+          var s = JSON.parse(raw);
+          var sess = s.access_token ? s : (s.currentSession || null);
+          if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
+        } catch(e2) {}
+      }
     }
     if (!token || !userId) return { abonnement: "gratuit" };
     var resp = await fetch("https://eulkccufeddlhbltekxm.supabase.co/rest/v1/profils?id=eq." + userId + "&select=abonnement,stripe_subscription_id", {
@@ -725,14 +739,7 @@ async function resilierAbonnement() {
   var btn = document.getElementById("btn-resilier");
   if (btn) { btn.textContent = "Resiliation en cours..."; btn.disabled = true; }
   try {
-    var token = null;
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      try { var s = JSON.parse(raw); if (s.access_token) { token = s.access_token; break; } } catch(e2) {}
-    }
+    var token = getSession().token;
     var resp = await fetch("https://eulkccufeddlhbltekxm.supabase.co/functions/v1/cancel-subscription", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token, "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g" }
@@ -756,20 +763,7 @@ async function resilierAbonnement() {
 }
 
 async function chargerStatutAbo(retry) {
-  // Si pas de session, réessayer jusqu'à 3 fois avec délai
-  var token = null;
-  try {
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      var s = JSON.parse(raw);
-      var sess = s.access_token ? s : (s.currentSession || null);
-      if (sess && sess.access_token) { token = sess.access_token; break; }
-    }
-  } catch(e) {}
-
+  var token = getSession().token;
   if (!token && (retry || 0) < 3) {
     setTimeout(function() { chargerStatutAbo((retry || 0) + 1); }, 1000);
     return;
@@ -941,25 +935,13 @@ async function supprimerCompte() {
 }
 function getUserPrenom() {
   try {
-    // Chercher dans toutes les clés localStorage possibles
-    var keys = ["sb_session"];
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (k && (k.includes("auth-token") || k.includes("sb-"))) keys.push(k);
-    }
-    for (var j = 0; j < keys.length; j++) {
-      var raw = localStorage.getItem(keys[j]);
-      if (!raw) continue;
-      var s = JSON.parse(raw);
-      var u = s.user || (s.currentSession && s.currentSession.user);
-      if (!u) continue;
-      var m = u.user_metadata || {};
-      // Ordre de priorité : prénom saisi > full_name Google > name > email
-      if (m.prenom) return m.prenom;
-      if (m.full_name) return m.full_name.split(" ")[0];
-      if (m.name) return m.name.split(" ")[0];
-      if (u.email) return u.email.split("@")[0];
-    }
+    var u = getSession().user;
+    if (!u) return "Utilisateur";
+    var m = u.user_metadata || {};
+    if (m.prenom) return m.prenom;
+    if (m.full_name) return m.full_name.split(" ")[0];
+    if (m.name) return m.name.split(" ")[0];
+    if (u.email) return u.email.split("@")[0];
   } catch(e) {}
   return "Utilisateur";
 }
@@ -1042,18 +1024,8 @@ async function init() {
     // Essayer de récupérer la photo Google
     var avatarUrl = null;
     try {
-      for (var i = 0; i < localStorage.length; i++) {
-        var k = localStorage.key(i);
-        if (!k) continue;
-        var raw = localStorage.getItem(k);
-        if (!raw) continue;
-        var s = JSON.parse(raw);
-        var sess = s.access_token ? s : (s.currentSession || null);
-        if (sess && sess.user && sess.user.user_metadata) {
-          avatarUrl = sess.user.user_metadata.avatar_url || sess.user.user_metadata.picture || null;
-          break;
-        }
-      }
+      var _u = getSession().user;
+      if (_u && _u.user_metadata) avatarUrl = _u.user_metadata.avatar_url || _u.user_metadata.picture || null;
     } catch(e) {}
     
     if (avatarUrl) {
