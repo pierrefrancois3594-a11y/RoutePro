@@ -112,6 +112,40 @@ const sb = {
     const data = await r.json();
     if (data.access_token) {
       localStorage.setItem('sb_session', JSON.stringify(data));
+      // ── Créer la ligne dans la table profils ──
+      try {
+        const userId = data.user && data.user.id;
+        if (userId) {
+          await fetch(SUPA_URL + '/rest/v1/profils', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SUPA_KEY,
+              'Authorization': 'Bearer ' + data.access_token,
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({
+              id: userId,
+              email: email,
+              prenom: prenom,
+              nom: nom,
+              abonnement: 'gratuit',
+              programme: 'LEGER'
+            })
+          });
+        }
+      } catch(e) { console.error('Erreur creation profil:', e); }
+    }
+    // Si email de confirmation requis, sauvegarder pour après
+    if (!data.access_token && data.user && data.user.id) {
+      try {
+        localStorage.setItem('ftr_pending_profil', JSON.stringify({
+          id: data.user.id,
+          email: email,
+          prenom: prenom,
+          nom: nom
+        }));
+      } catch(e) {}
     }
     return data;
   },
@@ -327,3 +361,52 @@ const sb = {
 
 // Exposer globalement
 window.sb = sb;
+
+// ── Créer le profil depuis les données en attente (après confirmation email) ──
+async function creerProfilSiNecessaire() {
+  try {
+    var session = window.sb._findSession();
+    if (!session || !session.access_token || !session.user) return;
+    var userId = session.user.id;
+    var token = session.access_token;
+
+    // Vérifier si le profil existe déjà
+    var check = await fetch(SUPA_URL + '/rest/v1/profils?id=eq.' + userId + '&select=id', {
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + token }
+    });
+    var existing = await check.json();
+    if (existing && existing.length > 0) return; // profil déjà là
+
+    // Récupérer les données en attente
+    var pending = null;
+    try { pending = JSON.parse(localStorage.getItem('ftr_pending_profil') || 'null'); } catch(e) {}
+
+    var prenom = (pending && pending.prenom) || (session.user.user_metadata && session.user.user_metadata.prenom) || '';
+    var nom    = (pending && pending.nom)    || (session.user.user_metadata && session.user.user_metadata.nom)    || '';
+    var email  = session.user.email || '';
+
+    // Créer le profil
+    await fetch(SUPA_URL + '/rest/v1/profils', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPA_KEY,
+        'Authorization': 'Bearer ' + token,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        id: userId,
+        email: email,
+        prenom: prenom,
+        nom: nom,
+        abonnement: 'gratuit',
+        programme: 'LEGER'
+      })
+    });
+
+    // Nettoyer
+    localStorage.removeItem('ftr_pending_profil');
+  } catch(e) { console.error('Erreur creerProfilSiNecessaire:', e); }
+}
+
+window.creerProfilSiNecessaire = creerProfilSiNecessaire;
