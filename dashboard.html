@@ -987,16 +987,30 @@ async function init() {
   var prenom = getUserPrenom();
   try {
     var token = null, userId = null;
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      try {
-        var s = JSON.parse(raw);
-        var sess = s.access_token ? s : (s.currentSession || null);
-        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
-      } catch(e2) {}
+    // Chercher dans sessionStorage en premier
+    try {
+      var sessRaw = sessionStorage.getItem('sb_session');
+      if (sessRaw) {
+        var sessObj = JSON.parse(sessRaw);
+        if (sessObj && sessObj.access_token) {
+          token = sessObj.access_token;
+          userId = sessObj.user && sessObj.user.id;
+        }
+      }
+    } catch(e3) {}
+    // Puis dans localStorage si pas trouvé
+    if (!token) {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (!k) continue;
+        var raw = localStorage.getItem(k);
+        if (!raw) continue;
+        try {
+          var s = JSON.parse(raw);
+          var sess = s.access_token ? s : (s.currentSession || null);
+          if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
+        } catch(e2) {}
+      }
     }
     if (token && userId) {
       var SUPA_URL_P = 'https://eulkccufeddlhbltekxm.supabase.co';
