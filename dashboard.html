@@ -982,8 +982,32 @@ function deconnexion() {
   };
   function getThemeName(id) { return THEME_NAMES[id] || id; }
 
-function init() {
+async function init() {
+  // Lire le prénom depuis la table profils en priorité
   var prenom = getUserPrenom();
+  try {
+    var token = null, userId = null;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      try {
+        var s = JSON.parse(raw);
+        var sess = s.access_token ? s : (s.currentSession || null);
+        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
+      } catch(e2) {}
+    }
+    if (token && userId) {
+      var SUPA_URL_P = 'https://eulkccufeddlhbltekxm.supabase.co';
+      var SUPA_KEY_P = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g';
+      var resp = await fetch(SUPA_URL_P + '/rest/v1/profils?id=eq.' + userId + '&select=prenom,nom', {
+        headers: { 'apikey': SUPA_KEY_P, 'Authorization': 'Bearer ' + token }
+      });
+      var data = await resp.json();
+      if (data && data[0] && data[0].prenom) prenom = data[0].prenom;
+    }
+  } catch(e) {}
   var nav = document.getElementById("nav-prenom"); if (nav) nav.textContent = prenom;
   var avt = document.getElementById("nav-avatar");
   if (avt) {
