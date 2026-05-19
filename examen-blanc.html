@@ -1120,17 +1120,7 @@ function finishExam() {
   // Sauvegarder dans localStorage (dashboard)
   var _prog = CFG.prog || 'LEGER';
   // Définir la clé stats par utilisateur
-  var _uid2 = (function() {
-    try {
-      for (var ii = 0; ii < localStorage.length; ii++) {
-        var kk = localStorage.key(ii); if (!kk) continue;
-        var rr = localStorage.getItem(kk); if (!rr) continue;
-        var ss = JSON.parse(rr);
-        var se = ss.access_token ? ss : (ss.currentSession || null);
-        if (se && se.user && se.user.id) return se.user.id;
-      }
-    } catch(e2) {} return 'anonymous';
-  })();
+  var _uid2 = getSessionExamen().userId || 'anonymous';
   var _statsKey = 'ftr_stats_' + _uid2;
   var _data = {};
   try { _data = JSON.parse(localStorage.getItem(_statsKey) || '{}') || {}; } catch(e) {}
@@ -1148,18 +1138,8 @@ function finishExam() {
 
   // Sauvegarder dans Supabase (permanent)
   try {
-    var _token = null, _userId = null;
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      try {
-        var s = JSON.parse(raw);
-        var sess = s.access_token ? s : (s.currentSession || null);
-        if (sess && sess.access_token) { _token = sess.access_token; _userId = sess.user && sess.user.id; break; }
-      } catch(e2) {}
-    }
+    var _se2 = getSessionExamen();
+    var _token = _se2.token, _userId = _se2.userId;
     if (_token && _userId) {
       fetch('https://eulkccufeddlhbltekxm.supabase.co/rest/v1/examens', {
         method: 'POST',
