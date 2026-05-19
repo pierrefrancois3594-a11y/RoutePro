@@ -1357,21 +1357,26 @@ window.addEventListener('DOMContentLoaded', () => {
   }, 400);
 });
 
+function getSessionExamen() {
+  try {
+    var raw = sessionStorage.getItem('sb_session');
+    if (raw) { var s = JSON.parse(raw); if (s && s.access_token) return { token: s.access_token, userId: s.user && s.user.id }; }
+  } catch(e) {}
+  try {
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i); if (!k) continue;
+      var raw = localStorage.getItem(k); if (!raw) continue;
+      try { var s = JSON.parse(raw); var sess = s.access_token ? s : (s.currentSession || null); if (sess && sess.access_token) return { token: sess.access_token, userId: sess.user && sess.user.id }; } catch(e2) {}
+    }
+  } catch(e) {}
+  return { token: null, userId: null };
+}
+
 async function checkExamenAccess() {
   var premium = false;
   try {
-    var token = null, userId = null;
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      try {
-        var s = JSON.parse(raw);
-        var sess = s.access_token ? s : (s.currentSession || null);
-        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
-      } catch(e2) {}
-    }
+    var _s = getSessionExamen();
+    var token = _s.token, userId = _s.userId;
     if (token && userId) {
       var resp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/rest/v1/profils?id=eq.' + userId + '&select=abonnement', {
         headers: {
