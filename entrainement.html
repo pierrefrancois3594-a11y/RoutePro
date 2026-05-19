@@ -561,21 +561,10 @@ let revHistory = []; // for filtering
 
 async function checkAccess() {
   var premium = false;
-  var currentUserId = null;
   try {
     var _se = getSessionEntr();
     var token = _se.token;
     var currentUserId = _se.userId;
-    if (true) {
-      var sess = { access_token: token, user: { id: currentUserId } };
-      if (true) {
-        if (sess && sess.access_token) {
-          token = sess.access_token;
-          currentUserId = sess.user && sess.user.id;
-          break;
-        }
-      } catch(e2) {}
-    }
     if (token && currentUserId) {
       var resp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/rest/v1/profils?id=eq.' + currentUserId + '&select=abonnement', {
         headers: {
