@@ -421,22 +421,28 @@
 <script src="banque.js"></script>
 <script>
 
+function getSessionEntr() {
+  try {
+    var raw = sessionStorage.getItem('sb_session');
+    if (raw) { var s = JSON.parse(raw); if (s && s.access_token) return { token: s.access_token, userId: s.user && s.user.id, user: s.user }; }
+  } catch(e) {}
+  try {
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i); if (!k) continue;
+      var raw = localStorage.getItem(k); if (!raw) continue;
+      try { var s = JSON.parse(raw); var sess = s.access_token ? s : (s.currentSession || null); if (sess && sess.access_token) return { token: sess.access_token, userId: sess.user && sess.user.id, user: sess.user }; } catch(e2) {}
+    }
+  } catch(e) {}
+  return { token: null, userId: null, user: null };
+}
+
+
 // ════════════════════════════════════════
 // SAUVEGARDE LOCALSTORAGE → DASHBOARD
 // ════════════════════════════════════════
 function ftrGetUserId() {
-  try {
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      var s = JSON.parse(raw);
-      var sess = s.access_token ? s : (s.currentSession || null);
-      if (sess && sess.user && sess.user.id) return sess.user.id;
-    }
-  } catch(e) {}
-  return 'anonymous';
+  var s = getSessionEntr();
+  return s.userId || 'anonymous';
 }
 
 function ftrStatsKey() {
@@ -468,18 +474,7 @@ function ftrSaveSession(prog, themeId, total, corr) {
 
   // 2. Sauvegarder dans Supabase (permanent)
   try {
-    var token = null, userId = null;
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      try {
-        var s = JSON.parse(raw);
-        var sess = s.access_token ? s : (s.currentSession || null);
-        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
-      } catch(e2) {}
-    }
+    var _se = getSessionEntr(); var token = _se.token, userId = _se.userId;
     if (token && userId) {
       fetch('https://eulkccufeddlhbltekxm.supabase.co/rest/v1/sessions', {
         method: 'POST',
@@ -565,19 +560,15 @@ let revHistory = []; // for filtering
 // ═══════════════════════════════════════════════════
 
 async function checkAccess() {
-  // Vérifier le statut abonnement depuis Supabase (toujours frais)
   var premium = false;
   var currentUserId = null;
   try {
-    var token = null;
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      try {
-        var s = JSON.parse(raw);
-        var sess = s.access_token ? s : (s.currentSession || null);
+    var _se = getSessionEntr();
+    var token = _se.token;
+    var currentUserId = _se.userId;
+    if (true) {
+      var sess = { access_token: token, user: { id: currentUserId } };
+      if (true) {
         if (sess && sess.access_token) {
           token = sess.access_token;
           currentUserId = sess.user && sess.user.id;
@@ -633,39 +624,13 @@ function getQToday() {
 }
 
 function checkQuestionLimit() {
-  // Vérifier que le statut premium correspond au bon utilisateur
-  var currentId = null;
-  try {
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      var s = JSON.parse(raw);
-      var sess = s.access_token ? s : (s.currentSession || null);
-      if (sess && sess.user) { currentId = sess.user.id; break; }
-    }
-  } catch(e) {}
-  // Si l'utilisateur a changé, réinitialiser le statut premium
+  var currentId = getSessionEntr().userId;
   if (window._premiumUserId && currentId && window._premiumUserId !== currentId) {
     window._isPremium = false;
   }
-  // Vérifier que le statut premium est pour le bon utilisateur
-  var curId = null;
-  try {
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (!k) continue;
-      var raw = localStorage.getItem(k);
-      if (!raw) continue;
-      var s = JSON.parse(raw);
-      var sess = s.access_token ? s : (s.currentSession || null);
-      if (sess && sess.user) { curId = sess.user.id; break; }
-    }
-  } catch(e) {}
-  if (window._isPremium && window._premiumUserId === curId) return true;
-  if (window._isPremium && window._premiumUserId !== curId) {
-    window._isPremium = false; // Réinitialiser si utilisateur différent
+  if (window._isPremium && window._premiumUserId === currentId) return true;
+  if (window._isPremium && window._premiumUserId !== currentId) {
+    window._isPremium = false;
   }
   var qToday = getQToday();
   if (qToday >= 10) {
