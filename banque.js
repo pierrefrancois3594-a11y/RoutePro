@@ -5051,13 +5051,40 @@ class QuestionEngine {
     this.history = this._loadHistory();
   }
 
+  // Identifiant de l'utilisateur connecté (sessionStorage ou localStorage)
+  _getUserId() {
+    var stores = [];
+    try { stores.push(sessionStorage); } catch(e) {}
+    try { stores.push(localStorage); } catch(e) {}
+    for (var s = 0; s < stores.length; s++) {
+      var store = stores[s];
+      for (var i = 0; i < store.length; i++) {
+        var k = store.key(i);
+        if (!k) continue;
+        var raw = store.getItem(k);
+        if (!raw) continue;
+        try {
+          var obj = JSON.parse(raw);
+          var sess = obj.access_token ? obj : (obj.currentSession || null);
+          if (sess && sess.user && sess.user.id) return sess.user.id;
+        } catch(e2) {}
+      }
+    }
+    return 'anonymous';
+  }
+
+  // Clé d'historique propre à chaque utilisateur
+  _historyKey() {
+    return 'ftr_q_history_' + this._getUserId();
+  }
+
   _loadHistory() {
-    try { return JSON.parse(localStorage.getItem('ftr_q_history') || '{}'); }
+    try { return JSON.parse(localStorage.getItem(this._historyKey()) || '{}'); }
     catch(e) { return {}; }
   }
 
   _saveHistory() {
-    try { localStorage.setItem('ftr_q_history', JSON.stringify(this.history)); }
+    try { localStorage.setItem(this._historyKey(), JSON.stringify(this.history)); }
     catch(e) {}
   }
 
