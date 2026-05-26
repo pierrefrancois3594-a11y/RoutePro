@@ -825,6 +825,7 @@ function renderQ() {
   q.r.forEach((rep, idx) => {
     const btn = document.createElement('button');
     btn.className = 'opt';
+    btn.dataset.correct = rep.ok === true ? '1' : '0';
     btn.innerHTML = `<div class="olb">${letters[idx]}</div><div class="otxt">${rep.t}</div><div class="oico"></div>`;
     btn.onclick = () => pick(btn, rep, q);
     og.appendChild(btn);
@@ -873,10 +874,17 @@ function pick(btn, rep, q) {
 
   document.querySelectorAll('.opt').forEach(b => {
     b.classList.add('done');
-    const bOk = b.querySelector('.oico').textContent === '✓';
-    if (b === btn) b.classList.add(ok ? 'ok' : 'ko');
-    else if (bOk) b.classList.add('ok');
-    else b.classList.add('dim');
+    const bOk = b.dataset.correct === '1';
+    const ico = b.querySelector('.oico');
+    if (b === btn) {
+      b.classList.add(ok ? 'ok' : 'ko');
+      if (ico) ico.textContent = ok ? '✓' : '✗';
+    } else if (bOk) {
+      b.classList.add('ok');
+      if (ico) ico.textContent = '✓';
+    } else {
+      b.classList.add('dim');
+    }
   });
 
   if (ok) S.corr++; else S.wrong++;
@@ -890,8 +898,24 @@ function pick(btn, rep, q) {
     window.sb.sauvegarderReponse(S.sessionId, q.id, q.prog, q.theme, ok).catch(()=>{});
   }
 
-  // Explication
-  document.getElementById('exp-txt').textContent = q.x;
+  // Explication : message adapté selon le résultat
+  var bonneRep = q.r.find(function(r){ return r.ok === true; }).t;
+  var expEl = document.getElementById('exp-txt');
+  expEl.innerHTML = '';
+  var entete = document.createElement('div');
+  entete.style.fontWeight = '600';
+  entete.style.marginBottom = '6px';
+  if (ok) {
+    entete.style.color = 'var(--green)';
+    entete.textContent = 'Bonne réponse ! C\'était bien : ' + bonneRep;
+  } else {
+    entete.style.color = 'var(--red)';
+    entete.textContent = 'Faux. La bonne réponse : ' + bonneRep;
+  }
+  expEl.appendChild(entete);
+  var corps = document.createElement('div');
+  corps.textContent = q.x;
+  expEl.appendChild(corps);
   document.getElementById('expbox').classList.add('show');
   document.getElementById('btnnext').disabled = false;
   updateSidebar();

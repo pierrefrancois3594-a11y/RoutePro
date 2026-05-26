@@ -647,7 +647,7 @@ const P2_BANK = {
        ctx:`Semaine conducteur PL :\nLundi : 8h conduite, 1h autre\nMardi : 9h conduite, 1h30 autre\nMercredi : 4h conduite, 2h livraison, 3h30 conduite\nJeudi : Repos\nVendredi : 8h conduite, 2h autre`,
        subs:[
          {id:'PL1E2Q1',pts:10,num:'Q 2.1',text:"Total heures de conduite — limite respectée ?",type:'calcul',unit:'h',corr:"32h30 de conduite\n= 8 + 9 + 7,5 + 0 + 8 = 32,5 h\nLimite 56 h/semaine : respectée ✓"},
-         {id:'PL1E2Q2',pts:10,num:'Q 2.2',text:"Mercredi : 4h conduite puis livraison puis 3h30 conduite — règle des 4h30 respectée ?",type:'redige',corr:"Non. La livraison est une période de travail (autre travail), elle n'est PAS une interruption réglementaire au sens du règlement 561/2006.\nSeule une pause sans conduite NI autre travail interrompt le comptage.\n4h conduite + livraison (travail) + 3h30 conduite = 7h30 sans pause valide → règle des 4h30 NON respectée. Une pause de 45 min (ou 15+30 min) était obligatoire."},
+         {id:'PL1E2Q2',pts:10,num:'Q 2.2',text:"Mercredi : 4h conduite puis livraison puis 3h30 conduite — règle des 4h30 respectée ?",type:'redige',corr:"Oui. La livraison de 2h interrompt le comptage des 4h30 continus.\n4h → interruption → 3h30 = aucun dépassement de 4h30 continus ✓"},
          {id:'PL1E2Q3',pts:10,num:'Q 2.3',text:"Calculez le temps de travail total (conduite + autre). Limite respectée ?",type:'calcul',unit:'h',corr:"Travail total = 32,5 + (1 + 1,5 + 2 + 2) = 32,5 + 6,5 = 39 h\nLimite 48 h/semaine : respectée ✓"},
        ]},
       {id:'PL1E3',titre:'Exercice 3 — Gestion financière',totalPts:20,
@@ -911,10 +911,28 @@ function renderQ() {
     optsEl.appendChild(btn);
   });
 
-  // Explication
+  // Explication : message adapté selon le résultat
   const explEl = document.getElementById('p1-expl');
   if (isAnswered && q.x) {
-    document.getElementById('p1-expl-txt').textContent = q.x || q.explication || '';
+    var bonneRep = q.r.find(function(r){ return r.ok === true || r.correct === true; });
+    var bonneRepTxt = bonneRep ? (bonneRep.t || bonneRep.texte || '') : '';
+    var aEuBon = chosenIdx !== undefined && q.r[chosenIdx] && (q.r[chosenIdx].ok === true || q.r[chosenIdx].correct === true);
+    var txtEl = document.getElementById('p1-expl-txt');
+    txtEl.innerHTML = '';
+    var entete = document.createElement('div');
+    entete.style.fontWeight = '600';
+    entete.style.marginBottom = '6px';
+    if (aEuBon) {
+      entete.style.color = '#27C93F';
+      entete.textContent = 'Bonne réponse ! C\'était bien : ' + bonneRepTxt;
+    } else {
+      entete.style.color = '#FF5F56';
+      entete.textContent = 'Faux. La bonne réponse : ' + bonneRepTxt;
+    }
+    txtEl.appendChild(entete);
+    var corps = document.createElement('div');
+    corps.textContent = q.x || q.explication || '';
+    txtEl.appendChild(corps);
     explEl.classList.add('show');
   } else {
     explEl.classList.remove('show');
@@ -1120,7 +1138,17 @@ function finishExam() {
   // Sauvegarder dans localStorage (dashboard)
   var _prog = CFG.prog || 'LEGER';
   // Définir la clé stats par utilisateur
-  var _uid2 = getSessionExamen().userId || 'anonymous';
+  var _uid2 = (function() {
+    try {
+      for (var ii = 0; ii < localStorage.length; ii++) {
+        var kk = localStorage.key(ii); if (!kk) continue;
+        var rr = localStorage.getItem(kk); if (!rr) continue;
+        var ss = JSON.parse(rr);
+        var se = ss.access_token ? ss : (ss.currentSession || null);
+        if (se && se.user && se.user.id) return se.user.id;
+      }
+    } catch(e2) {} return 'anonymous';
+  })();
   var _statsKey = 'ftr_stats_' + _uid2;
   var _data = {};
   try { _data = JSON.parse(localStorage.getItem(_statsKey) || '{}') || {}; } catch(e) {}
@@ -1138,8 +1166,18 @@ function finishExam() {
 
   // Sauvegarder dans Supabase (permanent)
   try {
-    var _se2 = getSessionExamen();
-    var _token = _se2.token, _userId = _se2.userId;
+    var _token = null, _userId = null;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      try {
+        var s = JSON.parse(raw);
+        var sess = s.access_token ? s : (s.currentSession || null);
+        if (sess && sess.access_token) { _token = sess.access_token; _userId = sess.user && sess.user.id; break; }
+      } catch(e2) {}
+    }
     if (_token && _userId) {
       fetch('https://eulkccufeddlhbltekxm.supabase.co/rest/v1/examens', {
         method: 'POST',
@@ -1337,26 +1375,21 @@ window.addEventListener('DOMContentLoaded', () => {
   }, 400);
 });
 
-function getSessionExamen() {
-  try {
-    var raw = sessionStorage.getItem('sb_session');
-    if (raw) { var s = JSON.parse(raw); if (s && s.access_token) return { token: s.access_token, userId: s.user && s.user.id }; }
-  } catch(e) {}
-  try {
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i); if (!k) continue;
-      var raw = localStorage.getItem(k); if (!raw) continue;
-      try { var s = JSON.parse(raw); var sess = s.access_token ? s : (s.currentSession || null); if (sess && sess.access_token) return { token: sess.access_token, userId: sess.user && sess.user.id }; } catch(e2) {}
-    }
-  } catch(e) {}
-  return { token: null, userId: null };
-}
-
 async function checkExamenAccess() {
   var premium = false;
   try {
-    var _s = getSessionExamen();
-    var token = _s.token, userId = _s.userId;
+    var token = null, userId = null;
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (!k) continue;
+      var raw = localStorage.getItem(k);
+      if (!raw) continue;
+      try {
+        var s = JSON.parse(raw);
+        var sess = s.access_token ? s : (s.currentSession || null);
+        if (sess && sess.access_token) { token = sess.access_token; userId = sess.user && sess.user.id; break; }
+      } catch(e2) {}
+    }
     if (token && userId) {
       var resp = await fetch('https://eulkccufeddlhbltekxm.supabase.co/rest/v1/profils?id=eq.' + userId + '&select=abonnement', {
         headers: {
