@@ -4069,7 +4069,7 @@ x:"Les exemptions pour petites quantités (quantités limitées - LQ) sont accor
 {id:4007,prog:'ADR',theme:'adr-gen',d:2,
 e:"La liste des marchandises dangereuses admises au transport est contenue dans :",
 r:[{t:"Le chapitre 2 de l'ADR (Accord Européen Relatif au Transport International des Marchandises Dangereuses par Route)"},{t:"La table A du chapitre 3.2 de l'ADR",ok:true},{t:"L'annexe A du Code des transports"},{t:"Les circulaires ministérielles annuelles"}],
-x:"La table A du chapitre 3.2 de l'ADR liste toutes les matières dangereuses admises au transport avec leur numéro ONU, leur désignation officielle, leur classe, leur groupe d'emballage, les prescriptions d'emballage et les équipements requis."},
+x:"Cette table liste toutes les matières dangereuses admises au transport avec leur numéro ONU, leur désignation officielle, leur classe, leur groupe d'emballage, les prescriptions d'emballage et les équipements requis."},
 
 {id:4008,prog:'ADR',theme:'adr-gen',d:2,
 e:"Le numéro ONU (Organisation des Nations Unies) d'une matière dangereuse sert à :",
@@ -4254,7 +4254,7 @@ x:"Le régime LQ permet de transporter de petites quantités de matières danger
 {id:4044,prog:'ADR',theme:'adr-gen',d:1,
 e:"La liste des matières dangereuses admises au transport ADR (Accord Européen Relatif au Transport International des Marchandises Dangereuses par Route) est contenue dans :",
 r:[{t:"Le chapitre 2 de l'ADR"},{t:"La table A du chapitre 3.2 de l'ADR",ok:true},{t:"L'annexe A du Code des transports"},{t:"Les circulaires ministérielles annuelles"}],
-x:"La table A du chapitre 3.2 de l'ADR liste toutes les matières dangereuses avec leur numéro ONU, désignation officielle, classe, groupe d'emballage, prescriptions d'emballage et équipements requis."},
+x:"Cette table liste toutes les matières dangereuses avec leur numéro ONU, désignation officielle, classe, groupe d'emballage, prescriptions d'emballage et équipements requis."},
 
 {id:4045,prog:'ADR',theme:'adr-gen',d:2,
 e:"Le rapport annuel du CSTMD doit être transmis à :",
