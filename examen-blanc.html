@@ -633,6 +633,86 @@ const P2_BANK = {
          {id:'L3E4Q2',pts:10,num:'Q 4.2',text:"Pour une marchandise de valeur (50 000 €), quelles mesures recommandez-vous pour couvrir le risque ?",type:'redige',corr:"1. Déclaration de valeur sur la lettre de voiture (indemnisation à la valeur déclarée).\n2. Assurance Ad Valorem (valeur réelle) pour ce transport.\n3. Mesures de sécurité : GPS, itinéraire sécurisé.\n4. Sans déclaration de valeur : indemnisation limitée au forfait/kg (très inférieur à 50 000 €)."},
        ]},
     ],
+    [// Sujet 4 — inspiré examen 2020 (Pb 2 — création d'entreprise)
+      {id:'L4E1',titre:'Exercice 1 — Plan de financement',totalPts:30,
+       ctx:`Création d'une SASU TRANS-LIVR :\n• Achat VUL neuf 28 000 € HT\n• Achat ordinateur 1 500 € HT\n• TVA à 20 %\n• Apport personnel : 8 000 €\n• Besoin en fonds de roulement : 4 000 €`,
+       subs:[
+         {id:'L4E1Q1',pts:10,num:'Q 1.1',text:"Calculez le montant TTC à financer (VUL + ordinateur + BFR).",type:'calcul',unit:'€',corr:"VUL TTC = 28 000 × 1,20 = 33 600 €\nOrdi TTC = 1 500 × 1,20 = 1 800 €\nTotal investissements TTC = 35 400 €\nTotal besoin financement = 35 400 + 4 000 = 39 400 €"},
+         {id:'L4E1Q2',pts:10,num:'Q 1.2',text:"Calculez le montant de l'emprunt nécessaire après apport personnel.",type:'calcul',unit:'€',corr:"Emprunt = 39 400 – 8 000 = 31 400 €"},
+         {id:'L4E1Q3',pts:10,num:'Q 1.3',text:"Citez 2 modes de financement alternatifs au prêt bancaire pour le VUL.",type:'redige',corr:"1. Crédit-bail (leasing) : loyers déductibles, préserve trésorerie, option d'achat finale.\n2. Location longue durée (LLD) : loyers mensuels, pas d'option d'achat, restitution finale.\nAutres : apport en compte courant d'associé, prêt d'honneur, microcrédit."},
+       ]},
+      {id:'L4E2',titre:'Exercice 2 — Capacité financière et accès',totalPts:25,ctx:``,
+       subs:[
+         {id:'L4E2Q1',pts:10,num:'Q 2.1',text:"La SASU TRANS-LIVR souhaite exploiter 3 VUL. Quelle capacité financière minimale doit-elle justifier ?",type:'calcul',unit:'€',corr:"Capacité financière transport léger (<3,5t) : 1 800 € pour le 1er véhicule + 900 €/véhicule supplémentaire.\nPour 3 VUL = 1 800 + (2 × 900) = 3 600 €"},
+         {id:'L4E2Q2',pts:8,num:'Q 2.2',text:"Citez les 3 conditions cumulatives d'accès à la profession de transporteur public.",type:'redige',corr:"1. Honorabilité professionnelle (absence de condamnations incompatibles).\n2. Capacité financière (fonds propres minimum selon parc).\n3. Capacité professionnelle (attestation CPC obtenue par examen, équivalence diplôme ou expérience)."},
+         {id:'L4E2Q3',pts:7,num:'Q 2.3',text:"Le gérant de la SASU n'a pas le CPC. Quelles solutions ?",type:'redige',corr:"1. Passer l'examen CPC en CCI.\n2. Faire reconnaître une équivalence de diplôme (BTS Transport, DUT GLT...).\n3. Faire valider l'expérience (10 ans de gestion).\n4. Recourir à un gestionnaire de transport externe mandaté."},
+       ]},
+      {id:'L4E3',titre:'Exercice 3 — Droit social et embauche',totalPts:25,ctx:``,
+       subs:[
+         {id:'L4E3Q1',pts:10,num:'Q 3.1',text:"La SASU embauche un coursier en CDI au SMIC. Quel est le coût mensuel brut chargé en 2026 ? (charges patronales 42 %)",type:'calcul',unit:'€',corr:"SMIC mensuel 2026 = 12,02 € × 151,67 h = 1 823,03 € brut\nCharges patronales = 1 823,03 × 42 % = 765,67 €\nCoût employeur = 1 823,03 + 765,67 = 2 588,70 €"},
+         {id:'L4E3Q2',pts:8,num:'Q 3.2',text:"Formalités obligatoires avant l'embauche du salarié ?",type:'redige',corr:"1. DPAE (Déclaration Préalable À l'Embauche) auprès de l'URSSAF au plus tard le jour de l'embauche.\n2. Visite médicale d'information et de prévention dans les 3 mois.\n3. Inscription au registre unique du personnel.\n4. Affiliation à une caisse de retraite complémentaire."},
+         {id:'L4E3Q3',pts:7,num:'Q 3.3',text:"Pour un coursier embauché en CDI, quelle est la durée maximale de la période d'essai selon la CCNTR ?",type:'redige',corr:"Selon la convention collective nationale des transports routiers, la période d'essai d'un conducteur (incluant coursier VUL) en CDI est de 2 mois non renouvelables."},
+       ]},
+      {id:'L4E4',titre:'Exercice 4 — TVA et auto-entrepreneur',totalPts:20,ctx:``,
+       subs:[
+         {id:'L4E4Q1',pts:10,num:'Q 4.1',text:"Un coursier auto-entrepreneur facture 45 000 € HT en 2026. Doit-il facturer la TVA ? Justifiez.",type:'redige',corr:"Oui. Le seuil de franchise en base de TVA pour les prestations de services est de 37 500 € en 2026 (seuil majoré 41 250 €).\nÀ 45 000 €, le seuil est dépassé : l'auto-entrepreneur doit collecter la TVA à 20 % et la reverser à l'État.\nIl peut aussi récupérer la TVA sur ses achats professionnels."},
+         {id:'L4E4Q2',pts:10,num:'Q 4.2',text:"Calculez les cotisations sociales d'un auto-entrepreneur transporteur (CA 45 000 €) en 2026.",type:'calcul',unit:'€',corr:"Taux 2026 prestations de services BIC (transport pour compte d'autrui) : 21,2 %\nCotisations = 45 000 × 21,2 % = 9 540 €\nNote : à ces cotisations s'ajoute la contribution à la formation professionnelle (CFP)."},
+       ]},
+    ],
+    [// Sujet 5 — inspiré examen 2021 (Pb 2 — analyse financière)
+      {id:'L5E1',titre:'Exercice 1 — Analyse de bilan',totalPts:30,
+       ctx:`Bilan d'une TPE transport léger au 31/12 :\nACTIF : VUL nets 22 000 € | Stocks 800 € | Créances clients 14 500 € | Banque 4 200 €\nPASSIF : Capital 12 000 € | Réserves 3 500 € | Résultat +2 800 € | Emprunts LT 13 000 € | Fournisseurs 6 400 € | Dettes sociales/fiscales 3 800 €`,
+       subs:[
+         {id:'L5E1Q1',pts:10,num:'Q 1.1',text:"Vérifiez l'équilibre du bilan.",type:'calcul',unit:'€',corr:"Total Actif = 22 000 + 800 + 14 500 + 4 200 = 41 500 €\nTotal Passif = 12 000 + 3 500 + 2 800 + 13 000 + 6 400 + 3 800 = 41 500 € ✓"},
+         {id:'L5E1Q2',pts:10,num:'Q 1.2',text:"Calculez le FRNG et indiquez si le financement est équilibré.",type:'calcul',unit:'€',corr:"Capitaux permanents = 12 000 + 3 500 + 2 800 + 13 000 = 31 300 €\nActif immobilisé = 22 000 €\nFRNG = 31 300 – 22 000 = 9 300 € (positif = équilibre respecté ✓)"},
+         {id:'L5E1Q3',pts:10,num:'Q 1.3',text:"Calculez le BFR, la trésorerie nette, et le ratio d'indépendance financière.",type:'calcul',unit:'€',corr:"BFR = (800 + 14 500) – (6 400 + 3 800) = 15 300 – 10 200 = 5 100 €\nTrésorerie nette = FRNG – BFR = 9 300 – 5 100 = 4 200 € ✓\nRatio indép. = Capitaux propres / Dettes financières = 18 300 / 13 000 = 1,41 (>1 = bon)"},
+       ]},
+      {id:'L5E2',titre:'Exercice 2 — Compte de résultat',totalPts:25,
+       ctx:`Compte de résultat simplifié :\nProduits exploitation : 95 000 € | Achats consommés : 28 000 € | Salaires et charges : 38 000 € | Impôts et taxes : 3 200 € | Dotations amort. : 5 800 € | Charges financières : 1 200 € | IS estimé : 25 %`,
+       subs:[
+         {id:'L5E2Q1',pts:10,num:'Q 2.1',text:"Calculez la valeur ajoutée (VA) et l'EBE.",type:'calcul',unit:'€',corr:"VA = 95 000 – 28 000 = 67 000 €\nEBE = VA – impôts/taxes – salaires/charges = 67 000 – 3 200 – 38 000 = 25 800 €"},
+         {id:'L5E2Q2',pts:8,num:'Q 2.2',text:"Calculez le résultat d'exploitation et le résultat net.",type:'calcul',unit:'€',corr:"Résultat exploitation = EBE – Dot. amort. = 25 800 – 5 800 = 20 000 €\nRésultat avant IS = 20 000 – 1 200 = 18 800 €\nIS = 18 800 × 25 % = 4 700 €\nRésultat net = 14 100 €"},
+         {id:'L5E2Q3',pts:7,num:'Q 2.3',text:"Calculez la CAF (méthode additive).",type:'calcul',unit:'€',corr:"CAF = Résultat net + Dotations amortissements\nCAF = 14 100 + 5 800 = 19 900 €"},
+       ]},
+      {id:'L5E3',titre:'Exercice 3 — Sous-traitance et commission',totalPts:25,ctx:``,
+       subs:[
+         {id:'L5E3Q1',pts:10,num:'Q 3.1',text:"Un transporteur VUL réalise 95 000 € de CA dont 21 000 € en sous-traitance. Est-il conforme à la réglementation ?",type:'redige',corr:"Taux de sous-traitance = 21 000 / 95 000 = 22,1 %\nLa limite légale est de 25 % du CA transport pour un transporteur non inscrit au registre des commissionnaires.\n22,1 % < 25 % → conforme ✓\nAu-delà de 25 %, il faudrait s'inscrire comme commissionnaire de transport."},
+         {id:'L5E3Q2',pts:8,num:'Q 3.2',text:"Différence entre transporteur et commissionnaire de transport ?",type:'redige',corr:"Transporteur : exécute lui-même le transport, sa responsabilité couvre le transport effectif.\nCommissionnaire : organise le transport pour le compte d'un donneur d'ordre, sous-traite à des transporteurs. Sa responsabilité est celle du commissionnaire (responsable comme s'il transportait lui-même).\nLe commissionnaire doit être inscrit au registre des commissionnaires."},
+         {id:'L5E3Q3',pts:7,num:'Q 3.3',text:"Délai légal de paiement d'une prestation de transport en France ?",type:'redige',corr:"30 jours à compter de la date d'émission de la facture (loi LME).\nDélai impératif et d'ordre public : il ne peut pas être allongé contractuellement pour le transport.\nEn cas de retard, pénalités automatiques dues (3 fois le taux légal) sans mise en demeure."},
+       ]},
+      {id:'L5E4',titre:'Exercice 4 — Contrat type général',totalPts:20,ctx:``,
+       subs:[
+         {id:'L5E4Q1',pts:10,num:'Q 4.1',text:"Pour un envoi de 5 tonnes selon le contrat type général : qui effectue le chargement ? L'arrimage ?",type:'redige',corr:"Pour un envoi ≥ 3 tonnes, c'est l'expéditeur qui effectue :\n- Le chargement\n- Le calage\n- L'arrimage\nLe transporteur doit surveiller et signaler tout défaut visible.\nPour un envoi < 3 tonnes, ces opérations sont à la charge du transporteur."},
+         {id:'L5E4Q2',pts:10,num:'Q 4.2',text:"Quel est le délai légal pour émettre des réserves en cas de dommage non apparent à la livraison ?",type:'redige',corr:"En transport national, le destinataire dispose de 3 jours non compris les jours fériés à compter de la livraison pour confirmer ses réserves par écrit au transporteur (art. L.133-3 du Code de commerce).\nLes réserves doivent être motivées et adressées par lettre recommandée.\nLes dommages apparents doivent être signalés au moment même de la livraison.\nAttention : sans réserve dans ce délai, le transporteur est libéré de toute responsabilité."},
+       ]},
+    ],
+    [// Sujet 6 — inspiré examen 2023 (Pb 2 — ratios et investissement)
+      {id:'L6E1',titre:'Exercice 1 — Délais de paiement et BFR',totalPts:30,
+       ctx:`Données 2026 :\nCA HT : 110 000 € | Achats HT : 38 000 €\nCréances clients TTC : 18 500 € | Dettes fournisseurs TTC : 6 200 €\nTVA 20 %`,
+       subs:[
+         {id:'L6E1Q1',pts:10,num:'Q 1.1',text:"Calculez le délai moyen de règlement des clients (en jours).",type:'calcul',unit:'jours',corr:"DSO = Créances TTC / CA TTC × 360\nCA TTC = 110 000 × 1,20 = 132 000 €\nDSO = 18 500 / 132 000 × 360 = 50,5 jours"},
+         {id:'L6E1Q2',pts:10,num:'Q 1.2',text:"Calculez le délai moyen de paiement des fournisseurs.",type:'calcul',unit:'jours',corr:"DPO = Dettes fourn. TTC / Achats TTC × 360\nAchats TTC = 38 000 × 1,20 = 45 600 €\nDPO = 6 200 / 45 600 × 360 = 48,9 jours"},
+         {id:'L6E1Q3',pts:10,num:'Q 1.3',text:"Le DSO est-il conforme au délai légal de paiement pour les prestations de transport ? Que faire si non ?",type:'redige',corr:"Le délai légal en transport est de 30 jours à compter de la facture.\nDSO de 50,5 jours = dépassement significatif.\nActions : relances systématiques, pénalités de retard automatiques (3 × taux légal), affacturage, escompte pour paiement rapide, mise en demeure puis injonction de payer."},
+       ]},
+      {id:'L6E2',titre:'Exercice 2 — Investissement et financement',totalPts:25,
+       ctx:`Achat d'un VUL neuf : 32 000 € HT\nOption 1 — Achat comptant\nOption 2 — Crédit-bail 60 mois, loyer 620 €/mois, option d'achat 3 200 €`,
+       subs:[
+         {id:'L6E2Q1',pts:10,num:'Q 2.1',text:"Calculez le coût total du crédit-bail (loyers + option d'achat) sur 5 ans.",type:'calcul',unit:'€',corr:"Total loyers = 620 × 60 = 37 200 €\n+ Option d'achat = 3 200 €\nCoût total crédit-bail = 40 400 €"},
+         {id:'L6E2Q2',pts:8,num:'Q 2.2',text:"Quel est le surcoût du crédit-bail par rapport à l'achat comptant ? En pourcentage du prix ?",type:'calcul',unit:'€',corr:"Surcoût = 40 400 – 32 000 = 8 400 €\nEn % = 8 400 / 32 000 × 100 = 26,25 %\nSoit un coût supplémentaire d'environ 26 % sur 5 ans."},
+         {id:'L6E2Q3',pts:7,num:'Q 2.3',text:"Citez 3 avantages du crédit-bail malgré ce surcoût.",type:'redige',corr:"1. Pas d'apport initial nécessaire — préserve la trésorerie.\n2. Loyers déductibles à 100 % du résultat fiscal.\n3. Pas d'inscription en immobilisation — n'alourdit pas le bilan.\n4. Véhicule récent et entretien souvent inclus.\n5. Souplesse en fin de contrat (achat, restitution, renouvellement)."},
+       ]},
+      {id:'L6E3',titre:'Exercice 3 — Réglementation sociale conducteur VUL',totalPts:25,ctx:``,
+       subs:[
+         {id:'L6E3Q1',pts:10,num:'Q 3.1',text:"Un conducteur VUL est-il soumis à la Réglementation Sociale Européenne (RSE) ?",type:'redige',corr:"Non, la RSE (règlement 561/2006) ne s'applique qu'aux véhicules > 3,5 tonnes de PTAC.\nLes VUL (< 3,5t) sont soumis :\n- Au Code du travail (35h légales, 48h max/semaine)\n- À la convention collective des transports routiers\n- Pour le transport pour compte d'autrui : nouvelles règles européennes 2026 sur les véhicules >2,5t pour le transport international."},
+         {id:'L6E3Q2',pts:8,num:'Q 3.2',text:"Pour un coursier VUL, durée maximale hebdomadaire de travail ?",type:'redige',corr:"Selon le Code du travail :\n- Durée légale : 35 heures/semaine\n- Maximum absolu : 48 heures/semaine\n- Maximum sur 12 semaines glissantes : 44 heures/semaine en moyenne\n- Repos quotidien obligatoire : 11 heures consécutives\n- Repos hebdomadaire : 35 heures consécutives (24h + 11h)"},
+         {id:'L6E3Q3',pts:7,num:'Q 3.3',text:"Le conducteur VUL doit-il avoir la FIMO/FCO ?",type:'redige',corr:"Non. La FIMO (formation initiale) et la FCO (continue tous les 5 ans) ne sont obligatoires que pour les conducteurs de véhicules > 3,5 tonnes (la CQC).\nPour un VUL, seul le permis B est requis.\nLe coursier doit cependant respecter le Code de la route et les règles de sécurité."},
+       ]},
+      {id:'L6E4',titre:'Exercice 4 — Responsabilité et assurances',totalPts:20,ctx:``,
+       subs:[
+         {id:'L6E4Q1',pts:10,num:'Q 4.1',text:"Citez les assurances obligatoires et fortement recommandées pour une TPE de transport léger.",type:'redige',corr:"OBLIGATOIRES :\n- Assurance RC automobile pour chaque véhicule (Code des assurances)\n- Assurance accidents du travail (AT/MP) pour les salariés\nFORTEMENT RECOMMANDÉES :\n- RC professionnelle (responsabilité de transporteur)\n- Assurance marchandises transportées (Ad Valorem)\n- Multirisque locaux et matériel\n- Protection juridique\n- Assurance perte d'exploitation"},
+         {id:'L6E4Q2',pts:10,num:'Q 4.2',text:"Pour une marchandise de 8 000 € avariée pendant le transport (sans déclaration de valeur) : quel est le montant maximal d'indemnisation ? Que faire pour mieux se couvrir ?",type:'redige',corr:"Sans déclaration de valeur, l'indemnisation est plafonnée selon le contrat type :\n- Envois < 3t : 23 €/kg, max 750 € par colis\n- Envois ≥ 3t : 14 €/kg, max 2 300 € par tonne\nPour mieux se couvrir :\n1. Faire une déclaration de valeur sur la lettre de voiture (clausé à 8 000 €)\n2. Souscrire une assurance Ad Valorem couvrant la valeur réelle\n3. Inclure une clause de réserve dans le contrat"},
+       ]},
+    ],
   ],
   LOURD: [
     [// Sujet 1
@@ -686,6 +766,58 @@ const P2_BANK = {
        subs:[
          {id:'PL2E4Q1',pts:8,num:'Q 4.1',text:"Rôle et contenu de la lettre de voiture CMR dans le transport international.",type:'redige',corr:"CMR = document de transport obligatoire pour transports internationaux entre pays signataires.\nContenu : expéditeur, destinataire, lieux chargement/livraison, désignation marchandise, poids, instructions douanières.\nRôle : preuve du contrat, de l'état de la marchandise, référence en cas de litige.\nLimite responsabilité : 8,33 DTS/kg."},
          {id:'PL2E4Q2',pts:7,num:'Q 4.2',text:"Qu'est-ce que le carnet TIR et dans quels cas est-il utilisé ?",type:'redige',corr:"Carnet TIR = document douanier international permettant le transport de marchandises sous scellés douaniers, en suspendant les droits et taxes aux frontières traversées.\nUtilisé pour les transports entre pays membres de la convention TIR (hors UE principalement : Turquie, Maroc, pays CIS…). Évite les contrôles douaniers aux frontières intermédiaires."},
+       ]},
+    ],
+    [// Sujet 3 — inspiré examen 2020 (Pb 1 — transport et coût mutualisé)
+      {id:'PL3E1',titre:'Exercice 1 — Coût de revient ensemble routier 44T',totalPts:35,
+       ctx:`Ensemble articulé 44 tonnes — Données annuelles 2026 :\n• Coût de revient total : 145 000 €\n• Utilisation : 110 000 km sur 230 jours\n• Carburant : 25 % du coût total\n• Autres coûts variables : 15 % du coût total (dont 7 % de péages)\n• Coût personnel conducteur : 23 €/h\n• Durée journalière : 10 h`,
+       subs:[
+         {id:'PL3E1Q1',pts:10,num:'Q 1.1',text:"Calculez le coût de revient kilométrique (CRK) global.",type:'calcul',unit:'€/km',corr:"CRK = 145 000 ÷ 110 000 = 1,318 €/km"},
+         {id:'PL3E1Q2',pts:13,num:'Q 1.2',text:"Calculez la répartition des coûts variables annuels (carburant, péages, autres variables).",type:'calcul',unit:'€',corr:"Carburant = 145 000 × 25 % = 36 250 €\nPéages = 145 000 × 7 % = 10 150 €\nAutres variables = 145 000 × (15 % – 7 %) = 145 000 × 8 % = 11 600 €\nTotal variables = 58 000 € (40 % du coût total)"},
+         {id:'PL3E1Q3',pts:12,num:'Q 1.3',text:"Pour un trajet aller-retour de 850 km (1 jour, conducteur 10h) chargé à l'aller, calculez le coût total puis le prix de vente avec marge de 18 %.",type:'calcul',unit:'€',corr:"Coût km = 1,318 × 850 = 1 120,30 €\nCoût conducteur = 23 × 10 = 230 € (déjà inclus dans CRK, mais à vérifier selon méthode)\nCoût trajet = 1 120,30 €\nPrix vente = 1 120,30 ÷ (1 – 0,18) = 1 120,30 ÷ 0,82 = 1 366,22 €"},
+       ]},
+      {id:'PL3E2',titre:'Exercice 2 — Tachygraphe et RSE',totalPts:30,ctx:``,
+       subs:[
+         {id:'PL3E2Q1',pts:10,num:'Q 2.1',text:"Selon le règlement 561/2006, énoncez les règles principales : conduite journalière, hebdomadaire, sur 2 semaines.",type:'redige',corr:"DURÉE DE CONDUITE :\n- Journalière : 9 h max (10 h max 2 fois/semaine)\n- Hebdomadaire : 56 h max\n- Sur 2 semaines : 90 h max\nPAUSES :\n- Après 4h30 de conduite : pause de 45 min (ou 15+30)\nREPOS :\n- Journalier : 11 h (réductible à 9 h max 3 fois/semaine)\n- Hebdomadaire : 45 h (réductible à 24 h une fois sur 2 semaines, à compenser)"},
+         {id:'PL3E2Q2',pts:10,num:'Q 2.2',text:"Un conducteur a une carte conducteur tachygraphe valable jusqu'au 15/09/2026. Que doit-il faire ?",type:'redige',corr:"La carte conducteur tachygraphe est valable 5 ans.\nLe conducteur doit demander le renouvellement AVANT la date d'expiration (au moins 2 mois avant pour éviter toute interruption).\nDemande auprès de l'imprimerie nationale via le site Chronoservices.\nSans carte valide, il ne peut plus conduire un véhicule > 3,5t équipé de tachygraphe numérique."},
+         {id:'PL3E2Q3',pts:10,num:'Q 2.3',text:"Quelles données sont enregistrées par le tachygraphe numérique ? Durée de conservation par l'entreprise ?",type:'redige',corr:"DONNÉES ENREGISTRÉES :\n- Identité du conducteur (carte insérée)\n- Temps de conduite, repos, autres travaux, disponibilité\n- Vitesse, distance parcourue\n- Positions GNSS (depuis 2024 avec G2V2)\n- Franchissements de frontières (depuis 2025)\n- Événements et anomalies\nCONSERVATION : 1 an minimum par l'entreprise (les fichiers téléchargés)."},
+       ]},
+      {id:'PL3E3',titre:'Exercice 3 — Gestion sociale conducteur grand routier',totalPts:20,
+       ctx:`Conducteur grand routier — Salaire de base 12,50 €/h sur 169h/mois\nIndemnités de grand déplacement : 18 € × 14 nuits\nPrimes diverses : 200 €\nCharges patronales 42 %`,
+       subs:[
+         {id:'PL3E3Q1',pts:10,num:'Q 3.1',text:"Calculez le salaire brut mensuel total.",type:'calcul',unit:'€',corr:"Salaire de base = 12,50 × 169 = 2 112,50 €\nIGD = 14 × 18 = 252 € (généralement non soumises à cotisations)\nPrimes = 200 €\nSalaire brut soumis = 2 112,50 + 200 = 2 312,50 €\nTotal brut perçu = 2 312,50 + 252 = 2 564,50 €"},
+         {id:'PL3E3Q2',pts:10,num:'Q 3.2',text:"Calculez le coût total employeur (sur le salaire brut soumis aux cotisations).",type:'calcul',unit:'€',corr:"Cotisations patronales = 2 312,50 × 42 % = 971,25 €\nCoût employeur = 2 312,50 + 971,25 + 252 (IGD) = 3 535,75 €"},
+       ]},
+      {id:'PL3E4',titre:'Exercice 4 — Transport international',totalPts:15,ctx:``,
+       subs:[
+         {id:'PL3E4Q1',pts:8,num:'Q 4.1',text:"Un transporteur français livre des marchandises en Allemagne puis effectue 2 livraisons internes en Allemagne avant de rentrer. Est-ce conforme à la réglementation cabotage ?",type:'redige',corr:"Oui, conforme.\nRègle UE (règlement 1072/2009) : après un transport international entrant, un transporteur peut effectuer maximum 3 opérations de cabotage dans le pays d'arrivée, dans les 7 jours suivant le déchargement complet.\nIci : 2 opérations < 3, dans les 7 jours → conforme.\nObligation : déclaration de détachement via la plateforme IMI avant chaque mission."},
+         {id:'PL3E4Q2',pts:7,num:'Q 4.2',text:"Quels documents sont obligatoires à bord lors d'un transport France → Allemagne ?",type:'redige',corr:"DOCUMENTS DU VÉHICULE :\n- Carte grise + certificat assurance + contrôle technique\nDOCUMENTS DE L'ENTREPRISE :\n- Copie certifiée de la licence communautaire\nDOCUMENTS DU CONDUCTEUR :\n- Permis CE + CQC valide + carte conducteur tachygraphe\nDOCUMENTS DU TRANSPORT :\n- Lettre de voiture CMR (3 exemplaires)\n- Déclaration de détachement IMI si cabotage\n- Attestation conducteur (si ressortissant hors UE)"},
+       ]},
+    ],
+    [// Sujet 4 — inspiré examen 2022 (Pb 1 — coût et planification)
+      {id:'PL4E1',titre:'Exercice 1 — Détermination du coût par client',totalPts:35,
+       ctx:`Mission de transport pour 2 clients A et B partageant un même véhicule :\n• Coût total du véhicule + conducteur : 4 200 €\n• Trajet total : 1 600 km\n• Client A : 1 100 km (chargement à 60 %)\n• Client B : 500 km (chargement à 40 %)`,
+       subs:[
+         {id:'PL4E1Q1',pts:10,num:'Q 1.1',text:"Calculez la répartition du coût au km parcouru.",type:'calcul',unit:'€',corr:"Coût km = 4 200 ÷ 1 600 = 2,625 €/km\nClient A : 1 100 × 2,625 = 2 887,50 €\nClient B : 500 × 2,625 = 1 312,50 €\nTotal = 4 200 € ✓"},
+         {id:'PL4E1Q2',pts:13,num:'Q 1.2',text:"Calculez la répartition du coût au volume de chargement (60 %/40 %).",type:'calcul',unit:'€',corr:"Client A : 4 200 × 60 % = 2 520 €\nClient B : 4 200 × 40 % = 1 680 €\nTotal = 4 200 € ✓"},
+         {id:'PL4E1Q3',pts:12,num:'Q 1.3',text:"Quelle méthode est la plus équitable ? Pour quel cas chaque méthode est-elle adaptée ?",type:'redige',corr:"Méthode km : adaptée quand les chargements sont similaires en volume/poids, ou quand seul le déplacement compte.\nMéthode volume : adaptée pour des marchandises de volumes très différents (palettes pleines vs partielles).\nLa méthode la plus équitable dépend de la nature du transport. En pratique, on combine souvent les deux (méthode mixte) en pondérant 50/50 ou selon le contrat."},
+       ]},
+      {id:'PL4E2',titre:'Exercice 2 — Plan d\'exploitation et RSE',totalPts:30,
+       ctx:`Mission Toulouse → Lille (800 km) :\nDépart 06:00 lundi\nVitesse moyenne 70 km/h\nChargement à 06:00 (45 min)\nDéchargement à l\'arrivée (1h)`,
+       subs:[
+         {id:'PL4E2Q1',pts:10,num:'Q 2.1',text:"Calculez le temps de conduite pour 800 km à 70 km/h moyenne.",type:'calcul',unit:'h',corr:"Temps conduite = 800 ÷ 70 = 11,43 h soit 11h26 min\nMais limite RSE : 9 h max/jour (ou 10 h max 2 fois/semaine)\nIl faut donc fractionner sur 2 jours ou utiliser une extension à 10 h."},
+         {id:'PL4E2Q2',pts:10,num:'Q 2.2',text:"Planifiez la mission en respectant la RSE (pauses, conduite max, repos).",type:'redige',corr:"Lundi :\n06:00-06:45 : Chargement (autres travaux)\n06:45-11:15 : 4h30 conduite\n11:15-12:00 : Pause obligatoire 45 min\n12:00-15:30 : 3h30 conduite (total jour = 8 h)\n15:30-16:30 : Repos avant arrivée prévue\n→ Reste 200 km soit ~3 h de conduite\nMardi :\nReprise après 11h de repos minimum (à partir de 03:30)\nFin de mission + déchargement\nTotal sur 2 jours : 11h26 de conduite < 18h max sur 2 jours ✓"},
+         {id:'PL4E2Q3',pts:10,num:'Q 2.3',text:"Que se passe-t-il si le conducteur dépasse les temps de conduite ? Quelles sanctions ?",type:'redige',corr:"SANCTIONS RÉGLEMENTAIRES :\n- Contravention selon la gravité : 4ème classe (135 €) à 5ème classe (1 500 €)\n- Immobilisation du véhicule possible\nSANCTIONS ADMINISTRATIVES (entreprise) :\n- Avis de la CTSA (Commission Territoriale)\n- Possibilité de retrait temporaire de la licence\nSANCTIONS PÉNALES en cas d'accident :\n- Mise en danger de la vie d'autrui\n- Responsabilité aggravée employeur (organisation impossible à respecter)"},
+       ]},
+      {id:'PL4E3',titre:'Exercice 3 — Indexation carburant et révision tarifaire',totalPts:20,ctx:``,
+       subs:[
+         {id:'PL4E3Q1',pts:10,num:'Q 3.1',text:"Qu'est-ce qu'une clause d'indexation gazole dans un contrat de transport ? À quoi sert-elle ?",type:'redige',corr:"La clause d'indexation gazole permet d'ajuster automatiquement le prix de transport en fonction des variations du prix du carburant.\nSERT À :\n- Protéger le transporteur contre les hausses du carburant\n- Préserver la marge sur des contrats longs (plusieurs mois/années)\nMÉCANISME :\n- Indice de référence (CNR, INSEE...)\n- Variation mensuelle ou trimestrielle\n- Formule : Nouveau prix = Prix initial × (1 + α × (Indice nouveau / Indice référence – 1))\n- α = part du carburant dans le prix (généralement 25-30 % en transport PL)"},
+         {id:'PL4E3Q2',pts:10,num:'Q 3.2',text:"Le CNR publie un indice gazole en hausse de 8 %. Le carburant représente 28 % du coût total. Quelle révision tarifaire ?",type:'calcul',unit:'%',corr:"Révision = 28 % × 8 % = 2,24 %\nLe prix de transport doit être augmenté de 2,24 % pour absorber la hausse du carburant.\nEx. sur un contrat à 5 000 € : nouveau prix = 5 000 × 1,0224 = 5 112 €\nEn pratique, application via clause contractuelle automatique."},
+       ]},
+      {id:'PL4E4',titre:'Exercice 4 — Sous-traitance et responsabilités',totalPts:15,ctx:``,
+       subs:[
+         {id:'PL4E4Q1',pts:8,num:'Q 4.1',text:"Une entreprise PL réalise 280 000 € de CA transport dont 84 000 € en sous-traitance. Est-ce légal ?",type:'redige',corr:"Taux sous-traitance = 84 000 / 280 000 = 30 %\nLimite légale = 25 % pour un transporteur non inscrit au registre des commissionnaires.\n30 % > 25 % → DÉPASSEMENT → infraction.\nL'entreprise doit s'inscrire au registre des commissionnaires de transport pour régulariser, sinon réduire son taux de sous-traitance."},
+         {id:'PL4E4Q2',pts:7,num:'Q 4.2',text:"Quelle est la responsabilité du donneur d'ordre en cas d'infraction du sous-traitant (temps de conduite) ?",type:'redige',corr:"Le donneur d'ordre est SOLIDAIREMENT responsable des infractions sociales commises par le sous-traitant si elles résultent d'une organisation rendant ces infractions inévitables.\nObligations du donneur d'ordre :\n- Vérifier la régularité du sous-traitant (registre transport, attestations sociales)\n- Ne pas imposer des délais incompatibles avec la RSE\n- Demander attestation de vigilance URSSAF tous les 6 mois\nSanctions : amende, sanctions administratives, responsabilité civile et pénale."},
        ]},
     ],
   ],
