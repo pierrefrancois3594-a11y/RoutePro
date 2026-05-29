@@ -1140,19 +1140,75 @@ function endP1(timeout) {
 // ════════════════════════════════════════
 // PARTIE 2
 // ════════════════════════════════════════
-function startP2() {
-  // Rotation des sujets P2
+// ── Récupère l'historique des sujets P2 déjà passés (Supabase > localStorage) ──
+async function getP2History(prog) {
+  const histKey = `ftr_p2_hist_${prog}`;
+
+  // 1. Si connecté → lire depuis Supabase (examens déjà passés)
+  if (window.sb && window.sb.estConnecte()) {
+    try {
+      const user = window.sb._user();
+      const token = window.sb._token();
+      if (user && token) {
+        const resp = await fetch(
+          `https://eulkccufeddlhbltekxm.supabase.co/rest/v1/examens?user_id=eq.${user.id}&programme=eq.${prog}&select=sujet_id&order=created_at.desc&limit=100`,
+          { headers: { 'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1bGtjY3VmZWRkbGhibHRla3htIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMjk3NTUsImV4cCI6MjA5MzYwNTc1NX0._2ozGx0-RRpKqxXlvZpYnmXqO_8IIg8y9cO5g4J9g2g', 'Authorization': 'Bearer ' + token } }
+        );
+        const rows = await resp.json();
+        if (Array.isArray(rows)) {
+          // Extraire les indices numériques des sujet_id (format "LEGER-3" → 2)
+          const used = rows
+            .map(r => r.sujet_id)
+            .filter(Boolean)
+            .map(sid => {
+              const m = sid.match(/-(\d+)$/);
+              return m ? parseInt(m[1]) - 1 : null;
+            })
+            .filter(n => n !== null && !isNaN(n));
+          return [...new Set(used)]; // dédoublonner
+        }
+      }
+    } catch(e) {}
+  }
+
+  // 2. Fallback : localStorage (non connecté ou erreur réseau)
+  try {
+    return JSON.parse(localStorage.getItem(histKey) || '[]');
+  } catch { return []; }
+}
+
+// ── Sauvegarde l'historique local (fallback si non connecté) ──
+function saveP2HistoryLocal(prog, hist) {
+  try {
+    const histKey = `ftr_p2_hist_${prog}`;
+    localStorage.setItem(histKey, JSON.stringify(hist));
+  } catch {}
+}
+
+async function startP2() {
   const bank = P2_BANK[CFG.prog] || P2_BANK.LEGER;
-  const histKey = `rp_p2_hist_${CFG.prog}`;
-  let hist = [];
-  try { hist = JSON.parse(sessionStorage.getItem(histKey) || '[]'); } catch {}
-  const used = new Set(hist);
+
+  // Afficher un loader pendant la récupération de l'historique
+  document.getElementById('p2-badge-lbl').textContent = 'Chargement du sujet…';
+  showPage('partie2');
+
+  // Récupérer l'historique des sujets déjà passés (Supabase ou localStorage)
+  const usedList = await getP2History(CFG.prog);
+  const used = new Set(usedList);
+
+  // Choisir parmi les sujets non encore vus
   const available = bank.map((_, i) => i).filter(i => !used.has(i));
-  const pool = available.length > 0 ? available : bank.map((_, i) => i);
+  const pool = available.length > 0 ? available : bank.map((_, i) => i); // reset si tous vus
+
   const chosenIdx = pool[Math.floor(Math.random() * pool.length)];
-  hist.push(chosenIdx);
-  if (hist.length >= bank.length) hist = []; // réinitialise quand tous faits
-  try { sessionStorage.setItem(histKey, JSON.stringify(hist)); } catch {}
+
+  // Sauvegarder localement (backup si déconnecté)
+  const newHist = [...usedList, chosenIdx];
+  const finalHist = newHist.length >= bank.length ? [] : newHist;
+  saveP2HistoryLocal(CFG.prog, finalHist);
+
+  // Stocker l'ID du sujet pour la sauvegarde Supabase à la fin
+  CFG.sujetId = `${CFG.prog}-${chosenIdx + 1}`;
 
   P2.exercises = bank[chosenIdx];
   P2.selfEval = {};
@@ -1161,7 +1217,6 @@ function startP2() {
   document.getElementById('p2-badge-lbl').textContent = `Partie 2 — Sujet ${sujetNum} / ${bank.length}`;
 
   renderP2();
-  showPage('partie2');
 }
 
 function renderP2() {
