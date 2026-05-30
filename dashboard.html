@@ -7,78 +7,61 @@
   <meta charset="UTF-8"/>
   <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ForgeTaRoute – Mon espace</title>
+  <title>ForgeTaRoute – Mon tableau de bord</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <script src="supabase.js"></script>
-  <script src="stripe.js"></script>
-  <script src="banque.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--navy:#0B1829;--navy-mid:#132338;--navy-lt:#1C3252;--orange:#F26522;--orange-lt:#FF8A4C;--steel:#8FA3B8;--steel-lt:#C4D4E2;--white:#F0F4F8;--green:#27C93F;--red:#FF5F56;--blue:#3B82F6;--display:'Barlow Condensed',sans-serif;--body:'Barlow',sans-serif;--mono:'JetBrains Mono',monospace;--sidebar-w:220px}
-    body{background:var(--navy);color:var(--white);font-family:var(--body);font-size:15px;min-height:100vh;display:flex;flex-direction:column}
-    nav{position:sticky;top:0;z-index:200;background:rgba(11,24,41,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(143,163,184,.1);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-    .nav-logo{font-family:var(--display);font-size:20px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+    :root{--navy:#0B1829;--navy-mid:#132338;--navy-lt:#1C3252;--orange:#F26522;--orange-lt:#FF8A4C;--steel:#8FA3B8;--steel-lt:#C4D4E2;--white:#F0F4F8;--green:#27C93F;--red:#FF5F56;--blue:#3B82F6;--display:'Barlow Condensed',sans-serif;--body:'Barlow',sans-serif;--mono:'JetBrains Mono',monospace}
+    body{background:var(--navy);color:var(--white);font-family:var(--body);font-size:15px;min-height:100vh}
+    a{color:inherit;text-decoration:none}
+    nav{position:sticky;top:0;z-index:100;background:rgba(11,24,41,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(143,163,184,.1);padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between}
+    .nav-logo{font-family:var(--display);font-size:22px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:10px}
     .nav-logo .accent{color:var(--orange)}
-    .logo-icon{width:30px;height:30px;background:var(--orange);border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .nav-right{display:flex;align-items:center;gap:10px}
+    .logo-icon{width:32px;height:32px;background:var(--orange);border-radius:6px;display:flex;align-items:center;justify-content:center}
+    .nav-right{display:flex;align-items:center;gap:12px}
     .nav-user{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--steel-lt)}
-    .nav-avatar{width:30px;height:30px;border-radius:50%;background:var(--orange);font-family:var(--display);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;color:white;flex-shrink:0}
-    .nav-btn{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:7px 16px;border-radius:3px;border:1px solid rgba(143,163,184,.2);color:var(--steel-lt);cursor:pointer;background:none;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+    .nav-avatar{width:32px;height:32px;border-radius:50%;background:var(--orange);font-family:var(--display);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;color:white;overflow:hidden;flex-shrink:0} .nav-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+    .nav-btn{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:8px 18px;border-radius:3px;border:1px solid rgba(143,163,184,.2);color:var(--steel-lt);cursor:pointer;background:none;transition:all .2s}
     .nav-btn:hover{background:var(--navy-lt);color:var(--white)}
     .nav-btn.primary{background:var(--orange);border-color:var(--orange);color:white}
     .nav-btn.primary:hover{background:var(--orange-lt)}
     .nav-btn.danger{border-color:rgba(255,95,86,.3);color:var(--red)}
     .nav-btn.danger:hover{background:rgba(255,95,86,.1)}
-    .app-body{display:flex;flex:1;min-height:0}
-    .sidebar{width:var(--sidebar-w);flex-shrink:0;background:var(--navy-mid);border-right:1px solid rgba(143,163,184,.08);display:flex;flex-direction:column;padding:20px 0;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto}
-    .sb-label{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);padding:0 18px;margin-bottom:4px;margin-top:18px}
-    .sb-label:first-child{margin-top:0}
-    .sb-item{display:flex;align-items:center;gap:9px;padding:9px 18px;font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--steel);cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:all .18s;border-left:3px solid transparent;text-decoration:none;white-space:nowrap}
-    .sb-item:hover{background:rgba(143,163,184,.06);color:var(--steel-lt)}
-    .sb-item.active{background:rgba(242,101,34,.09);color:var(--orange);border-left-color:var(--orange)}
-    .sb-ico{font-size:14px;width:16px;text-align:center;flex-shrink:0}
-    .sb-divider{height:1px;background:rgba(143,163,184,.07);margin:10px 18px}
-    .sb-premium{margin:auto 14px 0;padding:12px 14px;background:linear-gradient(135deg,rgba(242,101,34,.1),rgba(242,101,34,.03));border:1px solid rgba(242,101,34,.16);border-radius:6px;text-align:center}
-    .sb-premium-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin-bottom:5px}
-    .sb-premium p{font-size:11px;color:var(--steel);line-height:1.5;margin-bottom:8px}
-    .sb-premium-btn{display:block;width:100%;font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:8px;border-radius:3px;background:var(--orange);color:white;border:none;cursor:pointer;text-decoration:none;text-align:center;transition:background .2s}
-    .sb-premium-btn:hover{background:var(--orange-lt)}
-    .main-content{flex:1;overflow-y:auto;padding:28px 32px 60px;min-width:0}
-    .view{display:none}
-    .view.active{display:block}
-    .dash-header{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(143,163,184,.08);display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
-    .dash-header h1{font-family:var(--display);font-size:30px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1}
+    .page{max-width:1200px;margin:0 auto;padding:40px 40px 80px}
+    .dash-header{margin-bottom:32px;padding-bottom:24px;border-bottom:1px solid rgba(143,163,184,.1);display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px}
+    .dash-header h1{font-family:var(--display);font-size:36px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1}
     .dash-header h1 span{color:var(--orange)}
-    .dash-header p{color:var(--steel);font-size:13px;margin-top:4px}
-    .header-btns{display:flex;gap:8px}
-    .btn{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:8px 18px;border-radius:3px;border:none;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block}
+    .dash-header p{color:var(--steel);font-size:13px;margin-top:6px}
+    .header-btns{display:flex;gap:10px}
+    .btn{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:9px 20px;border-radius:3px;border:none;cursor:pointer;transition:all .2s}
     .btn-primary{background:var(--orange);color:white}
     .btn-primary:hover{background:var(--orange-lt)}
     .btn-ghost{background:none;border:1px solid rgba(143,163,184,.2);color:var(--steel-lt)}
     .btn-ghost:hover{background:var(--navy-lt);color:var(--white)}
-    .tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
-    .tab{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:3px;cursor:pointer;border:1px solid rgba(143,163,184,.15);color:var(--steel);background:none;transition:all .2s}
+    .tabs{display:flex;gap:6px;margin-bottom:28px;flex-wrap:wrap}
+    .tab{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:8px 18px;border-radius:3px;cursor:pointer;border:1px solid rgba(143,163,184,.15);color:var(--steel);background:none;transition:all .2s}
     .tab:hover{border-color:rgba(242,101,34,.4);color:var(--orange-lt)}
     .tab.active{background:var(--orange);border-color:var(--orange);color:white}
     .tab-content{display:none}
     .tab-content.active{display:block}
-    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-    .stat{background:var(--navy-mid);border:1px solid rgba(143,163,184,.08);border-radius:6px;padding:18px;position:relative;overflow:hidden}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .stat{background:var(--navy-mid);border:1px solid rgba(143,163,184,.08);border-radius:6px;padding:20px;position:relative;overflow:hidden}
     .stat::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--orange)}
     .stat.blue::before{background:var(--blue)}
     .stat.green::before{background:var(--green)}
     .stat.red::before{background:var(--red)}
-    .stat-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);margin-bottom:6px}
-    .stat-val{font-family:var(--display);font-size:30px;font-weight:800;line-height:1}
-    .stat-val small{font-size:14px;color:var(--steel)}
-    .stat-sub{font-size:11px;color:var(--steel);margin-top:3px}
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-    .card{background:var(--navy-mid);border:1px solid rgba(143,163,184,.08);border-radius:6px;padding:20px}
-    .card-title{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--steel-lt);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+    .stat-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);margin-bottom:8px}
+    .stat-val{font-family:var(--display);font-size:34px;font-weight:800;line-height:1}
+    .stat-val small{font-size:16px;color:var(--steel)}
+    .stat-sub{font-size:12px;color:var(--steel);margin-top:4px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+    .card{background:var(--navy-mid);border:1px solid rgba(143,163,184,.08);border-radius:6px;padding:24px}
+    .card-title{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--steel-lt);margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
     .badge{font-family:var(--mono);font-size:10px;background:rgba(143,163,184,.08);border:1px solid rgba(143,163,184,.12);color:var(--steel);padding:3px 10px;border-radius:2px}
     .prog-list{display:flex;flex-direction:column;gap:12px}
-    .prog-meta{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+    .prog-item{}
+    .prog-meta{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px}
     .prog-name{color:var(--steel-lt)}
     .prog-pct{font-family:var(--mono);font-size:11px;color:var(--steel)}
     .prog-bar{height:5px;background:rgba(143,163,184,.1);border-radius:3px;overflow:hidden}
@@ -86,230 +69,107 @@
     .prog-fill.green{background:var(--green)}
     .prog-fill.red{background:var(--red)}
     .act-list{display:flex;flex-direction:column}
-    .act-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(143,163,184,.06);font-size:12px}
+    .act-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(143,163,184,.06);font-size:13px}
     .act-item:last-child{border-bottom:none}
-    .act-ico{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+    .act-ico{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
     .act-ico.green{background:rgba(39,201,63,.12)}
     .act-ico.orange{background:rgba(242,101,34,.12)}
     .act-ico.red{background:rgba(255,95,86,.12)}
     .act-body{flex:1}
     .act-title{color:var(--steel-lt)}
-    .act-sub{font-size:10px;color:var(--steel)}
-    .act-right{text-align:right;flex-shrink:0;font-family:var(--mono);font-size:11px}
-    .act-score{font-size:14px;font-weight:600}
+    .act-sub{font-size:11px;color:var(--steel)}
+    .act-right{text-align:right;flex-shrink:0;font-family:var(--mono);font-size:12px}
+    .act-score{font-size:15px;font-weight:600}
     .act-score.good{color:var(--green)}
     .act-score.mid{color:var(--orange)}
     .act-score.bad{color:var(--red)}
-    .act-date{font-size:10px;color:var(--steel)}
-    .exam-list{display:flex;flex-direction:column;gap:8px}
-    .exam-item{background:rgba(143,163,184,.04);border:1px solid rgba(143,163,184,.08);border-radius:4px;padding:12px 14px;display:flex;align-items:center;gap:12px}
-    .exam-badge{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:2px;flex-shrink:0}
+    .act-date{font-size:11px;color:var(--steel)}
+    .exam-list{display:flex;flex-direction:column;gap:10px}
+    .exam-item{background:rgba(143,163,184,.04);border:1px solid rgba(143,163,184,.08);border-radius:4px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+    .exam-badge{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:2px;flex-shrink:0}
     .exam-badge.leger{background:rgba(59,130,246,.12);color:#60A5FA}
     .exam-badge.lourd{background:rgba(242,101,34,.12);color:var(--orange-lt)}
     .exam-badge.adr{background:rgba(39,201,63,.12);color:#4ADE80}
     .exam-info{flex:1}
-    .exam-name{font-size:12px;color:var(--steel-lt);font-weight:500}
-    .exam-meta{font-size:10px;color:var(--steel);margin-top:2px}
+    .exam-name{font-size:13px;color:var(--steel-lt);font-weight:500}
+    .exam-meta{font-size:11px;color:var(--steel);margin-top:2px}
     .exam-result{text-align:right}
-    .exam-score{font-family:var(--display);font-size:20px;font-weight:800;line-height:1}
+    .exam-score{font-family:var(--display);font-size:22px;font-weight:800;line-height:1}
     .exam-score.pass{color:var(--green)}
     .exam-score.fail{color:var(--red)}
     .exam-score.mid{color:var(--orange)}
-    .exam-verdict{font-size:10px;color:var(--steel)}
-    .goal-list{display:flex;flex-direction:column;gap:8px}
-    .goal-item{display:flex;align-items:center;gap:12px;padding:9px 12px;background:rgba(143,163,184,.04);border:1px solid rgba(143,163,184,.08);border-radius:4px}
-    .goal-check{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+    .exam-verdict{font-size:11px;color:var(--steel)}
+    .goal-list{display:flex;flex-direction:column;gap:10px}
+    .goal-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(143,163,184,.04);border:1px solid rgba(143,163,184,.08);border-radius:4px}
+    .goal-check{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
     .goal-check.done{background:rgba(39,201,63,.15);color:var(--green)}
     .goal-check.todo{background:rgba(143,163,184,.08);color:var(--steel);border:1px dashed rgba(143,163,184,.2)}
-    .goal-txt{flex:1;font-size:12px;color:var(--steel-lt)}
-    .goal-status{font-size:10px;color:var(--steel);font-family:var(--mono)}
+    .goal-txt{flex:1;font-size:13px;color:var(--steel-lt)}
+    .goal-status{font-size:11px;color:var(--steel);font-family:var(--mono)}
     .donut-wrap{display:flex;align-items:center;gap:20px}
     .donut-legend{flex:1}
-    .donut-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--steel-lt);margin-bottom:7px}
+    .donut-row{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--steel-lt);margin-bottom:8px}
     .donut-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
     .donut-pct{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--steel)}
-    .empty{text-align:center;padding:28px 20px;color:var(--steel)}
-    .empty-icon{font-size:28px;margin-bottom:8px;opacity:.4}
-    .empty p{font-size:12px;margin-bottom:12px}
-    .prog-filter{display:flex;gap:6px;margin-bottom:12px}
+    .empty{text-align:center;padding:30px 20px;color:var(--steel)}
+    .empty-icon{font-size:32px;margin-bottom:10px;opacity:.4}
+    .empty p{font-size:13px;margin-bottom:14px}
+    .prog-filter{display:flex;gap:6px;margin-bottom:14px}
     .pf-btn{font-family:var(--display);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 12px;border-radius:3px;cursor:pointer;border:1px solid rgba(143,163,184,.15);color:var(--steel);background:none;transition:all .2s}
     .pf-btn.active{background:var(--orange);border-color:var(--orange);color:white}
-    .qcm-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
-    .qcm-card{background:var(--navy-mid);border:1px solid rgba(143,163,184,.08);border-radius:6px;padding:18px;cursor:pointer;transition:all .2s}
-    .qcm-card:hover{border-color:rgba(242,101,34,.4);transform:translateY(-1px);background:rgba(242,101,34,.04)}
-    .qcm-card-ico{font-size:22px;margin-bottom:8px}
-    .qcm-card-title{font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--white);margin-bottom:4px}
-    .qcm-card-sub{font-size:11px;color:var(--steel);line-height:1.4}
-    .qcm-card-count{font-family:var(--mono);font-size:10px;color:var(--orange);margin-top:8px}
-    .sb-toggle{display:none;align-items:center;justify-content:center;width:34px;height:34px;background:rgba(143,163,184,.08);border:1px solid rgba(143,163,184,.15);border-radius:4px;cursor:pointer;font-size:16px;color:var(--steel-lt);flex-shrink:0}
-    @media(max-width:900px){.stats-grid{grid-template-columns:1fr 1fr}.grid-2{grid-template-columns:1fr}.qcm-cards{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:700px){:root{--sidebar-w:210px}.sidebar{position:fixed;left:-220px;top:60px;height:calc(100vh - 60px);z-index:150;transition:left .25s;box-shadow:4px 0 20px rgba(0,0,0,.4)}.sidebar.open{left:0}.main-content{padding:20px 14px 40px}.qcm-cards{grid-template-columns:1fr 1fr}.sb-toggle{display:flex !important}}
-    @media(max-width:480px){.stats-grid{grid-template-columns:1fr 1fr}.qcm-cards{grid-template-columns:1fr}}
+    @media(max-width:900px){.stats-grid{grid-template-columns:1fr 1fr}.grid-2{grid-template-columns:1fr}}
+    @media(max-width:600px){nav{padding:0 20px}.page{padding:24px 20px}.stats-grid{gap:10px}}
   </style>
 </head>
 <body>
 
 <nav>
-  <div style="display:flex;align-items:center;gap:12px">
-    <button class="sb-toggle" onclick="toggleSidebar()" title="Menu">☰</button>
-    <a href="dashboard.html" class="nav-logo">
-      <div class="logo-icon">
-        <svg width="17" height="17" viewBox="0 0 18 18" fill="none">
-          <rect x="1" y="8" width="16" height="3" rx="1.5" fill="white"/>
-          <rect x="3" y="4" width="12" height="3" rx="1.5" fill="white" opacity=".6"/>
-          <rect x="3" y="11" width="12" height="3" rx="1.5" fill="white" opacity=".6"/>
-          <circle cx="5" cy="15" r="2" fill="white"/><circle cx="13" cy="15" r="2" fill="white"/>
-        </svg>
-      </div>
-      Forge<span class="accent">Ta</span>Route
-    </a>
-  </div>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <rect x="1" y="8" width="16" height="3" rx="1.5" fill="white"/>
+        <rect x="3" y="4" width="12" height="3" rx="1.5" fill="white" opacity=".6"/>
+        <rect x="3" y="11" width="12" height="3" rx="1.5" fill="white" opacity=".6"/>
+        <circle cx="5" cy="15" r="2" fill="white"/>
+        <circle cx="13" cy="15" r="2" fill="white"/>
+      </svg>
+    </div>
+    Forge<span class="accent">Ta</span>Route
+  </a>
   <div class="nav-right">
     <div class="nav-user">
       <div class="nav-avatar" id="nav-avatar">?</div>
-      <span id="nav-prenom"></span>
+      <span id="nav-prenom">...</span>
     </div>
-    <a href="abonnement.html"><button class="nav-btn primary">&#128142; Premium</button></a>
+    <span id="badge-abo" style="font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:20px;background:rgba(143,163,184,.08);color:#8FA3B8;border:1px solid rgba(143,163,184,.15)">&#9679; ...</span>
+    <a href="abonnement.html"><button class="nav-btn">&#128142; Premium</button></a>
+    <a href="entrainement.html"><button class="nav-btn primary">S'entra&icirc;ner</button></a>
     <button class="nav-btn danger" onclick="deconnexion()">&#x2B8B; D&eacute;connexion</button>
   </div>
 </nav>
 
-<div class="app-body">
-  <aside class="sidebar" id="sidebar">
-  <div class="sb-label">Tableau de bord</div>
-  <button class="sb-item active" data-view="overview" onclick="showView('overview',this)">
-    <span class="sb-ico">📊</span> Vue d'ensemble
-  </button>
-  <button class="sb-item" data-view="stats" onclick="showView('stats',this)">
-    <span class="sb-ico">📈</span> Statistiques
-  </button>
-  <button class="sb-item" data-view="objectifs" onclick="showView('objectifs',this)">
-    <span class="sb-ico">🎯</span> Objectifs
-  </button>
-  <button class="sb-item" data-view="abonnement" onclick="showView('abonnement',this)">
-    <span class="sb-ico">💳</span> Abonnement
-  </button>
-
-  <div class="sb-divider"></div>
-
-  <div class="sb-label">Entraînement QCM</div>
-  <button class="sb-item" data-view="qcm-leger" onclick="showView('qcm-leger',this)">
-    <span class="sb-ico">🚐</span> &lt; 3,5t — Léger
-  </button>
-  <button class="sb-item" data-view="qcm-lourd" onclick="showView('qcm-lourd',this)">
-    <span class="sb-ico">🚛</span> &gt; 3,5t — Lourd
-  </button>
-  <button class="sb-item" data-view="qcm-adr" onclick="showView('qcm-adr',this)">
-    <span class="sb-ico">⚠️</span> ADR
-  </button>
-
-  <div class="sb-divider"></div>
-
-  <div class="sb-label">Examens blancs</div>
-  <button class="sb-item" data-view="examens-blanc" onclick="showView('examens-blanc',this)">
-    <span class="sb-ico">📝</span> Nouvel examen
-  </button>
-  <button class="sb-item" data-view="historique" onclick="showView('historique',this)">
-    <span class="sb-ico">📋</span> Historique
-  </button>
-
-  <div id="sb-premium-box" class="sb-premium" style="margin-top:auto">
-    <div class="sb-premium-label">✦ Débloquez tout</div>
-    <p>Entraînement illimité &amp; examens blancs complets</p>
-    <a href="abonnement.html" class="sb-premium-btn">Passer Premium →</a>
-  </div>
-</aside>
-  <main class="main-content">
-    
-  <!-- QCM LÉGER -->
-  <div id="view-qcm-leger" class="view">
-    <div class="dash-header">
-      <div><h1>Entraînement <span>&lt; 3,5t</span></h1><p>QCM CPC Marchandises — Programme Léger (VUL)</p></div>
+<div class="page">
+  <div class="dash-header">
+    <div>
+      <h1>Mon <span>tableau</span> de bord</h1>
+      <p id="dash-subtitle">Chargement...</p>
     </div>
-    <div class="qcm-cards">
-      <div class="qcm-card" onclick="launchQCM('LEGER','all')"><div class="qcm-card-ico">🎲</div><div class="qcm-card-title">Tous les thèmes</div><div class="qcm-card-sub">Tirage aléatoire complet</div><div class="qcm-card-count" id="count-leger-all">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LEGER','cl-civil')"><div class="qcm-card-ico">⚖️</div><div class="qcm-card-title">Droit civil</div><div class="qcm-card-sub">Contrats, responsabilité</div><div class="qcm-card-count" id="count-leger-civil">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LEGER','cl-social')"><div class="qcm-card-ico">👷</div><div class="qcm-card-title">Droit social</div><div class="qcm-card-sub">Travail, congés, paie</div><div class="qcm-card-count" id="count-leger-social">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LEGER','cl-fiscal')"><div class="qcm-card-ico">💶</div><div class="qcm-card-title">Fiscal &amp; TVA</div><div class="qcm-card-sub">TVA, IS, TICPE</div><div class="qcm-card-count" id="count-leger-fiscal">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LEGER','cl-gestion')"><div class="qcm-card-ico">📊</div><div class="qcm-card-title">Gestion financière</div><div class="qcm-card-sub">Bilan, CRK, seuil rentabilité</div><div class="qcm-card-count" id="count-leger-gestion">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LEGER','cl-regl')"><div class="qcm-card-ico">📋</div><div class="qcm-card-title">Réglementation</div><div class="qcm-card-sub">Licences, contrats transport</div><div class="qcm-card-count" id="count-leger-regl">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LEGER','cl-acces')"><div class="qcm-card-ico">🔑</div><div class="qcm-card-title">Accès profession</div><div class="qcm-card-sub">CPC, inscription DREAL</div><div class="qcm-card-count" id="count-leger-acces">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LEGER','cl-secu')"><div class="qcm-card-ico">🛡️</div><div class="qcm-card-title">Sécurité routière</div><div class="qcm-card-sub">ZFE, arrimage, CT VUL</div><div class="qcm-card-count" id="count-leger-secu">—</div></div>
+    <div class="header-btns">
+      <a href="examen-blanc.html"><button class="btn btn-primary">Nouvel examen blanc</button></a>
+      <a href="entrainement.html"><button class="btn btn-ghost">S'entra&icirc;ner</button></a>
     </div>
   </div>
 
-  <!-- QCM LOURD -->
-  <div id="view-qcm-lourd" class="view">
-    <div class="dash-header">
-      <div><h1>Entraînement <span>&gt; 3,5t</span></h1><p>QCM CPC Marchandises — Programme Lourd (PL)</p></div>
-    </div>
-    <div class="qcm-cards">
-      <div class="qcm-card" onclick="launchQCM('LOURD','all')"><div class="qcm-card-ico">🎲</div><div class="qcm-card-title">Tous les thèmes</div><div class="qcm-card-sub">Tirage aléatoire complet</div><div class="qcm-card-count" id="count-lourd-all">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LOURD','lo-civil')"><div class="qcm-card-ico">⚖️</div><div class="qcm-card-title">Droit civil</div><div class="qcm-card-sub">CMR, responsabilité</div><div class="qcm-card-count" id="count-lourd-civil">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LOURD','lo-social')"><div class="qcm-card-ico">👷</div><div class="qcm-card-title">RSE &amp; social</div><div class="qcm-card-sub">561/2006, tachygraphe, CCNTR</div><div class="qcm-card-count" id="count-lourd-social">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LOURD','lo-fiscal')"><div class="qcm-card-ico">💶</div><div class="qcm-card-title">Fiscal PL</div><div class="qcm-card-sub">TVA, taxe essieu, TSVR</div><div class="qcm-card-count" id="count-lourd-fiscal">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LOURD','lo-gestion')"><div class="qcm-card-ico">📊</div><div class="qcm-card-title">Gestion financière</div><div class="qcm-card-sub">Trinôme, CRK, coeff. exploit.</div><div class="qcm-card-count" id="count-lourd-gestion">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LOURD','lo-intl')"><div class="qcm-card-ico">🌍</div><div class="qcm-card-title">International</div><div class="qcm-card-sub">CMR, cabotage, licences UE</div><div class="qcm-card-count" id="count-lourd-intl">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LOURD','lo-regl')"><div class="qcm-card-ico">📋</div><div class="qcm-card-title">Réglementation PL</div><div class="qcm-card-sub">PTAC, dimensions, restrictions</div><div class="qcm-card-count" id="count-lourd-regl">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('LOURD','lo-secu')"><div class="qcm-card-ico">🛡️</div><div class="qcm-card-title">Sécurité &amp; ADR</div><div class="qcm-card-sub">Arrimage, convois, sécurité PL</div><div class="qcm-card-count" id="count-lourd-secu">—</div></div>
-    </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('overview',this)">&#128202; Vue d'ensemble</button>
+    <button class="tab" onclick="switchTab('stats',this)">&#128200; Statistiques</button>
+    <button class="tab" onclick="switchTab('examens',this)">&#128221; Examens blancs</button>
+    <button class="tab" onclick="switchTab('objectifs',this)">&#127919; Objectifs</button>
+    <button class="tab" onclick="switchTab('abonnement',this)">&#128179; Abonnement</button>
   </div>
-
-  <!-- QCM ADR -->
-  <div id="view-qcm-adr" class="view">
-    <div class="dash-header">
-      <div><h1>Entraînement <span>ADR</span></h1><p>Accord européen relatif au transport de marchandises dangereuses</p></div>
-    </div>
-    <div class="qcm-cards">
-      <div class="qcm-card" onclick="launchQCM('ADR','all')"><div class="qcm-card-ico">🎲</div><div class="qcm-card-title">Tous les thèmes</div><div class="qcm-card-sub">Tirage aléatoire ADR complet</div><div class="qcm-card-count" id="count-adr-all">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('ADR','adr-gen')"><div class="qcm-card-ico">📖</div><div class="qcm-card-title">Généralités ADR</div><div class="qcm-card-sub">Principes, champ d'application</div><div class="qcm-card-count" id="count-adr-gen">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('ADR','adr-cls')"><div class="qcm-card-ico">🏷️</div><div class="qcm-card-title">Classes de danger</div><div class="qcm-card-sub">9 classes, étiquettes, UN</div><div class="qcm-card-count" id="count-adr-cls">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('ADR','adr-emb')"><div class="qcm-card-ico">📦</div><div class="qcm-card-title">Emballages</div><div class="qcm-card-sub">Emballages homologués, LQ</div><div class="qcm-card-count" id="count-adr-emb">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('ADR','adr-doc')"><div class="qcm-card-ico">📄</div><div class="qcm-card-title">Documents</div><div class="qcm-card-sub">Certificat conducteur, doc. transport</div><div class="qcm-card-count" id="count-adr-doc">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('ADR','adr-sig')"><div class="qcm-card-ico">🔶</div><div class="qcm-card-title">Signalisation</div><div class="qcm-card-sub">Panneaux oranges, étiquettes</div><div class="qcm-card-count" id="count-adr-sig">—</div></div>
-      <div class="qcm-card" onclick="launchQCM('ADR','adr-sec')"><div class="qcm-card-ico">🧯</div><div class="qcm-card-title">Sécurité</div><div class="qcm-card-sub">EPI, consignes, accident</div><div class="qcm-card-count" id="count-adr-sec">—</div></div>
-    </div>
-  </div>
-
-  <!-- EXAMEN BLANC -->
-  <div id="view-examens-blanc" class="view">
-    <div class="dash-header">
-      <div><h1>Examen <span>blanc</span></h1><p>Simulation complète — Partie 1 QCM + Partie 2 questions rédigées</p></div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px;max-width:700px">
-      <div class="card" style="text-align:center;cursor:pointer;transition:border-color .2s" onmouseover="this.style.borderColor='rgba(242,101,34,.4)'" onmouseout="this.style.borderColor=''" onclick="location.href='examen-blanc.html?prog=LEGER'">
-        <div style="font-size:32px;margin-bottom:10px">🚐</div>
-        <div style="font-family:var(--display);font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Léger <span style="color:var(--orange)">&lt; 3,5t</span></div>
-        <div style="font-size:12px;color:var(--steel)">CPC Marchandises léger<br>3h · 200 pts · Seuil 120</div>
-      </div>
-      <div class="card" style="text-align:center;cursor:pointer;transition:border-color .2s" onmouseover="this.style.borderColor='rgba(242,101,34,.4)'" onmouseout="this.style.borderColor=''" onclick="location.href='examen-blanc.html?prog=LOURD'">
-        <div style="font-size:32px;margin-bottom:10px">🚛</div>
-        <div style="font-family:var(--display);font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Lourd <span style="color:var(--orange)">&gt; 3,5t</span></div>
-        <div style="font-size:12px;color:var(--steel)">CPC Marchandises lourd<br>4h · 200 pts · Seuil 120</div>
-      </div>
-
-    </div>
-    <div class="card">
-      <div class="card-title">Derniers examens <span class="badge" id="eb-count-badge">0 passés</span></div>
-      <div id="eb-list-inline"><div class="empty"><div class="empty-icon">📝</div><p>Aucun examen passé encore</p><a href="examen-blanc.html" class="btn btn-primary" style="margin-top:8px">Commencer →</a></div></div>
-    </div>
-  </div>
-
-  <!-- HISTORIQUE -->
-  <div id="view-historique" class="view">
-    <div class="dash-header">
-      <div><h1>Historique <span>complet</span></h1><p>Tous vos examens blancs</p></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Examens blancs <span class="badge" id="hist-count-badge">0</span></div>
-      <div id="hist-exam-list"><div class="empty"><div class="empty-icon">📋</div><p>Aucun examen encore</p></div></div>
-    </div>
-  </div>
-    <div class="page">
-  
 
   <!-- VUE D'ENSEMBLE -->
-  <div id="view-overview" class="view active">
+  <div id="tab-overview" class="tab-content active">
     <div class="stats-grid">
       <div class="stat"><div class="stat-lbl">Questions r&eacute;pondue</div><div class="stat-val" id="s-total">0 <small>qst</small></div><div class="stat-sub" id="s-total-sub">Aucune session encore</div></div>
       <div class="stat green"><div class="stat-lbl">Taux de r&eacute;ussite</div><div class="stat-val" id="s-taux">0 <small>%</small></div><div class="stat-sub" id="s-taux-sub">&mdash;</div></div>
@@ -355,7 +215,7 @@
   </div>
 
   <!-- STATISTIQUES -->
-  <div id="view-stats" class="view">
+  <div id="tab-stats" class="tab-content">
     <div class="stats-grid">
       <div class="stat"><div class="stat-lbl">CPC L&eacute;ger</div><div class="stat-val" id="ss-leger">0 <small>%</small></div><div class="stat-sub" id="ss-leger-sub">0 questions</div></div>
       <div class="stat blue"><div class="stat-lbl">CPC Lourd</div><div class="stat-val" id="ss-lourd">0 <small>%</small></div><div class="stat-sub" id="ss-lourd-sub">0 questions</div></div>
@@ -370,7 +230,7 @@
   </div>
 
   <!-- EXAMENS -->
-  <div id="view-hist-old" class="view">
+  <div id="tab-examens" class="tab-content">
     <div class="stats-grid">
       <div class="stat blue"><div class="stat-lbl">Examens pass&eacute;s</div><div class="stat-val" id="ex-total">0</div><div class="stat-sub" id="ex-rep">&mdash;</div></div>
       <div class="stat green"><div class="stat-lbl">Meilleur score</div><div class="stat-val" id="ex-best">&mdash;</div><div class="stat-sub" id="ex-best-sub">&mdash;</div></div>
@@ -384,7 +244,7 @@
   </div>
 
   <!-- OBJECTIFS -->
-  <div id="view-objectifs" class="view">
+  <div id="tab-objectifs" class="tab-content">
     <div class="stats-grid">
       <div class="stat green"><div class="stat-lbl">Objectifs complet&eacute;s</div><div class="stat-val" id="obj-done">0 <small>/5</small></div><div class="stat-sub">Cette semaine</div></div>
       <div class="stat blue"><div class="stat-lbl">Jours d'&eacute;tude</div><div class="stat-val" id="obj-jours">0 <small>j</small></div><div class="stat-sub">30 derniers jours</div></div>
@@ -405,7 +265,7 @@
   </div>
 
   <!-- ABONNEMENT -->
-  <div id="view-abonnement" class="view">
+  <div id="tab-abonnement" class="tab-content">
     <div class="dash-header">
       <div>
         <h1>Mon <span>abonnement</span></h1>
@@ -454,112 +314,6 @@
 
 <script src="supabase.js"></script>
 <script src="stripe.js"></script>
-  </main>
-</div>
-
-
-<script>
-function showView(viewId, btn) {
-  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});
-  document.querySelectorAll('.sb-item').forEach(function(b){b.classList.remove('active');});
-  var el = document.getElementById('view-' + viewId);
-  if (el) el.classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (window.innerWidth <= 700) document.getElementById('sidebar').classList.remove('open');
-  if (viewId === 'examens-blanc' || viewId === 'historique') renderExamensInline();
-  if (viewId.startsWith('qcm-')) updateQCMCounts();
-}
-
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-}
-
-function launchQCM(prog, theme) {
-  var url = 'entrainement.html?prog=' + prog;
-  if (theme && theme !== 'all') url += '&theme=' + theme;
-  window.location.href = url;
-}
-
-function updateQCMCounts() {
-  if (typeof QUESTIONS_BANK === 'undefined') return;
-  var map = {
-    'leger-all':{prog:'LEGER',theme:null},'leger-civil':{prog:'LEGER',theme:'cl-civil'},
-    'leger-social':{prog:'LEGER',theme:'cl-social'},'leger-fiscal':{prog:'LEGER',theme:'cl-fiscal'},
-    'leger-gestion':{prog:'LEGER',theme:'cl-gestion'},'leger-regl':{prog:'LEGER',theme:'cl-regl'},
-    'leger-acces':{prog:'LEGER',theme:'cl-acces'},'leger-secu':{prog:'LEGER',theme:'cl-secu'},
-    'lourd-all':{prog:'LOURD',theme:null},'lourd-civil':{prog:'LOURD',theme:'lo-civil'},
-    'lourd-social':{prog:'LOURD',theme:'lo-social'},'lourd-fiscal':{prog:'LOURD',theme:'lo-fiscal'},
-    'lourd-gestion':{prog:'LOURD',theme:'lo-gestion'},'lourd-intl':{prog:'LOURD',theme:'lo-intl'},
-    'lourd-regl':{prog:'LOURD',theme:'lo-regl'},'lourd-secu':{prog:'LOURD',theme:'lo-secu'},
-    'adr-all':{prog:'ADR',theme:null},'adr-gen':{prog:'ADR',theme:'adr-gen'},
-    'adr-cls':{prog:'ADR',theme:'adr-cls'},'adr-emb':{prog:'ADR',theme:'adr-emb'},
-    'adr-doc':{prog:'ADR',theme:'adr-doc'},'adr-sig':{prog:'ADR',theme:'adr-sig'},
-    'adr-sec':{prog:'ADR',theme:'adr-sec'}
-  };
-  Object.keys(map).forEach(function(key) {
-    var el = document.getElementById('count-' + key);
-    if (!el) return;
-    var cfg = map[key];
-    var count = QUESTIONS_BANK.filter(function(q){
-      return q.prog === cfg.prog && (!cfg.theme || q.theme === cfg.theme);
-    }).length;
-    el.textContent = count + ' question' + (count > 1 ? 's' : '');
-  });
-}
-
-function renderExamensInline() {
-  var examens = (typeof getExamens === 'function') ? getExamens() : [];
-  if (!Array.isArray(examens)) examens = [];
-  var b1 = document.getElementById('eb-count-badge');
-  var b2 = document.getElementById('hist-count-badge');
-  if (b1) b1.textContent = examens.length + ' passé' + (examens.length > 1 ? 's' : '');
-  if (b2) b2.textContent = examens.length;
-  var html = examens.length === 0
-    ? '<div class="empty"><div class="empty-icon">📝</div><p>Aucun examen passé encore</p><a href="examen-blanc.html" class="btn btn-primary" style="margin-top:8px">Commencer →</a></div>'
-    : '<div class="exam-list">' + examens.slice(0,20).map(function(e){
-        var sc = e.score_total || 0;
-        var cls = sc >= 120 ? 'pass' : sc >= 100 ? 'mid' : 'fail';
-        var prog = e.programme || 'LEGER';
-        var progLbl = prog === 'LEGER' ? '&lt;3,5t' : prog === 'LOURD' ? '&gt;3,5t' : 'ADR';
-        var progCls = prog === 'LEGER' ? 'leger' : prog === 'LOURD' ? 'lourd' : 'adr';
-        var date = e.created_at ? new Date(e.created_at).toLocaleDateString('fr-FR') : '';
-        return '<div class="exam-item"><span class="exam-badge '+progCls+'">'+progLbl+'</span>'
-          +'<div class="exam-info"><div class="exam-name">Examen '+(e.sujet_id||'')+'</div>'
-          +'<div class="exam-meta">'+date+' · P1 '+(e.score_p1||0)+'/100 · P2 '+(e.score_p2||0)+'/100</div></div>'
-          +'<div class="exam-result"><div class="exam-score '+cls+'">'+sc+'<small>/200</small></div>'
-          +'<div class="exam-verdict">'+(sc>=120?'Admis':'Ajourné')+'</div></div></div>';
-      }).join('') + '</div>';
-  var e1 = document.getElementById('eb-list-inline');
-  var e2 = document.getElementById('hist-exam-list');
-  if (e1) e1.innerHTML = html;
-  if (e2) e2.innerHTML = html;
-}
-
-function updateSidebarPremium(isPremium) {
-  var box = document.getElementById('sb-premium-box');
-  if (box) box.style.display = isPremium ? 'none' : '';
-}
-
-function switchTab(name, btn) {
-  var map = {overview:'overview',stats:'stats',examens:'historique',objectifs:'objectifs',abonnement:'abonnement'};
-  var t = map[name] || name;
-  showView(t, document.querySelector('.sb-item[data-view="'+t+'"]') || btn);
-}
-
-(function(){
-  var params = new URLSearchParams(window.location.search);
-  var v = params.get('view') || params.get('tab');
-  if (v) {
-    window.addEventListener('DOMContentLoaded', function(){
-      showView(v, document.querySelector('.sb-item[data-view="'+v+'"]'));
-    });
-  }
-})();
-
-document.addEventListener('DOMContentLoaded', function(){
-  updateQCMCounts();
-});
-</script>
 <script>
 
 var THEMES = {
@@ -1017,7 +771,6 @@ async function chargerStatutAbo(retry) {
 
   var profil = await verifierStatutAbo();
   var premium = profil && profil.abonnement === "premium";
-    if(typeof updateSidebarPremium !== "undefined") updateSidebarPremium(premium);
   var badge = document.getElementById("badge-abo");
   if (badge) {
     badge.textContent = premium ? "● Premium" : "● Gratuit";
