@@ -2478,17 +2478,17 @@ var QUESTIONS_BANK = [
         "t": "5,5 %"
       },
       {
-        "t": "10 %"
+        "t": "10 %",
+        "ok": true
       },
       {
-        "t": "20 %",
-        "ok": true
+        "t": "20 %"
       },
       {
         "t": "25 %"
       }
     ],
-    "x": "Les prestations de transport de marchandises en France sont soumises au taux normal de TVA de 20 %. Le taux réduit de 10 % s'applique notamment aux transports de voyageurs, et le taux de 5,5 % aux produits alimentaires."
+    "x": "Les prestations de transport routier de marchandises en France sont soumises au taux RÉDUIT de TVA de 10 % (article 279 du CGI). Le taux de 20 % est le taux normal applicable à la plupart des services, mais le transport de marchandises bénéficie d'un taux intermédiaire de 10 %. Le taux de 5,5 % s'applique aux produits alimentaires et de première nécessité."
   },
   {
     "id": 109,
@@ -4837,29 +4837,6 @@ var QUESTIONS_BANK = [
     "x": "La TVA sur les véhicules conçus pour le transport de personnes (voitures de tourisme, catégorie M1) n'est pas déductible, même utilisés professionnellement. Exception : les VUL (véhicules utilitaires légers N1) qui permettent la récupération de TVA car ils sont conçus pour le transport de marchandises."
   },
   {
-    "id": 211,
-    "prog": "LEGER",
-    "theme": "cl-fiscal",
-    "d": 2,
-    "e": "La franchise en base de TVA (Taxe sur la Valeur Ajoutée) pour un prestataire de services s'applique si le CA (Chiffre d'Affaires) annuel est inférieur à :",
-    "r": [
-      {
-        "t": "10 000 €"
-      },
-      {
-        "t": "37 500 €",
-        "ok": true
-      },
-      {
-        "t": "85 000 €"
-      },
-      {
-        "t": "188 700 €"
-      }
-    ],
-    "x": "Depuis 2026, la franchise en base de TVA (art. 293 B du CGI) exonère les prestataires de services dont le CA HT ne dépasse pas 37 500 € (seuil majoré de tolérance : 41 250 €). Pour la vente de biens, le seuil est de 85 000 €. Sous ce seuil, pas de TVA facturée et pas de TVA déductible sur les achats."
-  },
-  {
     "id": 212,
     "prog": "LEGER",
     "theme": "cl-social",
@@ -6792,29 +6769,6 @@ var QUESTIONS_BANK = [
     "x": "Le coefficient d'adhérence est d'environ : 0,8 sur chaussée sèche, 0,4 sur chaussée mouillée, 0,1 à 0,2 sur neige, 0,05 à 0,1 sur verglas. Le verglas présente donc l'adhérence la plus faible, multipliant les distances de freinage par 8 à 16 par rapport à la chaussée sèche."
   },
   {
-    "id": 296,
-    "prog": "LEGER",
-    "theme": "cl-secu",
-    "d": 2,
-    "e": "L'éco-conduite permet de réduire la consommation de carburant d'un VUL de :",
-    "r": [
-      {
-        "t": "2 à 5 %"
-      },
-      {
-        "t": "10 à 15 %",
-        "ok": true
-      },
-      {
-        "t": "30 à 40 %"
-      },
-      {
-        "t": "Plus de 50 %"
-      }
-    ],
-    "x": "Une conduite économique bien maîtrisée permet de réduire la consommation de 10 à 15 % : anticipation des situations, montée en régime rapide pour passer au rapport supérieur, maintien d'une vitesse régulière, coupure du moteur à l'arrêt prolongé. Les bénéfices incluent aussi la réduction de l'usure des freins, des pneus et du moteur."
-  },
-  {
     "id": 297,
     "prog": "LEGER",
     "theme": "cl-civil",
@@ -8701,29 +8655,6 @@ var QUESTIONS_BANK = [
     "x": "Le salarié en arrêt maladie ordinaire bénéficie d'une protection relative : il peut être licencié pour motif étranger à la maladie (faute, motif économique) ou si son absence prolongée perturbe l'entreprise au point de nécessiter son remplacement définitif. L'employeur doit chercher des alternatives avant de licencier dans ce cas."
   },
   {
-    "id": 379,
-    "prog": "LEGER",
-    "theme": "cl-civil",
-    "d": 2,
-    "e": "La résolution d'un contrat pour inexécution entraîne :",
-    "r": [
-      {
-        "t": "La modification des obligations des parties"
-      },
-      {
-        "t": "L'anéantissement rétroactif du contrat avec restitutions",
-        "ok": true
-      },
-      {
-        "t": "Uniquement le versement de dommages et intérêts"
-      },
-      {
-        "t": "La suspension temporaire du contrat"
-      }
-    ],
-    "x": "La résolution (art. 1229 du Code civil) met fin au contrat et l'anéantit rétroactivement : les parties sont remises dans l'état où elles étaient avant la conclusion du contrat (restitutions mutuelles). Elle diffère de la résiliation qui ne vaut que pour l'avenir."
-  },
-  {
     "id": 380,
     "prog": "LEGER",
     "theme": "cl-regl",
@@ -8837,29 +8768,6 @@ var QUESTIONS_BANK = [
       }
     ],
     "x": "Un OCF négatif signifie que l'activité opérationnelle consomme de la trésorerie. C'est préoccupant car une entreprise doit normalement générer de la trésorerie via son exploitation. Cela peut indiquer un BFR trop élevé, une rentabilité insuffisante ou des délais de paiement défavorables. À distinguer des flux d'investissement et de financement."
-  },
-  {
-    "id": 385,
-    "prog": "LEGER",
-    "theme": "cl-civil",
-    "d": 2,
-    "e": "Le nantissement du fonds de commerce permet au commerçant de :",
-    "r": [
-      {
-        "t": "Vendre son fonds sans accord des créanciers"
-      },
-      {
-        "t": "Affecter son fonds en garantie d'emprunt en l'exploitant",
-        "ok": true
-      },
-      {
-        "t": "Suspendre le paiement de ses dettes"
-      },
-      {
-        "t": "Transférer temporairement la propriété"
-      }
-    ],
-    "x": "Le nantissement de fonds de commerce (art. L.142-1 du Code de commerce) est une sûreté mobilière permettant d'affecter le fonds en garantie d'un crédit sans en perdre la possession. Le créancier bénéficie d'un droit de préférence sur le prix de vente du fonds en cas de défaillance du débiteur."
   },
   {
     "id": 386,
@@ -9056,17 +8964,17 @@ var QUESTIONS_BANK = [
         "t": "5,5 %"
       },
       {
-        "t": "10 %"
+        "t": "10 %",
+        "ok": true
       },
       {
-        "t": "20 %",
-        "ok": true
+        "t": "20 %"
       },
       {
         "t": "0 % (exonéré)"
       }
     ],
-    "x": "Les prestations de transport de marchandises en France sont soumises au taux normal de TVA de 20 %."
+    "x": "Les prestations de transport routier de marchandises en France sont soumises au taux réduit de TVA de 10 % (article 279 du CGI). Ce taux intermédiaire s'applique également aux transports de voyageurs. Le taux normal de 20 % s'applique aux services non listés dans les taux réduits."
   },
   {
     "id": 395,
@@ -12680,29 +12588,6 @@ var QUESTIONS_BANK = [
     "x": "La licence de transport intérieur (LTI) et la licence communautaire (LC) sont délivrées pour une durée de 10 ans renouvelables. Le renouvellement est soumis à la vérification que l'entreprise continue de satisfaire aux 3 conditions d'accès (honorabilité, capacité financière et professionnelle)."
   },
   {
-    "id": 2149,
-    "prog": "LOURD",
-    "theme": "lo-social",
-    "d": 1,
-    "e": "La durée maximale de conduite sur 2 semaines consécutives est de :",
-    "r": [
-      {
-        "t": "90 heures",
-        "ok": true
-      },
-      {
-        "t": "112 heures"
-      },
-      {
-        "t": "80 heures"
-      },
-      {
-        "t": "100 heures"
-      }
-    ],
-    "x": "Le règlement 561/2006 limite la durée de conduite à 56 heures par semaine et à 90 heures sur deux semaines consécutives. Ces deux limites doivent être respectées simultanément."
-  },
-  {
     "id": 2150,
     "prog": "LOURD",
     "theme": "lo-acces",
@@ -13725,17 +13610,17 @@ var QUESTIONS_BANK = [
         "t": "6 heures"
       },
       {
-        "t": "8 heures",
-        "ok": true
+        "t": "8 heures"
       },
       {
-        "t": "9 heures"
+        "t": "9 heures",
+        "ok": true
       },
       {
         "t": "10 heures"
       }
     ],
-    "x": "Lorsqu'un véhicule est conduit par deux conducteurs (équipage), chaque conducteur doit prendre un repos journalier d'au moins 9 heures dans une période de 30 heures (au lieu de 11h en solo). Pendant le trajet, le conducteur non actif peut prendre son repos sur le siège passager."
+    "x": "En cas de multi-présence (équipage de deux conducteurs), chaque conducteur doit prendre un repos journalier d'au moins 9 heures dans une période de 30 heures (au lieu de 11h en solo). Pendant le trajet, le conducteur non actif peut prendre son repos sur le siège passager. Référence : règlement CE 561/2006, article 8§5."
   },
   {
     "id": 2195,
@@ -14093,17 +13978,17 @@ var QUESTIONS_BANK = [
         "t": "24 heures consécutives"
       },
       {
-        "t": "35 heures consécutives",
-        "ok": true
+        "t": "35 heures consécutives"
       },
       {
-        "t": "45 heures consécutives"
+        "t": "45 heures consécutives",
+        "ok": true
       },
       {
         "t": "48 heures consécutives"
       }
     ],
-    "x": "Le repos hebdomadaire normal est de 45 heures consécutives minimum. Il peut être réduit à 24 heures (repos hebdomadaire réduit) dans certaines conditions, avec récupération obligatoire avant la fin de la 3ème semaine suivante."
+    "x": "Le repos hebdomadaire NORMAL d'un conducteur PL est de 45 heures consécutives minimum (règlement CE 561/2006, art. 8§6). Il peut être réduit à 24 heures (repos hebdomadaire RÉDUIT) au maximum 2 fois entre deux repos normaux, avec l'obligation de récupérer l'équivalent de la réduction avant la fin de la 3ème semaine suivante."
   },
   {
     "id": 2211,
@@ -21568,17 +21453,17 @@ var QUESTIONS_BANK = [
         "t": "1 an"
       },
       {
-        "t": "3 ans",
-        "ok": true
+        "t": "3 ans"
       },
       {
-        "t": "5 ans"
+        "t": "5 ans",
+        "ok": true
       },
       {
         "t": "Indéfiniment si aucun accident"
       }
     ],
-    "x": "Le certificat ADR du conducteur est valable 5 ans. Pour le conserver, le conducteur doit suivre une formation de recyclage dans les 12 mois précédant l'expiration. S'il n'est pas renouvelé à temps, une nouvelle formation initiale complète est nécessaire."
+    "x": "Le certificat de formation des conducteurs ADR est valable 5 ans à compter de la date de réussite à l'examen. Pour le renouveler, le conducteur doit suivre une formation de recyclage et passer un examen de renouvellement dans les 12 mois précédant l'expiration. Sans renouvellement, une nouvelle formation initiale complète est requise."
   },
   {
     "id": 4133,
