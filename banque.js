@@ -2478,17 +2478,17 @@ var QUESTIONS_BANK = [
         "t": "5,5 %"
       },
       {
-        "t": "10 %",
-        "ok": true
+        "t": "10 %"
       },
       {
-        "t": "20 %"
+        "t": "20 %",
+        "ok": true
       },
       {
         "t": "25 %"
       }
     ],
-    "x": "Les prestations de transport routier de marchandises en France sont soumises au taux RÉDUIT de TVA de 10 % (article 279 du CGI). Le taux de 20 % est le taux normal applicable à la plupart des services, mais le transport de marchandises bénéficie d'un taux intermédiaire de 10 %. Le taux de 5,5 % s'applique aux produits alimentaires et de première nécessité."
+    "x": "Les prestations de transport routier de marchandises en France sont soumises au taux NORMAL de TVA de 20 % (article 278 du CGI). Seul le transport de voyageurs bénéficie du taux réduit de 10 % (article 279 du CGI). Le transport de marchandises ne figure pas dans la liste des opérations à taux réduit."
   },
   {
     "id": 109,
@@ -8964,17 +8964,17 @@ var QUESTIONS_BANK = [
         "t": "5,5 %"
       },
       {
-        "t": "10 %",
-        "ok": true
+        "t": "10 %"
       },
       {
-        "t": "20 %"
+        "t": "20 %",
+        "ok": true
       },
       {
         "t": "0 % (exonéré)"
       }
     ],
-    "x": "Les prestations de transport routier de marchandises en France sont soumises au taux réduit de TVA de 10 % (article 279 du CGI). Ce taux intermédiaire s'applique également aux transports de voyageurs. Le taux normal de 20 % s'applique aux services non listés dans les taux réduits."
+    "x": "Le transport routier de marchandises est soumis au taux normal de TVA de 20 % en France (article 278 du CGI). Le taux de 10 % s'applique uniquement au transport de voyageurs (article 279 a du CGI). Le transport de marchandises relève du taux normal, pas du taux réduit."
   },
   {
     "id": 395,
@@ -25064,17 +25064,17 @@ var QUESTIONS_BANK = [
         "t": "5,5%"
       },
       {
-        "t": "10%",
-        "ok": true
+        "t": "10%"
       },
       {
-        "t": "20%"
+        "t": "20%",
+        "ok": true
       },
       {
         "t": "Exonéré de TVA"
       }
     ],
-    "x": "Les prestations de transport routier de marchandises sont soumises au taux réduit de TVA de 10% en France (taux intermédiaire), conformément à l'article 279 du Code Général des Impôts."
+    "x": "Le transport routier de marchandises est soumis au taux NORMAL de TVA de 20 % en France (article 278 du CGI). Seul le transport de voyageurs bénéficie du taux réduit de 10 % (article 279 a du CGI). Le transport de marchandises ne figure pas dans la liste des opérations bénéficiant d'un taux réduit."
   },
   {
     "id": 4290,
@@ -30811,20 +30811,20 @@ var QUESTIONS_BANK = [
     "e": "La longueur maximale d'un porteur rigide avec remorque (train routier) est de :",
     "r": [
       {
-        "t": "18,75 m"
+        "t": "18,75 m",
+        "ok": true
       },
       {
         "t": "22 m"
       },
       {
-        "t": "25,25 m",
-        "ok": true
+        "t": "25,25 m"
       },
       {
         "t": "30 m"
       }
     ],
-    "x": "La longueur maximale d'un train routier (porteur + remorque) est de 18,75 m en configuration standard. Des dérogations existent pour les trains routiers longs (LHV / EMS) dans certains pays européens, mais la norme générale reste 18,75 m en France."
+    "x": "La longueur maximale d'un train routier (porteur rigide + remorque) est de 18,75 mètres, identique à celle d'un ensemble articulé (tracteur + semi-remorque), conformément à la directive 96/53/CE. Les 25,25 m correspondent aux véhicules longs européens (EMS/LHV) autorisés dans certains pays nordiques (Suède, Finlande) mais pas en France en transport général."
   },
   {
     "id": 4540,
@@ -34770,17 +34770,17 @@ var QUESTIONS_BANK = [
         "t": "5,5%"
       },
       {
-        "t": "10%",
-        "ok": true
+        "t": "10%"
       },
       {
-        "t": "20%"
+        "t": "20%",
+        "ok": true
       },
       {
         "t": "Exonéré"
       }
     ],
-    "x": "Les prestations de transport routier de marchandises sont soumises au taux réduit de TVA de 10% en France (article 279 du CGI). Ce taux s'applique à l'ensemble des opérations de transport de marchandises, que ce soit en VUL ou en PL."
+    "x": "Le transport routier de marchandises est soumis au taux NORMAL de TVA de 20 % en France (article 278 du CGI). Seul le transport de voyageurs bénéficie du taux réduit de 10 % (article 279 a du CGI). Le transport de marchandises ne figure pas dans la liste des opérations bénéficiant d'un taux réduit."
   },
   {
     "id": 4712,
