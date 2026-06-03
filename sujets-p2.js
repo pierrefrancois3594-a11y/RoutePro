@@ -169,7 +169,7 @@ corr:"Le CNR (Comité National Routier, organisme public) publie mensuellement d
 {id:'L04E3',titre:'Exercice 3 — Droit fiscal',totalPts:25,ctx:'',
 subs:[
 {id:'L04-3A',pts:10,num:'Q 3.1',text:"Expliquez le mécanisme de la TVA pour un transporteur assujetti (collectée, déductible, à reverser).",type:'redige',
-corr:"TVA collectée : facturée aux clients (10 %) sur les prestations de transport de marchandises — appartient à l'État.\nTVA déductible : payée sur les achats professionnels (gazole VUL 80 %, matériels, services…) — récupérable.\nTVA à reverser = collectée – déductible. Si déductible > collectée → crédit de TVA remboursable."},
+corr:"TVA collectée : facturée aux clients (20 %) sur les prestations de transport de marchandises — appartient à l'État.\nTVA déductible : payée sur les achats professionnels (gazole VUL 80 %, matériels, services…) — récupérable.\nTVA à reverser = collectée – déductible. Si déductible > collectée → crédit de TVA remboursable."},
 {id:'L04-3B',pts:8,num:'Q 3.2',text:"Quels sont les avantages et les limites du régime de la micro-entreprise pour un livreur VUL ?",type:'redige',
 corr:"Avantages : comptabilité simplifiée, charges sociales proportionnelles au CA, franchise de TVA sous les seuils, démarches administratives allégées.\nLimites : plafond CA 188 700 €, pas de déduction des charges réelles, difficultés d'investissement, pas de salarié facile."},
 {id:'L04-3C',pts:7,num:'Q 3.3',text:"Qu'est-ce que l'amortissement ? Quelle est la durée habituelle pour un VUL ?",type:'redige',
