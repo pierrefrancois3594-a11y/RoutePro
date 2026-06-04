@@ -658,11 +658,11 @@ var QUESTIONS_BANK = [
     "e": "La récupération de TVA (Taxe sur la Valeur Ajoutée) sur le carburant gazole utilisé par les véhicules utilitaires légers (VUL) de moins de 3,5t est :",
     "r": [
       {
-        "t": "Totalement déductible à 100 %"
+        "t": "Totalement déductible à 100 %",
+        "ok": true
       },
       {
-        "t": "Partiellement déductible à 80 %",
-        "ok": true
+        "t": "Partiellement déductible à 80 %"
       },
       {
         "t": "Non déductible"
@@ -671,30 +671,30 @@ var QUESTIONS_BANK = [
         "t": "Déductible à 50 %"
       }
     ],
-    "x": "Pour les VUL (véhicules utilitaires légers de moins de 3,5t), la TVA sur le gazole est récupérable à hauteur de 80 %. Pour les camions (>3,5t), la TVA gazole est récupérable à 100 %."
+    "x": "Depuis l'alignement fiscal de 2022 (art. 298 du CGI), la TVA sur le gazole est récupérable à 100 % pour les véhicules utilitaires (VU/VUL affectés au transport de marchandises, mention CTTE/VU sur la carte grise), quel que soit leur PTAC. Seuls les véhicules de tourisme (VP) restent limités à 80 %. Un VUL de transporteur étant un véhicule utilitaire, la TVA gazole est donc déductible à 100 %."
   },
   {
     "id": 30,
     "prog": "LEGER",
     "theme": "cl-fiscal",
     "d": 3,
-    "e": "La contribution économique territoriale (CET) comprend :",
+    "e": "Depuis la suppression totale de la CVAE en 2024, la contribution économique territoriale (CET) comprend :",
     "r": [
       {
-        "t": "La cotisation foncière des entreprises (CFE) uniquement"
+        "t": "La cotisation foncière des entreprises (CFE) uniquement",
+        "ok": true
       },
       {
         "t": "La cotisation sur la valeur ajoutée (CVAE) uniquement"
       },
       {
-        "t": "La cotisation foncière (CFE) et la cotisation sur la valeur ajoutée (CVAE)",
-        "ok": true
+        "t": "La CFE et la CVAE"
       },
       {
         "t": "L'impôt sur les sociétés et la taxe professionnelle"
       }
     ],
-    "x": "La contribution économique territoriale (CET) remplace l'ancienne taxe professionnelle depuis 2010. Elle comprend la CFE (Cotisation Foncière des Entreprises), assise sur la valeur locative des biens, et la CVAE (Cotisation sur la Valeur Ajoutée des Entreprises)."
+    "x": "Depuis la suppression totale de la CVAE au 1er janvier 2024 (loi de finances), la contribution économique territoriale (CET) ne comprend plus que la CFE (Cotisation Foncière des Entreprises), assise sur la valeur locative des biens professionnels. Auparavant (2010-2023), la CET comprenait à la fois la CFE et la CVAE. La CET avait elle-même remplacé la taxe professionnelle en 2010."
   },
   {
     "id": 31,
@@ -1026,20 +1026,20 @@ var QUESTIONS_BANK = [
     "e": "Le SMIC (Salaire Minimum Interprofessionnel de Croissance) horaire brut en France en 2026 est d'environ :",
     "r": [
       {
-        "t": "11,65 €"
-      },
-      {
         "t": "11,88 €"
       },
       {
-        "t": "12,02 €",
+        "t": "12,02 €"
+      },
+      {
+        "t": "12,31 €",
         "ok": true
       },
       {
         "t": "12,50 €"
       }
     ],
-    "x": "Le SMIC horaire brut est de 12,02 € depuis le 1er janvier 2026 (décret n°2025-1228), soit un SMIC mensuel brut de 1 823,03 € pour 35h/semaine. Il est revalorisé automatiquement, au moins chaque 1er janvier."
+    "x": "Le SMIC horaire brut est de 12,31 € depuis le 1er juin 2026 (revalorisation automatique de +2,41% liée à l'inflation), soit un SMIC mensuel brut de 1 867,02 € pour 35h/semaine. Il était de 12,02 € du 1er janvier au 31 mai 2026. Le SMIC est revalorisé au moins chaque 1er janvier, et en cours d'année si l'inflation dépasse 2%."
   },
   {
     "id": 46,
@@ -2452,11 +2452,11 @@ var QUESTIONS_BANK = [
     "e": "La TVA (Taxe sur la Valeur Ajoutée) sur le carburant gazole des VUL (Véhicules Utilitaires Légers) de moins de 3,5t est récupérable à :",
     "r": [
       {
-        "t": "100 %"
+        "t": "100 %",
+        "ok": true
       },
       {
-        "t": "80 %",
-        "ok": true
+        "t": "80 %"
       },
       {
         "t": "50 %"
@@ -2465,7 +2465,7 @@ var QUESTIONS_BANK = [
         "t": "0 % — non récupérable"
       }
     ],
-    "x": "Pour les VUL (<3,5t), la TVA sur le gazole est récupérable à 80 %. Pour les véhicules lourds (>3,5t), elle est récupérable à 100 %. La TVA sur l'essence n'est récupérable que pour les véhicules exclusivement professionnels."
+    "x": "Depuis l'alignement fiscal de 2022 (art. 298 du CGI), la TVA sur le gazole est récupérable à 100 % pour les véhicules utilitaires (VU/VUL affectés au transport de marchandises, mention CTTE/VU sur la carte grise), quel que soit leur PTAC. Seuls les véhicules de tourisme (VP) restent limités à 80 %. Un VUL de transporteur étant un véhicule utilitaire, la TVA gazole est donc déductible à 100 %."
   },
   {
     "id": 108,
@@ -4098,7 +4098,7 @@ var QUESTIONS_BANK = [
         "t": "Le capital social"
       }
     ],
-    "x": "La CFE est assise sur la valeur locative cadastrale des biens immobiliers dont l'entreprise a disposé pour son activité au 1er janvier de l'année. Les entreprises sans local (ex : auto-entrepreneur à domicile) paient une CFE minimale définie par la commune. La CFE fait partie de la CET avec la CVAE."
+    "x": "La CFE est assise sur la valeur locative cadastrale des biens immobiliers dont l'entreprise a disposé pour son activité au 1er janvier de l'année. Les entreprises sans local (ex : auto-entrepreneur à domicile) paient une CFE minimale définie par la commune. La CFE est, depuis la suppression de la CVAE en 2024, la seule composante de la CET."
   },
   {
     "id": 179,
@@ -4617,17 +4617,17 @@ var QUESTIONS_BANK = [
         "t": "0 % (non récupérable pour les VUL)"
       },
       {
-        "t": "80 % pour le gazole",
-        "ok": true
+        "t": "80 % pour le gazole"
       },
       {
-        "t": "100 % pour tous les carburants"
+        "t": "100 % pour tous les carburants",
+        "ok": true
       },
       {
         "t": "50 % quel que soit le carburant"
       }
     ],
-    "x": "Pour les VUL utilisés à des fins professionnelles, la TVA sur le gazole est récupérable à 80 %. Pour l'essence, elle est non récupérable (0 %). Pour les véhicules électriques professionnels, la TVA sur l'électricité est récupérable à 100 %."
+    "x": "Depuis l'alignement fiscal de 2022 (art. 298 du CGI), la TVA sur le gazole est récupérable à 100 % pour les véhicules utilitaires (VU/VUL affectés au transport de marchandises, mention CTTE/VU sur la carte grise), quel que soit leur PTAC. Seuls les véhicules de tourisme (VP) restent limités à 80 %. Un VUL de transporteur étant un véhicule utilitaire, la TVA gazole est donc déductible à 100 %."
   },
   {
     "id": 202,
@@ -5708,7 +5708,7 @@ var QUESTIONS_BANK = [
         "t": "La taxe d'habitation pour les entreprises"
       }
     ],
-    "x": "La CET remplace la taxe professionnelle depuis le 1er janvier 2010. Elle se compose de la CFE (Cotisation Foncière des Entreprises) basée sur les valeurs locatives, et de la CVAE (Cotisation sur la Valeur Ajoutée des Entreprises) pour les plus grandes entreprises."
+    "x": "La CET remplace la taxe professionnelle depuis le 1er janvier 2010. Jusqu'en 2023, elle se composait de la CFE (Cotisation Foncière des Entreprises) et de la CVAE (Cotisation sur la Valeur Ajoutée des Entreprises). Depuis la suppression totale de la CVAE en 2024, la CET ne comprend plus que la CFE."
   },
   {
     "id": 250,
@@ -8892,11 +8892,11 @@ var QUESTIONS_BANK = [
     "e": "Les véhicules utilitaires légers (<3,5t) professionnels bénéficient de la récupération de TVA sur le carburant à :",
     "r": [
       {
-        "t": "100 % pour le gazole"
+        "t": "100 % pour le gazole",
+        "ok": true
       },
       {
-        "t": "80 % pour le gazole et 0 % pour l'essence",
-        "ok": true
+        "t": "80 % pour le gazole et 0 % pour l'essence"
       },
       {
         "t": "50 % pour tous les carburants"
@@ -8905,7 +8905,7 @@ var QUESTIONS_BANK = [
         "t": "0 % — aucune récupération possible"
       }
     ],
-    "x": "Pour les VUL à usage professionnel exclusif : TVA sur gazole récupérable à 80 % (en voie d'augmentation progressive jusqu'à 100 %), TVA sur l'essence non récupérable (0 %). Pour les véhicules électriques : TVA sur l'électricité récupérable à 100 %."
+    "x": "Depuis l'alignement fiscal de 2022 (art. 298 du CGI), la TVA sur le gazole est récupérable à 100 % pour les véhicules utilitaires (VU/VUL affectés au transport de marchandises, mention CTTE/VU sur la carte grise), quel que soit leur PTAC. Seuls les véhicules de tourisme (VP) restent limités à 80 %. Un VUL de transporteur étant un véhicule utilitaire, la TVA gazole est donc déductible à 100 %."
   },
   {
     "id": 392,
@@ -11941,7 +11941,7 @@ var QUESTIONS_BANK = [
         "t": "40 tonnes"
       }
     ],
-    "x": "Un tracteur routier 3 essieux a un PTAC maximum de 26 tonnes. Mais en pratique, la limite réglementaire par configuration d'essieux fixe le PTAC dans la carte grise. Pour un tracteur 2 essieux courant, le PTAC est de 18-19 tonnes. Le PTAC du tracteur seul est distinct du PTRA (Poids Total Roulant Autorisé) de l'ensemble tracteur + semi-remorque."
+    "x": "Un tracteur routier 2 essieux (le plus courant) a un PTAC inscrit en carte grise généralement de 18 à 19 tonnes. La limite réglementaire pour un véhicule à 2 essieux est de 19 tonnes (art. R312-4 du Code de la route). Ce PTAC est celui du tracteur seul, sans sa semi-remorque. Le PTAC de l'ensemble (tracteur + semi) est limité à 40 tonnes pour 5 essieux."
   },
   {
     "id": 2121,
@@ -12345,17 +12345,17 @@ var QUESTIONS_BANK = [
         "t": "38 tonnes"
       },
       {
-        "t": "40 tonnes",
-        "ok": true
+        "t": "40 tonnes"
       },
       {
-        "t": "44 tonnes"
+        "t": "44 tonnes",
+        "ok": true
       },
       {
         "t": "52 tonnes"
       }
     ],
-    "x": "Le PTAC maximum pour un ensemble articulé (tracteur + semi-remorque) à 5 essieux est de 40 tonnes en France. Pour 4 essieux c'est 36 tonnes, pour 6 essieux jusqu'à 44 tonnes. Des dérogations existent pour les transports de bois ronds (48 tonnes) et certains transports spéciaux."
+    "x": "Depuis le décret du 4 décembre 2012 (art. R312-4 modifié du Code de la route), les ensembles routiers comportant plus de 4 essieux (5 essieux et plus) sont autorisés à circuler jusqu'à 44 tonnes en France, sous réserve que le PTRA figurant sur la carte grise du tracteur soit ≥ 44t et que le véhicule soit équipé de suspensions pneumatiques. L'ancienne limite de 40 tonnes (avant 2013) ne s'applique plus en transport routier général."
   },
   {
     "id": 2139,
@@ -13242,17 +13242,17 @@ var QUESTIONS_BANK = [
         "t": "38 tonnes"
       },
       {
-        "t": "40 tonnes",
-        "ok": true
+        "t": "40 tonnes"
       },
       {
-        "t": "44 tonnes"
+        "t": "44 tonnes",
+        "ok": true
       },
       {
         "t": "50 tonnes"
       }
     ],
-    "x": "Le PTAC maximum d'un ensemble routier à 5 essieux en France est de 40 tonnes en général. Des exceptions existent pour le transport combiné (44 tonnes avec conteneurs ISO) et pour des configurations spéciales (48 tonnes pour le bois avec 6 essieux). Les 44 tonnes sont également autorisées pour certains transports de denrées en conteneurs."
+    "x": "Depuis le décret du 4 décembre 2012 (art. R312-4 modifié du Code de la route), les ensembles routiers comportant plus de 4 essieux (5 essieux et plus) sont autorisés à circuler jusqu'à 44 tonnes en France, sous réserve que le PTRA figurant sur la carte grise du tracteur soit ≥ 44t et que le véhicule soit équipé de suspensions pneumatiques. L'ancienne limite de 40 tonnes (avant 2013) ne s'applique plus en transport routier général."
   },
   {
     "id": 2179,
@@ -13518,17 +13518,17 @@ var QUESTIONS_BANK = [
         "t": "105 heures (3 semaines)"
       },
       {
-        "t": "280 heures (8 semaines) pour les débutants",
-        "ok": true
+        "t": "280 heures (8 semaines) pour les débutants"
       },
       {
         "t": "35 heures"
       },
       {
-        "t": "140 heures"
+        "t": "140 heures",
+        "ok": true
       }
     ],
-    "x": "La FIMO initiale (CQC Initial) est de 280 heures (8 semaines) pour les conducteurs n'ayant aucune expérience. Elle peut être réduite à 140 heures pour les conducteurs justifiant d'une expérience antérieure. Elle est sanctionnée par un examen."
+    "x": "La FIMO (Formation Initiale Minimale Obligatoire) dure 140 heures (4 semaines), quelle que soit l'expérience du conducteur (article R3314-5 du Code des transports). La formation longue de 280 heures n'est PAS une FIMO : c'est un titre ou diplôme professionnel (CAP/BEP/Titre Pro de conducteur routier) qui donne aussi accès à la qualification initiale, mais par une voie différente."
   },
   {
     "id": 2191,
@@ -13725,17 +13725,17 @@ var QUESTIONS_BANK = [
         "t": "35 heures"
       },
       {
-        "t": "280 heures (pour un débutant complet)",
-        "ok": true
+        "t": "280 heures (pour un débutant complet)"
       },
       {
         "t": "105 heures"
       },
       {
-        "t": "140 heures"
+        "t": "140 heures",
+        "ok": true
       }
     ],
-    "x": "La FIMO complète est de 280 heures (8 semaines) pour les conducteurs n'ayant aucune expérience préalable. Elle peut être réduite à 140 heures pour les conducteurs justifiant d'une expérience antérieure reconnue. Elle est sanctionnée par un examen et donne accès au CQC Initial (code 95)."
+    "x": "La FIMO (Formation Initiale Minimale Obligatoire) dure 140 heures (4 semaines), quelle que soit l'expérience du conducteur (article R3314-5 du Code des transports). La formation longue de 280 heures n'est PAS une FIMO : c'est un titre ou diplôme professionnel (CAP/BEP/Titre Pro de conducteur routier) qui donne aussi accès à la qualification initiale, mais par une voie différente."
   },
   {
     "id": 2200,
@@ -14484,7 +14484,7 @@ var QUESTIONS_BANK = [
         "t": "Oui, le maximum est 32 tonnes"
       },
       {
-        "t": "Non, la limite de 40 tonnes n'est pas atteinte",
+        "t": "Non, la limite de 44 tonnes n'est pas atteinte",
         "ok": true
       },
       {
@@ -14494,7 +14494,7 @@ var QUESTIONS_BANK = [
         "t": "Non si autorisation préfectorale"
       }
     ],
-    "x": "Un ensemble routier standard à 5 essieux est autorisé jusqu'à 40 tonnes de PTAC en France. 36 tonnes reste dans les limites légales. Il faut aussi vérifier que la charge par essieu respecte les limites (essieu avant ≤ 7,5t, tandem ≤ 19t selon l'écartement)."
+    "x": "Un ensemble routier standard à 5 essieux est autorisé jusqu'à 44 tonnes de PTAC en France depuis le décret du 4 décembre 2012. 36 tonnes reste bien en dessous de la limite légale. Il faut aussi vérifier que la charge par essieu respecte les limites individuelles."
   },
   {
     "id": 2233,
@@ -15358,7 +15358,7 @@ var QUESTIONS_BANK = [
         "t": "= 52 tonnes (sum des PTAC)"
       },
       {
-        "t": "= 40 tonnes, limite légale pour un ensemble 5 essieux",
+        "t": "= 44 tonnes, limite légale pour un ensemble 5 essieux (depuis 2013)",
         "ok": true
       },
       {
@@ -15368,7 +15368,7 @@ var QUESTIONS_BANK = [
         "t": "= Variable selon le nombre d'essieux"
       }
     ],
-    "x": "Le PTRA n'est pas la somme des PTAC individuels mais la limite légale applicable à l'ensemble. Pour un ensemble tracteur + semi à 5 essieux, le PTRA légal en France est de 40 tonnes. Un tracteur 18t + semi 34t = PTAC cumulés 52t, mais le PTRA légal maximum est de 40t. Il faut choisir un chargement compatible avec le PTRA légal."
+    "x": "Le PTRA n'est pas la somme des PTAC individuels mais la limite légale applicable à l'ensemble. Depuis le décret du 4 décembre 2012, pour un ensemble tracteur + semi à 5 essieux, le PTRA légal en France est de 44 tonnes (sous conditions : suspension pneumatique, PTRA ≥ 44t sur la carte grise). Avant 2013, la limite était de 40 tonnes."
   },
   {
     "id": 2271,
@@ -23165,7 +23165,7 @@ var QUESTIONS_BANK = [
         "t": "Par une attestation de l'employeur"
       }
     ],
-    "x": "La capacité professionnelle s'obtient par la réussite à l'examen organisé par la DREAL (4 heures, après une formation de 175 heures) ou par équivalence de diplôme (ex. licence Transport)."
+    "x": "La capacité professionnelle s'obtient par la réussite à l'examen organisé par la DREAL (4 heures, après une formation de 105 heures) ou par équivalence de diplôme (ex. licence Transport)."
   },
   {
     "id": 4207,
@@ -23359,20 +23359,20 @@ var QUESTIONS_BANK = [
     "e": "La durée de la formation préparatoire à l'examen CPC >3,5t est de :",
     "r": [
       {
-        "t": "105 heures"
+        "t": "105 heures",
+        "ok": true
       },
       {
         "t": "140 heures"
       },
       {
-        "t": "175 heures",
-        "ok": true
+        "t": "175 heures"
       },
       {
         "t": "210 heures"
       }
     ],
-    "x": "La formation préparatoire à l'examen CPC Marchandises >3,5t dure 175 heures. À titre de comparaison, la formation pour le CPC <3,5t dure 105 heures."
+    "x": "La formation préparatoire à l'examen de capacité professionnelle (CPC) pour le transport lourd de marchandises (>3,5t) est de 105 heures (102h de cours + 3h d'examen), identique à celle du transport léger. À ne pas confondre avec la FIMO conducteur (140h) qui est une formation différente, destinée aux conducteurs et non aux gestionnaires."
   },
   {
     "id": 4216,
@@ -26950,7 +26950,7 @@ var QUESTIONS_BANK = [
         "t": "10 €/kg"
       },
       {
-        "t": "23 €/kg",
+        "t": "33 €/kg",
         "ok": true
       },
       {
@@ -26960,7 +26960,7 @@ var QUESTIONS_BANK = [
         "t": "50 €/kg"
       }
     ],
-    "x": "Le contrat type général (arrêté du 5 mai 1988 modifié) fixe le plafond d'indemnisation à 23 €/kg de marchandise manquante ou avariée pour le transport routier national. Ce plafond est supérieur au plafond CMR pour l'international."
+    "x": "Le contrat type général fixe le plafond d'indemnisation à 33 €/kg de marchandise manquante ou avariée pour les envois inférieurs à 3 tonnes (max 1000€/colis), et 20 €/kg pour les envois ≥ 3 tonnes (max 3200€/tonne), depuis la réforme du contrat type entrée en vigueur en 2022. L'ancien plafond était de 23 €/kg."
   },
   {
     "id": 4372,
@@ -30009,17 +30009,17 @@ var QUESTIONS_BANK = [
         "t": "38 tonnes"
       },
       {
-        "t": "40 tonnes",
-        "ok": true
+        "t": "40 tonnes"
       },
       {
-        "t": "44 tonnes"
+        "t": "44 tonnes",
+        "ok": true
       },
       {
         "t": "48 tonnes"
       }
     ],
-    "x": "Le PTAC maximum en France pour un ensemble à 5 essieux en transport routier général est de 40 tonnes. Des dérogations portent à 44 tonnes pour le transport combiné (rail+route, fleuve+route) et jusqu'à 48 tonnes pour le transport de bois ronds (6 essieux)."
+    "x": "Depuis le décret du 4 décembre 2012 (art. R312-4 modifié du Code de la route), les ensembles routiers comportant plus de 4 essieux (5 essieux et plus) sont autorisés à circuler jusqu'à 44 tonnes en France, sous réserve que le PTRA figurant sur la carte grise du tracteur soit ≥ 44t et que le véhicule soit équipé de suspensions pneumatiques. L'ancienne limite de 40 tonnes (avant 2013) ne s'applique plus en transport routier général."
   },
   {
     "id": 4505,
@@ -30029,11 +30029,11 @@ var QUESTIONS_BANK = [
     "e": "La longueur maximale d'un ensemble articulé (tracteur + semi-remorque) en France est de :",
     "r": [
       {
-        "t": "16,50 m"
+        "t": "16,50 m",
+        "ok": true
       },
       {
-        "t": "18,75 m",
-        "ok": true
+        "t": "18,75 m"
       },
       {
         "t": "20 m"
@@ -30042,7 +30042,7 @@ var QUESTIONS_BANK = [
         "t": "22 m"
       }
     ],
-    "x": "La longueur maximale d'un ensemble articulé est de 18,75 mètres, conformément à la directive 96/53/CE. La longueur de la semi-remorque est limitée à 13,60 m pour un ensemble standard de 16,50 m de longueur utile."
+    "x": "La longueur maximale d'un ensemble articulé (tracteur + semi-remorque) est de 16,50 mètres en France (art. R312-11 du Code de la route, directive 96/53/CE). À ne pas confondre avec le train routier (porteur + remorque) qui peut atteindre 18,75 mètres. La semi-remorque seule est limitée à une longueur réglementaire de 13,60 m."
   },
   {
     "id": 4506,
@@ -34373,7 +34373,7 @@ var QUESTIONS_BANK = [
     "prog": "LEGER",
     "theme": "cl-acces",
     "d": 1,
-    "e": "Un auto-entrepreneur transporteur VUL dont le CA dépasse 77 700 € doit :",
+    "e": "Un auto-entrepreneur transporteur VUL dont le CA dépasse 41 250 € (seuil majoré de TVA pour les services) doit :",
     "r": [
       {
         "t": "Continuer en franchise de TVA"
@@ -34389,7 +34389,7 @@ var QUESTIONS_BANK = [
         "t": "Demander une dérogation à l'administration fiscale"
       }
     ],
-    "x": "Lorsque le CA d'un auto-entrepreneur prestataire de services dépasse 77 700 € sur l'année civile (seuil 2024), il perd le bénéfice de la franchise en base de TVA et doit désormais facturer et reverser la TVA. Il peut rester en auto-entrepreneur malgré ce dépassement."
+    "x": "Lorsque le CA d'un auto-entrepreneur prestataire de services dépasse le seuil majoré de franchise en base de TVA (41 250 € en 2026, seuil de base 37 500 €), il perd la franchise et doit facturer la TVA à ses clients et la reverser à l'État. Le plafond du régime micro lui-même est de 83 600 € pour les prestations de services."
   },
   {
     "id": 4695,
@@ -34796,14 +34796,14 @@ var QUESTIONS_BANK = [
         "t": "50%"
       },
       {
-        "t": "80%",
-        "ok": true
+        "t": "80%"
       },
       {
-        "t": "100%"
+        "t": "100%",
+        "ok": true
       }
     ],
-    "x": "La TVA sur le gazole utilisé pour les VUL <3,5t affectés au transport de marchandises est récupérable à 80%. C'est une différence importante avec les PL >3,5t (100% récupérable) et les véhicules de tourisme (0% récupérable)."
+    "x": "Depuis l'alignement fiscal de 2022 (art. 298 du CGI), la TVA sur le gazole est récupérable à 100 % pour les véhicules utilitaires (VU/VUL affectés au transport de marchandises, mention CTTE/VU sur la carte grise), quel que soit leur PTAC. Seuls les véhicules de tourisme (VP) restent limités à 80 %. Un VUL de transporteur étant un véhicule utilitaire, la TVA gazole est donc déductible à 100 %."
   },
   {
     "id": 4713,
@@ -35161,7 +35161,7 @@ var QUESTIONS_BANK = [
         "t": "5% sur le CA"
       },
       {
-        "t": "22% sur le CA (prestations de services BIC)",
+        "t": "21,2% sur le CA (prestations de services BIC)",
         "ok": true
       },
       {
@@ -35171,7 +35171,7 @@ var QUESTIONS_BANK = [
         "t": "50% sur le CA"
       }
     ],
-    "x": "Les auto-entrepreneurs prestataires de services (BIC) paient des cotisations sociales forfaitaires d'environ 22% du CA encaissé. Ce taux couvre toutes les cotisations sociales (maladie, retraite, allocations familiales...). Il est simple mais moins protecteur qu'un régime classique."
+    "x": "Les auto-entrepreneurs prestataires de services commerciales/artisanales (BIC) paient des cotisations sociales au taux de 21,2 % du chiffre d'affaires (depuis octobre 2022). Le transport pour compte d'autrui relève de cette catégorie BIC prestations de services."
   },
   {
     "id": 4729,
@@ -35552,7 +35552,7 @@ var QUESTIONS_BANK = [
         "t": "0 €"
       },
       {
-        "t": "8 800 € (22% × 40 000 €)",
+        "t": "8 480 € (21,2% × 40 000 €)",
         "ok": true
       },
       {
@@ -35562,7 +35562,7 @@ var QUESTIONS_BANK = [
         "t": "4 000 €"
       }
     ],
-    "x": "Cotisations sociales auto-entrepreneur BIC prestation de services = CA × 22% = 40 000 × 22% = 8 800 €. Ces cotisations sont libératoires : en les payant, l'auto-entrepreneur est couvert pour la retraite de base, la maladie et les allocations familiales."
+    "x": "Cotisations sociales auto-entrepreneur BIC prestation de services = CA × 21,2% = 40 000 × 21,2% = 8 480 €. Le taux de 21,2% s'applique aux prestations de services commerciales et artisanales relevant des BIC depuis octobre 2022."
   },
   {
     "id": 4746,
@@ -35598,17 +35598,17 @@ var QUESTIONS_BANK = [
         "t": "0 € (non récupérable)"
       },
       {
-        "t": "1 600 € (80% × 20% × 10 000 €)",
-        "ok": true
+        "t": "1 600 € (80% × 20% × 10 000 €)"
       },
       {
-        "t": "2 000 € (100% × 20% × 10 000 €)"
+        "t": "2 000 € (100% × 20% × 10 000 €)",
+        "ok": true
       },
       {
         "t": "1 000 € (50% × 20% × 10 000 €)"
       }
     ],
-    "x": "TVA gazole VUL = montant HT × 20% × 80% de récupération = 10 000 × 20% × 80% = 10 000 × 16% = 1 600 €. Le VUL récupère 80% de la TVA sur le gazole (vs 100% pour le PL et 0% pour la voiture de tourisme)."
+    "x": "TVA gazole VUL (véhicule utilitaire) = montant HT × 20% × 100% de récupération = 10 000 × 20% = 2 000 €. Depuis 2022, les véhicules utilitaires récupèrent 100% de la TVA sur le gazole (contre 80% pour les véhicules de tourisme)."
   },
   {
     "id": 4748,
@@ -36748,7 +36748,7 @@ var QUESTIONS_BANK = [
         "t": "10 €/kg"
       },
       {
-        "t": "23 €/kg",
+        "t": "33 €/kg",
         "ok": true
       },
       {
@@ -36758,7 +36758,7 @@ var QUESTIONS_BANK = [
         "t": "8,33 DTS/kg"
       }
     ],
-    "x": "Le contrat type général fixe le plafond d'indemnisation à 23 € par kilogramme de marchandise manquante ou avariée. Ce plafond s'applique en l'absence de déclaration de valeur. Il peut être dépassé par une déclaration de valeur moyennant un supplément de prix."
+    "x": "Le contrat type général fixe le plafond d'indemnisation à 33 € par kilogramme de marchandise manquante ou avariée pour les envois inférieurs à 3 tonnes (depuis la réforme 2022, ancien plafond 23 €/kg). Pour les envois de 3 tonnes et plus, le plafond est de 20 €/kg."
   },
   {
     "id": 4798,
@@ -36909,7 +36909,7 @@ var QUESTIONS_BANK = [
         "t": "De réduire le prix du transport"
       },
       {
-        "t": "D'augmenter le plafond d'indemnisation au-delà de 23 €/kg en cas de perte ou d'avarie",
+        "t": "D'augmenter le plafond d'indemnisation au-delà de 33 €/kg en cas de perte ou d'avarie",
         "ok": true
       },
       {
@@ -36919,7 +36919,7 @@ var QUESTIONS_BANK = [
         "t": "De bénéficier d'une livraison prioritaire"
       }
     ],
-    "x": "La déclaration de valeur (exprimée sur la lettre de voiture) permet à l'expéditeur de fixer un plafond d'indemnisation supérieur aux 23 €/kg du contrat type général. En contrepartie, un supplément de prix est facturé par le transporteur. En cas de sinistre, l'indemnisation peut aller jusqu'au montant déclaré."
+    "x": "La déclaration de valeur (exprimée sur la lettre de voiture) permet à l'expéditeur de fixer un plafond d'indemnisation supérieur aux 33 €/kg du contrat type général. En contrepartie, un supplément de prix est facturé par le transporteur. En cas de sinistre, l'indemnisation peut aller jusqu'au montant déclaré."
   },
   {
     "id": 4805,
@@ -37714,7 +37714,7 @@ var QUESTIONS_BANK = [
         "t": "Oui, si les parties le conviennent"
       },
       {
-        "t": "Non, le plafond légal de 23 €/kg est un minimum : toute clause réduisant cette indemnisation en dessous est nulle",
+        "t": "Non, le plafond légal de 33 €/kg est un minimum : toute clause réduisant cette indemnisation en dessous est nulle",
         "ok": true
       },
       {
@@ -37724,7 +37724,7 @@ var QUESTIONS_BANK = [
         "t": "Oui si le client a souscrit une assurance propre"
       }
     ],
-    "x": "Les plafonds légaux d'indemnisation constituent un minimum légal en faveur de l'ayant droit. Toute clause contractuelle prévoyant une indemnisation inférieure à 23 €/kg (pour le CT général) serait nulle. En revanche, un plafond supérieur peut être convenu (déclaration de valeur). La protection de l'ayant droit est d'ordre public."
+    "x": "Les plafonds légaux d'indemnisation constituent un minimum légal en faveur de l'ayant droit. Toute clause contractuelle prévoyant une indemnisation inférieure à 33 €/kg (pour le CT général) serait nulle. En revanche, un plafond supérieur peut être convenu (déclaration de valeur). La protection de l'ayant droit est d'ordre public."
   },
   {
     "id": 4840,
