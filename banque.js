@@ -678,23 +678,23 @@ var QUESTIONS_BANK = [
     "prog": "LEGER",
     "theme": "cl-fiscal",
     "d": 3,
-    "e": "Depuis la suppression totale de la CVAE en 2024, la contribution économique territoriale (CET) comprend :",
+    "e": "En 2026, la contribution économique territoriale (CET) comprend :",
     "r": [
       {
         "t": "La CVAE uniquement"
       },
       {
-        "t": "La CFE uniquement",
-        "ok": true
+        "t": "La CFE uniquement"
       },
       {
-        "t": "La CFE et la CVAE"
+        "t": "La CFE et la CVAE",
+        "ok": true
       },
       {
         "t": "L'IS et la taxe professionnelle"
       }
     ],
-    "x": "Depuis la suppression totale de la CVAE au 1er janvier 2024 (loi de finances), la contribution économique territoriale (CET) ne comprend plus que la CFE (Cotisation Foncière des Entreprises), assise sur la valeur locative des biens professionnels. Auparavant (2010-2023), la CET comprenait à la fois la CFE et la CVAE. La CET avait elle-même remplacé la taxe professionnelle en 2010."
+    "x": "En 2026, la CET (Contribution Économique Territoriale) comprend la CFE (Cotisation Foncière des Entreprises) ET la CVAE (Cotisation sur la Valeur Ajoutée des Entreprises). La CVAE fait l'objet d'une suppression progressive prévue jusqu'en 2030 ; en 2026 elle reste due par les entreprises dont le chiffre d'affaires dépasse 500 000 €. La CET a remplacé la taxe professionnelle en 2010."
   },
   {
     "id": 31,
@@ -4098,7 +4098,7 @@ var QUESTIONS_BANK = [
         "t": "Le capital social"
       }
     ],
-    "x": "La CFE est assise sur la valeur locative cadastrale des biens immobiliers dont l'entreprise a disposé pour son activité au 1er janvier de l'année. Les entreprises sans local (ex : auto-entrepreneur à domicile) paient une CFE minimale définie par la commune. La CFE est, depuis la suppression de la CVAE en 2024, la seule composante de la CET."
+    "x": "La CFE est assise sur la valeur locative cadastrale des biens immobiliers dont l'entreprise a disposé pour son activité au 1er janvier de l'année. Les entreprises sans local (ex : auto-entrepreneur à domicile) paient une CFE minimale définie par la commune. La CFE forme, avec la CVAE, la CET (Contribution Économique Territoriale)."
   },
   {
     "id": 179,
@@ -4390,14 +4390,14 @@ var QUESTIONS_BANK = [
         "t": "6 mois puis cesser"
       },
       {
-        "t": "18 mois avec gestionnaire temporaire",
+        "t": "9 mois avec gestionnaire temporaire",
         "ok": true
       },
       {
         "t": "Cesser immédiatement"
       }
     ],
-    "x": "En cas de décès, d'incapacité physique ou de départ du gestionnaire, l'autorité compétente peut autoriser la poursuite de l'activité pendant 18 mois maximum sous réserve de la désignation d'un gestionnaire temporaire. Après ce délai, un nouveau gestionnaire qualifié doit être nommé."
+    "x": "En cas de décès ou d'incapacité physique du gestionnaire de transport, l'autorité compétente peut autoriser la poursuite de l'activité pendant 9 mois maximum, sous réserve de la désignation d'un gestionnaire temporaire. Après ce délai, un nouveau gestionnaire qualifié doit être nommé. Le délai est de 6 mois en cas de cessation d'activité ou de perte d'honorabilité."
   },
   {
     "id": 192,
@@ -5037,11 +5037,11 @@ var QUESTIONS_BANK = [
         "t": "30 m"
       },
       {
-        "t": "115 m",
+        "t": "72 m",
         "ok": true
       }
     ],
-    "x": "La distance de sécurité recommandée correspond à au moins 2 secondes de temps d'espacement (règle des 2 secondes). À 130 km/h, cela représente environ 72 m/s × 2 = soit environ 72 m minimum. La règle légale française (art. R.412-12) impose une distance au moins égale à la distance parcourue en 2 secondes, soit environ 72 m à 130 km/h. (Précision : soit 2 secondes de temps.)"
+    "x": "La distance de sécurité doit correspondre à au moins 2 secondes de temps d'espacement (règle des 2 secondes). À 130 km/h (soit 36,1 m/s), cela représente environ 72 m. La règle légale française (art. R.412-12) impose une distance au moins égale à la distance parcourue en 2 secondes."
   },
   {
     "id": 221,
@@ -5386,7 +5386,7 @@ var QUESTIONS_BANK = [
         "t": "Tout diplôme supérieur"
       }
     ],
-    "x": "La capacité professionnelle peut être prouvée par : la réussite à l'examen CPC organisé par les CCI, un diplôme ou titre reconnu comme équivalent par arrêté ministériel, ou une attestation de capacité délivrée sur la base d'une expérience professionnelle antérieure à l'entrée en vigueur de la réglementation."
+    "x": "La capacité professionnelle peut être prouvée par : la réussite à l'examen national organisé par la DREAL, un diplôme ou titre reconnu comme équivalent par arrêté ministériel, ou une attestation de capacité délivrée sur la base d'une expérience professionnelle antérieure à l'entrée en vigueur de la réglementation."
   },
   {
     "id": 236,
@@ -5708,7 +5708,7 @@ var QUESTIONS_BANK = [
         "t": "La taxe d'habitation pour les entreprises"
       }
     ],
-    "x": "La CET remplace la taxe professionnelle depuis le 1er janvier 2010. Jusqu'en 2023, elle se composait de la CFE (Cotisation Foncière des Entreprises) et de la CVAE (Cotisation sur la Valeur Ajoutée des Entreprises). Depuis la suppression totale de la CVAE en 2024, la CET ne comprend plus que la CFE."
+    "x": "La CET remplace la taxe professionnelle depuis le 1er janvier 2010. Elle se compose de la CFE (Cotisation Foncière des Entreprises) et de la CVAE (Cotisation sur la Valeur Ajoutée des Entreprises). La CVAE fait l'objet d'une suppression progressive prévue jusqu'en 2030."
   },
   {
     "id": 250,
@@ -6513,7 +6513,7 @@ var QUESTIONS_BANK = [
         "ok": true
       }
     ],
-    "x": "Si une entreprise ne satisfait temporairement plus l'une des conditions d'accès (honorabilité, capacité financière ou professionnelle), l'autorité compétente peut lui accorder un délai de mise en conformité de 6 mois maximum (12 mois en cas de décès ou d'incapacité physique du gestionnaire)."
+    "x": "Si une entreprise ne satisfait temporairement plus l'une des conditions d'accès (honorabilité, capacité financière ou professionnelle), l'autorité compétente peut lui accorder un délai de mise en conformité de 6 mois maximum (9 mois en cas de décès ou d'incapacité physique du gestionnaire)."
   },
   {
     "id": 285,
@@ -7147,17 +7147,17 @@ var QUESTIONS_BANK = [
         "t": "Le Ministère des Transports"
       },
       {
-        "t": "La DREAL"
+        "t": "La DREAL",
+        "ok": true
       },
       {
-        "t": "Les CCI",
-        "ok": true
+        "t": "Les CCI"
       },
       {
         "t": "L'AFPA"
       }
     ],
-    "x": "L'examen du CPC pour le transport léger (<3,5t) est organisé et administré par les Chambres de Commerce et d'Industrie (CCI) sous l'autorité du Ministère chargé des Transports. L'examen comprend des épreuves écrites couvrant le droit civil et commercial, le droit social, la gestion financière et l'accès à la profession."
+    "x": "L'examen de capacité professionnelle pour le transport léger (<3,5t) est un examen national, organisé une fois par an par la DREAL selon le lieu de domicile du candidat (inscriptions gérées par le SIEC). Il comprend des épreuves écrites couvrant le droit, le social, la fiscalité, la gestion et l'accès à la profession."
   },
   {
     "id": 314,
@@ -8468,7 +8468,7 @@ var QUESTIONS_BANK = [
         "t": "Les mathématiques financières seules"
       }
     ],
-    "x": "L'examen CPC pour le transport léger (<3,5t) couvre 6 domaines selon le règlement européen 1071/2009 : droit civil et commercial, droit social, fiscalité, gestion financière et comptable, accès au marché, normes techniques. Organisé par les CCI, il comprend des épreuves écrites (QCM + questions rédigées)."
+    "x": "L'examen de capacité professionnelle pour le transport léger (<3,5t) couvre plusieurs domaines selon le règlement européen 1071/2009 : droit civil et commercial, droit social, fiscalité, gestion financière et commerciale, accès au marché et normes techniques. Organisé par la DREAL, il comprend des épreuves écrites (QCM et questions rédigées)."
   },
   {
     "id": 371,
@@ -10091,17 +10091,17 @@ var QUESTIONS_BANK = [
         "t": "80 km/h"
       },
       {
-        "t": "90 km/h"
+        "t": "90 km/h",
+        "ok": true
       },
       {
         "t": "110 km/h"
       },
       {
-        "t": "100 km/h",
-        "ok": true
+        "t": "100 km/h"
       }
     ],
-    "x": "Les PL de plus de 3,5t sont limités à 80 km/h sur route ordinaire et 90 km/h sur route à chaussées séparées. Sur autoroute, la limitation est de 90 km/h pour les véhicules <12t et 100 km/h pour ceux de plus de 12t (ou avec de la marchandise dangereuse : 80 km/h)."
+    "x": "Les PL de plus de 3,5t sont limités à 80 km/h sur route ordinaire et 90 km/h sur route à chaussées séparées. Sur autoroute, la limitation est de 90 km/h pour tous les véhicules de marchandises de plus de 3,5t (et 80 km/h en cas de transport de marchandises dangereuses). Le 100 km/h ne concerne que les autocars de plus de 10t."
   },
   {
     "id": 2041,
@@ -10134,8 +10134,7 @@ var QUESTIONS_BANK = [
     "e": "La charge maximale autorisée par essieu isolé pour un ensemble de PTAC inférieur à 40 tonnes est de :",
     "r": [
       {
-        "t": "11,5 tonnes",
-        "ok": true
+        "t": "11,5 tonnes"
       },
       {
         "t": "8 tonnes"
@@ -10144,10 +10143,11 @@ var QUESTIONS_BANK = [
         "t": "10 tonnes"
       },
       {
-        "t": "13 tonnes"
+        "t": "13 tonnes",
+        "ok": true
       }
     ],
-    "x": "La charge maximale par essieu isolé est de 11,5 tonnes pour un ensemble de PTAC <40 tonnes. Pour un ensemble de PTAC ≥40 tonnes, la charge peut être portée à 13 tonnes sur l'essieu moteur sous conditions."
+    "x": "La charge maximale par essieu simple (isolé) est de 13 tonnes. Dans un groupe d'essieux (tandem, tridem), la charge par essieu est plafonnée plus bas (souvent 11,5 t sur l'essieu moteur) selon l'espacement entre essieux, afin de protéger l'infrastructure routière."
   },
   {
     "id": 2043,
@@ -11192,7 +11192,8 @@ var QUESTIONS_BANK = [
     "e": "Un véhicule de transport de marchandises de PTAC (Poids Total Autorisé en Charge) de 9 tonnes sur autoroute est limité à :",
     "r": [
       {
-        "t": "90 km/h"
+        "t": "90 km/h",
+        "ok": true
       },
       {
         "t": "110 km/h"
@@ -11201,11 +11202,10 @@ var QUESTIONS_BANK = [
         "t": "130 km/h"
       },
       {
-        "t": "100 km/h",
-        "ok": true
+        "t": "100 km/h"
       }
     ],
-    "x": "Les véhicules dont le PTAC est compris entre 3,5t et 12t sont limités à 100 km/h sur autoroute. Les véhicules de plus de 12t sont limités à 90 km/h. Les véhicules de moins de 3,5t suivent les mêmes limitations que les voitures particulières (130 km/h sur autoroute)."
+    "x": "Les véhicules de transport de marchandises de plus de 3,5t sont limités à 90 km/h sur autoroute, quel que soit leur PTAC (entre 3,5t et 12t comme au-delà). Les véhicules de moins de 3,5t suivent les mêmes limitations que les voitures particulières (130 km/h sur autoroute). Le 100 km/h ne concerne que les autocars de plus de 10t."
   },
   {
     "id": 2089,
@@ -11284,7 +11284,8 @@ var QUESTIONS_BANK = [
     "e": "La durée de conservation minimale des disques d'enregistrement (tachygrammes papier) par l'entreprise de transport est de :",
     "r": [
       {
-        "t": "1 an"
+        "t": "1 an",
+        "ok": true
       },
       {
         "t": "2 ans"
@@ -11293,11 +11294,10 @@ var QUESTIONS_BANK = [
         "t": "3 ans"
       },
       {
-        "t": "5 ans",
-        "ok": true
+        "t": "5 ans"
       }
     ],
-    "x": "Les disques d'enregistrement (tachygrammes) et les données téléchargées du tachygraphe doivent être conservés par l'entreprise pendant 1 an. Cependant, pour les contrôles fiscaux et sociaux, il est conseillé de les conserver 5 ans."
+    "x": "Les disques d'enregistrement (tachygrammes) et les données téléchargées du tachygraphe doivent être conservés par l'entreprise pendant au moins 1 an et présentés lors des contrôles. Une conservation plus longue (jusqu'à 5 ans) est conseillée pour les contrôles fiscaux et sociaux, mais le délai légal est de 1 an."
   },
   {
     "id": 2093,
@@ -12204,20 +12204,20 @@ var QUESTIONS_BANK = [
     "e": "Le tachygraphe doit être étalonné (vérification métrologique) tous les :",
     "r": [
       {
-        "t": "2 ans"
+        "t": "2 ans",
+        "ok": true
       },
       {
         "t": "1 an"
       },
       {
-        "t": "6 ans",
-        "ok": true
+        "t": "6 ans"
       },
       {
         "t": "10 ans"
       }
     ],
-    "x": "Le tachygraphe doit être étalonné (contrôle par un atelier agréé) lors de la mise en service, puis tous les 6 ans, et après toute modification pouvant affecter sa précision (modification de la transmission, changement de taille de pneus, réparation du capteur). L'étalonnage est mentionné sur une plaque apposée dans le véhicule. Ou après modification du véhicule."
+    "x": "Le tachygraphe doit être étalonné (contrôle par un atelier agréé) lors de la mise en service, puis tous les 2 ans, et après toute modification pouvant affecter sa précision (modification de la transmission, changement de taille de pneus, réparation du capteur). L'étalonnage est mentionné sur une plaque apposée dans le véhicule. Les 6 ans ne valaient que pour d'anciens appareils analogiques."
   },
   {
     "id": 2133,
@@ -12507,7 +12507,7 @@ var QUESTIONS_BANK = [
         "ok": true
       },
       {
-        "t": "1 an"
+        "t": "6 mois"
       },
       {
         "t": "5 ans"
@@ -15042,11 +15042,11 @@ var QUESTIONS_BANK = [
         "t": "Alternance uniquement"
       },
       {
-        "t": "Examen CCI ou VAE",
+        "t": "Examen DREAL ou équivalence",
         "ok": true
       }
     ],
-    "x": "Le CPC Marchandises Lourd peut être obtenu : par examen devant une commission dans les CCI (épreuves écrites sur 4 matières), ou par la Validation des Acquis de l'Expérience (VAE) pour les professionnels justifiant d'une expérience significative dans la gestion d'une entreprise de transport. La VAE permet de dispenser certaines épreuves."
+    "x": "Le CPC Marchandises Lourd peut être obtenu par l'examen national organisé par la DREAL (épreuves écrites), ou par équivalence : diplôme ou titre reconnu, ou expérience professionnelle de direction d'une entreprise de transport. Ces dispenses permettent d'éviter tout ou partie des épreuves."
   },
   {
     "id": 2257,
@@ -16256,7 +16256,7 @@ var QUESTIONS_BANK = [
         "ok": true
       },
       {
-        "t": "3,5 tonnes"
+        "t": "2,5 tonnes"
       },
       {
         "t": "7,5 tonnes"
@@ -16919,7 +16919,7 @@ var QUESTIONS_BANK = [
     "e": "Le délai de réponse de l'employeur à une demande de formation CPF du salarié est de :",
     "r": [
       {
-        "t": "30 jours"
+        "t": "8 jours"
       },
       {
         "t": "30 jours",
@@ -17106,7 +17106,7 @@ var QUESTIONS_BANK = [
         "t": "Indéfiniment sans remplaçant"
       },
       {
-        "t": "18 mois avec gestionnaire temporaire",
+        "t": "9 mois avec gestionnaire temporaire",
         "ok": true
       },
       {
@@ -17116,7 +17116,7 @@ var QUESTIONS_BANK = [
         "t": "Cesser immédiatement"
       }
     ],
-    "x": "En cas de décès, d'incapacité ou de départ du gestionnaire, l'autorité compétente peut autoriser la poursuite de l'activité pendant 18 mois avec un gestionnaire temporaire acceptable. Ce délai permet de trouver un nouveau gestionnaire qualifié ou de passer le CPC. À l'expiration, un gestionnaire satisfaisant aux conditions doit être nommé."
+    "x": "En cas de décès ou d'incapacité physique du gestionnaire, l'autorité compétente peut autoriser la poursuite de l'activité pendant 9 mois maximum avec un gestionnaire temporaire acceptable. Ce délai permet de trouver un nouveau gestionnaire qualifié ou de passer le CPC. En cas de cessation d'activité ou de perte d'honorabilité, le délai est de 6 mois."
   },
   {
     "id": 2347,
@@ -20014,7 +20014,7 @@ var QUESTIONS_BANK = [
         "ok": true
       }
     ],
-    "x": "L'ADR est révisé tous les 2 ans (années impaires). Les nouvelles versions entrent en vigueur le 1er janvier de l'année paire suivante, avec une période transitoire de 6 mois."
+    "x": "L'ADR est révisé tous les 2 ans. Les nouvelles versions entrent en vigueur le 1er janvier des années impaires (2025, 2027…), avec une période transitoire de 6 mois (jusqu'au 30 juin)."
   },
   {
     "id": 4070,
@@ -21965,11 +21965,11 @@ var QUESTIONS_BANK = [
         "t": "Classe 4.1"
       },
       {
-        "t": "Classe 2, 2AF (gaz dissous)",
+        "t": "Classe 2, 4F (gaz dissous)",
         "ok": true
       }
     ],
-    "x": "L'acétylène (ONU 1001) est dissous dans l'acétone et stocké dans une masse poreuse dans la bouteille. Son code est 2AF (2 = gaz, A = asphyxiant, F = inflammable... mais en réalité le code ADR pour l'acétylène dissous est 2AF). Il est extrêmement inflammable et sensible aux chocs. Les bouteilles ne doivent pas être stockées allongées."
+    "x": "L'acétylène dissous (ONU 1001) est dissous dans l'acétone et stocké dans une masse poreuse à l'intérieur de la bouteille. Son code de classification ADR est 4F (4 = gaz dissous, F = inflammable), classe 2, danger n° 239. Il est extrêmement inflammable et peut exploser sous l'effet de la chaleur. Les bouteilles ne doivent pas être stockées couchées."
   },
   {
     "id": 4155,
@@ -23408,7 +23408,7 @@ var QUESTIONS_BANK = [
         "t": "30 jours"
       },
       {
-        "t": "6 mois",
+        "t": "9 mois",
         "ok": true
       },
       {
@@ -23418,7 +23418,7 @@ var QUESTIONS_BANK = [
         "t": "12 mois"
       }
     ],
-    "x": "En cas de décès ou d'incapacité physique du gestionnaire de transport, l'entreprise dispose généralement d'un délai de 6 mois pour désigner un nouveau gestionnaire répondant aux exigences réglementaires."
+    "x": "En cas de décès ou d'incapacité physique du gestionnaire de transport, l'entreprise dispose d'un délai maximum de 9 mois pour désigner un nouveau gestionnaire répondant aux exigences réglementaires. Le délai est de 6 mois en cas de cessation d'activité ou de perte d'honorabilité."
   },
   {
     "id": 4218,
@@ -25852,11 +25852,11 @@ var QUESTIONS_BANK = [
         "t": "Fusionnée avec la CFE"
       },
       {
-        "t": "Supprimée totalement en 2024",
+        "t": "En cours de suppression, prévue en 2030",
         "ok": true
       }
     ],
-    "x": "La CVAE a été supprimée progressivement : réduction de moitié en 2023 et suppression totale en 2024, dans le cadre de la loi de finances. Il ne reste plus que la CFE comme composante de la CET (Contribution Économique Territoriale)."
+    "x": "La CVAE fait l'objet d'une suppression progressive, désormais prévue pour 2030 (échéance initialement envisagée en 2024, puis reportée plusieurs fois). En 2026 elle reste due par les entreprises dont le chiffre d'affaires dépasse 500 000 € et forme, avec la CFE, la CET (Contribution Économique Territoriale)."
   },
   {
     "id": 4324,
@@ -31251,11 +31251,11 @@ var QUESTIONS_BANK = [
         "t": "Tous les ans"
       },
       {
-        "t": "Tous les 2 ans"
+        "t": "Tous les 2 ans",
+        "ok": true
       },
       {
-        "t": "Tous les 4 ans (+ limiteur)",
-        "ok": true
+        "t": "Tous les 4 ans (+ limiteur)"
       },
       {
         "t": "Tous les 6 ans sauf dérogation"
@@ -34228,7 +34228,7 @@ var QUESTIONS_BANK = [
         "t": "1 seule partie rédactionnelle"
       }
     ],
-    "x": "L'examen CPC <3,5t comprend 2 parties : la Partie 1 (QCM, 50 questions sur 1h30) et la Partie 2 (questions rédigées incluant des calculs, 1h30). Le seuil de réussite est de 120/200 avec un minimum de 50 points dans chaque partie."
+    "x": "L'examen CPC <3,5t comprend 2 parties : la Partie 1 (QCM, 50 questions, 1h30) et la Partie 2 (questions rédigées incluant des calculs, 1h30). Le seuil de réussite est de 120/200 au total, avec un minimum de 50 points à la Partie 1 (QCM) et de 40 points à la Partie 2 (rédigée)."
   },
   {
     "id": 4688,
